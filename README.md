@@ -51,7 +51,7 @@ By default, `markovify.Text` uses a state size of 2. But you can instantiate a m
 text_model = markovify.Text(text, state_size=3)
 ```
 
-## Extending `markovify.Text`
+### Extending `markovify.Text`
 
 The `markovify.Text` class is highly extensible; most methods can be overridden. For example, the following `POSifiedText` class uses NLTK's part-of-speech tagger to generate a Markov model that obeys sentence structure better than a naive model. (It works. But be warned: `pos_tag` is very slow.)
 

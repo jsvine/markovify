@@ -22,8 +22,6 @@ pip install markovify
 
 ## Basic Usage
 
-*Note: The usage examples below assume you're trying to markovify text. If you'd like to use the underlying `markovify.Chain` class, which is not text-specific, check out [the (annotated) source code](markovify/model.py).*
-
 ```python
 import markovify
 
@@ -37,9 +35,21 @@ text_model = markovify.Text(text)
 # Print five randomly-generated sentences
 for i in range(5):
     print(text_model.make_sentence())
+
+# Print three randomly-generated sentences of no more than 140 characters
+for i in range(3):
+    print(text_model.make_short_sentence(140))
 ```
 
-Markovify works best with large, well-punctuated texts. If your text doesn't use `.`s to delineate sentences, put each sentence on a newline, and use the `markovify.NewlineText` class instead of `markovify.Text` class.
+Notes:
+
+- The usage examples here assume you're trying to markovify text. If you'd like to use the underlying `markovify.Chain` class, which is not text-specific, check out [the (annotated) source code](markovify/model.py).
+
+- Markovify works best with large, well-punctuated texts. If your text doesn't use `.`s to delineate sentences, put each sentence on a newline, and use the `markovify.NewlineText` class instead of `markovify.Text` class.
+
+- By default, the `make_sentence` method tries, a maximum of 10 times per invocation, to make a sentence that doesn't overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
+
+- By default, `markovify.Text` rejects sentences containing word-sequences longer than 15 words or 70% of the total words in the sentence. You can change this rule by overriding `markovify.Text`'s [`test_sentence_output` method](markovify/text.py). For more on extending/overriding methods, see the "Advanced Usage" section below.
 
 ## Advanced Usage
 

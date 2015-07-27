@@ -95,6 +95,6 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 ## Markovify In The Wild
 
 - BuzzFeed's [Tom Friedman Sentence Generator](http://www.buzzfeed.com/jsvine/the-tom-friedman-sentence-generator) / [@mot_namdeirf](https://twitter.com/mot_namdeirf).
-- [UserSim](https://github.com/trambelus/UserSim) which powers [/u/user_simulator](https://www.reddit.com/user/user_simulator) bot on Reddit. It generates comments based on user's past comment history.
+- [UserSim](https://github.com/trambelus/UserSim), which powers [/u/user_simulator](https://www.reddit.com/user/user_simulator) bot on Reddit and generates comments based on user's comment history.
 
 Have other examples? Pull requests welcome.

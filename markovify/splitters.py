@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*- 
-import string
 import re
+
+ascii_lowercase = "abcdefghijklmnopqrstuvwxyz"
+ascii_uppercase = ascii_lowercase.upper()
 
 # States w/ with thanks to https://github.com/unitedstates/python-us
 # Titles w/ thanks to https://github.com/nytimes/emphasis and @donohoe
@@ -10,7 +12,7 @@ abbr_capped = "|".join([
     "mr|ms|mrs|msr|dr|gov|pres|sen|sens|rep|reps|prof|gen|messrs|col|sr|jf|sgt|mgr|fr|rev|jr|snr|atty|supt", # Titles
     "ave|blvd|st|rd|hwy", # Streets
     "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec", # Months
-    "|".join(string.lowercase) # Initials
+    "|".join(ascii_lowercase) # Initials
 ]).split("|")
 
 abbr_lowercase = "etc|v|vs|viz|al|pct"
@@ -19,7 +21,7 @@ exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
 
 def is_abbreviation(dotted_word):
     clipped = dotted_word[:-1]
-    if clipped[0] in string.uppercase:
+    if clipped[0] in ascii_uppercase:
         if clipped.lower() in abbr_capped: return True
         else: return False
     else:

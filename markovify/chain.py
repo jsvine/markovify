@@ -3,6 +3,7 @@ import itertools
 import operator
 import bisect
 import json
+from collections import OrderedDict
 
 BEGIN = "___BEGIN__"
 END = "___END__"
@@ -48,14 +49,14 @@ class Chain(object):
         """
         if (type(corpus) != list) or (type(corpus[0]) != list):
             raise Exception("`corpus` must be list of lists")
-        model = dict()
+        model = OrderedDict()
         for run in corpus:
             items = ([ BEGIN ] * state_size) + run + [ END ]
             for i in range(len(run) + 1):
                 state = tuple(items[i:i+state_size])
                 follow = items[i+state_size]
                 if state not in model:
-                    model[state] = { follow: 1 }
+                    model[state] = OrderedDict(((follow, 1), ))
                 elif follow not in model[state]:
                     model[state][follow] = 1
                 else:
@@ -66,7 +67,7 @@ class Chain(object):
         """
         Given a state, choose the next item at random.
         """
-        choices, weights = zip(*self.model[state].iteritems())
+        choices, weights = zip(*self.model[state].items())
         cumdist = list(accumulate(weights))
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
@@ -97,7 +98,7 @@ class Chain(object):
         """
         Dump the model as a JSON object, for loading later.
         """
-        return json.dumps(list(self.model.iteritems()))
+        return json.dumps(list(self.model.items()))
 
     @classmethod
     def from_json(cls, json_thing):
@@ -110,7 +111,7 @@ class Chain(object):
         else:
             obj = json_thing
         state_size = len(obj[0][0])
-        rehydrated = dict((tuple(item[0]), item[1]) for item in obj)
+        rehydrated = OrderedDict((tuple(item[0]), item[1]) for item in obj)
         inst = cls(None, state_size, rehydrated)
         return inst
 

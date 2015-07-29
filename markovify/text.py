@@ -1,6 +1,5 @@
 import re
 import string
-import random
 import markovify
 from unidecode import unidecode
 
@@ -11,7 +10,7 @@ class Text(object):
         state_size: An integer, indicating the number of words in the model's state.
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
-        runs = self.generate_corpus(input_text)
+        runs = list(self.generate_corpus(input_text))
         # Rejoined text lets us assess the novelty of generated setences
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
         self.state_size = state_size        
@@ -50,7 +49,10 @@ class Text(object):
         """
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
-        decoded = unidecode(sentence)
+        if sentence.__class__.__name__ == "str":
+            decoded = sentence
+        else:
+            decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
         if re.search(reject_pat, decoded): return False
         return True

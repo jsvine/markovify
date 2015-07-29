@@ -49,7 +49,7 @@ Notes:
 
 - By default, the `make_sentence` method tries, a maximum of 10 times per invocation, to make a sentence that doesn't overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
 
-- By default, `markovify.Text` rejects sentences containing word-sequences longer than 15 words or 70% of the total words in the sentence. You can change this rule by overriding `markovify.Text`'s [`test_sentence_output` method](markovify/text.py). For more on extending/overriding methods, see the "Advanced Usage" section below.
+- By default, `markovify.Text` tries to generate sentences that don't simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by overriding `markovify.Text`'s [`test_sentence_output` method](markovify/text.py). For more on extending/overriding methods, see the "Advanced Usage" section below.
 
 ## Advanced Usage
 

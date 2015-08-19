@@ -15,3 +15,12 @@ def test_sherlock():
     text_model = markovify.Text(text)
     sent = text_model.make_sentence()
     assert(len(sent) != 0)
+
+def test_prompt(prompt_word):
+    with open(os.path.join(HERE, "texts/sherlock.txt")) as f:
+        text = f.read()
+    text_model = markovify.Text(text)
+    sent = None
+    while not sent:
+        sent = text_model.make_prompt_sentence(prompt_word)
+    assert(prompt_word.lower() in sent.lower())

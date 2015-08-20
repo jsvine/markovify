@@ -11,7 +11,7 @@ class Text(object):
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
         runs = list(self.generate_corpus(input_text))
-        # Rejoined text lets us assess the novelty of generated setences
+        # Rejoined text lets us assess the novelty of generated sentences
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
         self.state_size = state_size        
         self.chain = chain or markovify.Chain(runs, state_size)
@@ -68,18 +68,17 @@ class Text(object):
         runs = map(self.word_split, passing)
         return runs
 
-    max_overlap_ratio = 0.7
-    max_overlap_cap = 15
-    def test_sentence_output(self, words):
+    def test_sentence_output(self, words, max_overlap_ratio, max_overlap_cap):
         """
         Given a generated list of words, accept or reject it. This one rejects
         sentences that too closely match the original text, namely those that
         contain any identical sequence of words of X length, where X is the
-        smaller number of (a) 70% of the total number of words, and (b) 15.
+        smaller number of (a) max_overlap_ratio of the total number of words,
+        and (b) max_overlap_cap.
         """
         # Reject large chunks of similarity
-        overlap_ratio = int(round(self.max_overlap_ratio * len(words)))
-        overlap_max = min(self.max_overlap_cap, overlap_ratio)
+        overlap_ratio = int(round(max_overlap_ratio * len(words)))
+        overlap_max = min(max_overlap_cap, overlap_ratio)
         overlap_over = overlap_max + 1
         gram_count = max((len(words) - overlap_max), 1)
         grams = [ words[i:i+overlap_over] for i in range(gram_count) ]
@@ -89,10 +88,12 @@ class Text(object):
                 return False
         return True
             
-    def make_sentence(self, init_state=None, tries=10):
+    def make_sentence(self, init_state=None, tries=10, max_overlap_ratio=0.7, max_overlap_cap=15):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
         based on the model and self.test_sentence_output.
+
+        max_overlap_ratio and max_overlap_cap set the rejection frequency of test_sentence output.
 
         If successful, returns the sentence as a string. If not, returns None.
 
@@ -101,8 +102,10 @@ class Text(object):
         """
         for i in range(tries):
             words = self.chain.walk(init_state)
-            if self.test_sentence_output(words): return self.word_join(words)
-            else: continue
+            if self.test_sentence_output(words, max_overlap_ratio, max_overlap_cap):
+                return self.word_join(words)
+            else:
+                continue
         return None
     
     def make_short_sentence(self, char_limit, **kwargs):
@@ -114,6 +117,18 @@ class Text(object):
             sentence = self.make_sentence(**kwargs)
             if sentence and len(sentence) < char_limit:
                 return sentence
+
+    def make_prompt_sentence(self, prompt_word, **kwargs):
+        """
+        Tries making a sentence that contains the prompt word,
+        passing **kwargs to self.make_sentence
+        Tries 50 times by default.
+        """
+        for i in range(50):
+            sentence = self.make_sentence(**kwargs)
+            if prompt_word.lower() in sentence.lower():
+                return sentence
+        return None
 
 class NewlineText(Text):
     """

@@ -16,11 +16,11 @@ def test_sherlock():
     sent = text_model.make_sentence()
     assert(len(sent) != 0)
 
-def test_prompt(prompt_word):
+def test_json():
     with open(os.path.join(HERE, "texts/sherlock.txt")) as f:
         text = f.read()
     text_model = markovify.Text(text)
-    sent = None
-    while not sent:
-        sent = text_model.make_prompt_sentence(prompt_word)
-    assert(prompt_word.lower() in sent.lower())
+    json_model = text_model.chain.to_json()
+    text_model = markovify.Text(text, chain=markovify.Chain.from_json(json_model))
+    sent = text_model.make_sentence()
+    assert(len(sent) != 0)

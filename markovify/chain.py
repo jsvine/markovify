@@ -106,6 +106,12 @@ class Chain(object):
         Given a JSON object or JSON string that was created by `self.to_json`,
         return the corresponding markovify.Chain.
         """
+        # Python3 compatibility
+        try:
+          basestring
+        except NameError:
+          basestring = str
+
         if isinstance(json_thing, basestring):
             obj = json.loads(json_thing)
         else:

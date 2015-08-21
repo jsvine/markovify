@@ -1,4 +1,4 @@
-VERSION_TUPLE = (0, 1, 0)
+VERSION_TUPLE = (0, 2, 0)
 VERSION = ".".join(map(str, VERSION_TUPLE))
 
 from markovify.chain import Chain

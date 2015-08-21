@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="markovify",
-    version="0.1.0",
-    description="Use Markov chains to generate random semi-plausible sentences based on an existing text.",
+    version="0.2.0",
+    description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
     long_description="",
     classifiers=[
         "Development Status :: 3 - Alpha",

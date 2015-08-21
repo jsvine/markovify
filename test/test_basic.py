@@ -17,10 +17,9 @@ def test_sherlock():
     assert(len(sent) != 0)
 
 def test_json():
-    with open(os.path.join(HERE, "texts/sherlock.txt")) as f:
-        text = f.read()
-    text_model = markovify.Text(text)
+    text_model = markovify.Text(sherlock)
     json_model = text_model.chain.to_json()
-    text_model = markovify.Text(text, chain=markovify.Chain.from_json(json_model))
+    stored_chain = markovify.Chain.from_json(json_model)
+    new_text_model = markovify.Text(sherlock, chain=stored_chain)
     sent = text_model.make_sentence()
     assert(len(sent) != 0)

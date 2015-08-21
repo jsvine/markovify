@@ -3,6 +3,10 @@ import string
 import markovify
 from unidecode import unidecode
 
+DEFAULT_MAX_OVERLAP_RATIO = 0.7
+DEFAULT_MAX_OVERLAP_TOTAL = 15
+DEFAULT_TRIES = 10
+
 class Text(object):
     def __init__(self, input_text, state_size=2, chain=None):
         """
@@ -68,18 +72,17 @@ class Text(object):
         runs = map(self.word_split, passing)
         return runs
 
-    max_overlap_ratio = 0.7
-    max_overlap_cap = 15
-    def test_sentence_output(self, words):
+    def test_sentence_output(self, words, max_overlap_ratio, max_overlap_total):
         """
         Given a generated list of words, accept or reject it. This one rejects
         sentences that too closely match the original text, namely those that
         contain any identical sequence of words of X length, where X is the
-        smaller number of (a) 70% of the total number of words, and (b) 15.
+        smaller number of (a) `max_overlap_ratio` (default: 0.7) of the total 
+        number of words, and (b) `max_overlap_total` (default: 15).
         """
         # Reject large chunks of similarity
-        overlap_ratio = int(round(self.max_overlap_ratio * len(words)))
-        overlap_max = min(self.max_overlap_cap, overlap_ratio)
+        overlap_ratio = int(round(max_overlap_ratio * len(words)))
+        overlap_max = min(max_overlap_total, overlap_ratio)
         overlap_over = overlap_max + 1
         gram_count = max((len(words) - overlap_max), 1)
         grams = [ words[i:i+overlap_over] for i in range(gram_count) ]
@@ -89,19 +92,26 @@ class Text(object):
                 return False
         return True
             
-    def make_sentence(self, init_state=None, tries=10):
+    def make_sentence(self, init_state=None,
+        tries=DEFAULT_TRIES,
+        max_overlap_ratio=DEFAULT_MAX_OVERLAP_RATIO,
+        max_overlap_total=DEFAULT_MAX_OVERLAP_TOTAL):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
-        based on the model and self.test_sentence_output.
+        based on the model and `test_sentence_output`. Passes `max_overlap_ratio`
+        and `max_overlap_total` to `test_sentence_output`.
 
         If successful, returns the sentence as a string. If not, returns None.
 
         If `init_state` (a tuple of `self.state_size` words) is not specified,
-        this method chooses a sentence-start at random, in accordance with the model.
+        this method chooses a sentence-start at random, in accordance with
+        the model.
         """
+        mor, mot = max_overlap_ratio, max_overlap_total
         for i in range(tries):
             words = self.chain.walk(init_state)
-            if self.test_sentence_output(words): return self.word_join(words)
+            if self.test_sentence_output(words, mor, mot):
+                return self.word_join(words)
             else: continue
         return None
     
@@ -114,6 +124,10 @@ class Text(object):
             sentence = self.make_sentence(**kwargs)
             if sentence and len(sentence) < char_limit:
                 return sentence
+
+    def make_sentence_with_start(self, beginning, **kwargs):
+        init_state = tuple(self.word_split(beginning))
+        return make_sentence(init_state, **kwargs)
 
 class NewlineText(Text):
     """

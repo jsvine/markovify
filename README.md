@@ -99,5 +99,8 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [SubredditSimulator](https://www.reddit.com/r/SubredditSimulator), which generates random Reddit submissions and comments based on a subreddit's previous activity.
     - ["What is /r/SubredditSimulator?"](https://www.reddit.com/r/SubredditSimulator/comments/391ria/what_is_rsubredditsimulator/)
     - [Note re. `markovify`](https://www.reddit.com/r/SubredditSimMeta/comments/3d910r/i_was_inspired_by_this_place_and_made_a_twitter/ct3vjp0)
+- [college crapplication](http://college-crapplication.appspot.com/), a web-app that generates college application essays. [[code](https://github.com/mattr555/college-crapplication)]
+- [@MarkovPicard](https://twitter.com/MarkovPicard), a Twitter bot based on *Star Trek: The Next Generation* transcripts. [[code](https://github.com/rdsheppard95/MarkovPicard)]
+- [sekrits.herokuapp.com](https://sekrits.herokuapp.com/), a `markovify`-powered quiz that challenges you to tell the difference between "two file titles relating to matters of [Australian] national security" — one real and one fake. [[code](https://sekrits.herokuapp.com/)]
 
 Have other examples? Pull requests welcome.

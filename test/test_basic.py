@@ -1,6 +1,7 @@
 import random
 import markovify
 import sys, os
+import operator
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 with open(os.path.join(HERE, "texts/sherlock.txt")) as f:
@@ -16,10 +17,14 @@ def test_sherlock():
     sent = text_model.make_sentence()
     assert(len(sent) != 0)
 
+def get_sorted(chain_json):
+    return sorted(chain_json, key=operator.itemgetter(0))
+
 def test_json():
     text_model = markovify.Text(sherlock)
-    json_model = text_model.chain.to_json()
-    stored_chain = markovify.Chain.from_json(json_model)
+    chain_json = text_model.chain.to_json()
+    stored_chain = markovify.Chain.from_json(chain_json)
+    assert(get_sorted(stored_chain.to_json()) == get_sorted(chain_json))
     new_text_model = markovify.Text(sherlock, chain=stored_chain)
     sent = text_model.make_sentence()
     assert(len(sent) != 0)

@@ -3,7 +3,7 @@ import itertools
 import operator
 import bisect
 import json
-from collections import OrderedDict
+from collections import defaultdict
 
 BEGIN = "___BEGIN__"
 END = "___END__"
@@ -49,18 +49,13 @@ class Chain(object):
         """
         if (type(corpus) != list) or (type(corpus[0]) != list):
             raise Exception("`corpus` must be list of lists")
-        model = OrderedDict()
+        model = defaultdict(lambda: defaultdict(int))
         for run in corpus:
             items = ([ BEGIN ] * state_size) + run + [ END ]
             for i in range(len(run) + 1):
                 state = tuple(items[i:i+state_size])
                 follow = items[i+state_size]
-                if state not in model:
-                    model[state] = OrderedDict(((follow, 1), ))
-                elif follow not in model[state]:
-                    model[state][follow] = 1
-                else:
-                    model[state][follow] += 1
+                model[state][follow] += 1
         return model
 
     def move(self, state):
@@ -117,7 +112,7 @@ class Chain(object):
         else:
             obj = json_thing
         state_size = len(obj[0][0])
-        rehydrated = OrderedDict((tuple(item[0]), item[1]) for item in obj)
+        rehydrated = {tuple(item[0]): item[1] for item in obj}
         inst = cls(None, state_size, rehydrated)
         return inst
 

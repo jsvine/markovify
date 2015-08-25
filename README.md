@@ -1,6 +1,6 @@
 # Markovify
 
-Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpuses of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
+Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpora of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
 
 Some features include:
 

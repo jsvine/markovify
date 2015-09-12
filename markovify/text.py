@@ -127,7 +127,7 @@ class Text(object):
 
     def make_sentence_with_start(self, beginning, **kwargs):
         init_state = tuple(self.word_split(beginning))
-        return make_sentence(init_state, **kwargs)
+        return self.make_sentence(init_state, **kwargs)
 
 class NewlineText(Text):
     """

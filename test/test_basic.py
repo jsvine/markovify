@@ -28,3 +28,8 @@ def test_json():
     new_text_model = markovify.Text(sherlock, chain=stored_chain)
     sent = text_model.make_sentence()
     assert(len(sent) != 0)
+
+def test_make_sentence_with_start():
+    text_model = markovify.Text(sherlock)
+    sent = text_model.make_sentence_with_start("Sherlock Holmes")
+    assert(sent != None)

@@ -21,7 +21,7 @@ def accumulate(iterable, func=operator.add):
 class Chain(object):
     """
     A Markov chain representing processes that have both beginnings and ends.
-    For example: Sentences. 
+    For example: Sentences.
     """
     def __init__(self, corpus, state_size, model=None):
         """
@@ -36,7 +36,7 @@ class Chain(object):
         """
         self.state_size = state_size
         self.model = model or self.build(corpus, state_size)
-        
+
     def build(self, corpus, state_size):
         """
         Build a Python representation of the Markov model. Returns a dict
@@ -88,7 +88,7 @@ class Chain(object):
             if next_word == END: break
             yield next_word
             state = tuple(state[1:]) + (next_word,)
-    
+
     def walk(self, init_state=None):
         """
         Return a list representing a single run of the Markov model, either
@@ -120,7 +120,7 @@ class Chain(object):
         else:
             obj = json_thing
         state_size = len(obj[0][0])
-        rehydrated = {tuple(item[0]): item[1] for item in obj}
+        rehydrated = dict((tuple(item[0]), item[1]) for item in obj)
         inst = cls(None, state_size, rehydrated)
         return inst
 

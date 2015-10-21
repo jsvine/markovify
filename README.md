@@ -14,6 +14,8 @@ Some features include:
 
 Developed at [BuzzFeed](http://www.buzzfeed.com/).
 
+Tested on Python 2.6, 2.7, 3.1, and 3.4.
+
 ## Installation
 
 ```
@@ -113,3 +115,4 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@orf](https://github.com/orf)
 - [@deimos](https://github.com/deimos)
 - [@cjmochrie](https://github.com/cjmochrie)
+- [@Jaza](https://github.com/Jaza)

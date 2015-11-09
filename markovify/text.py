@@ -7,8 +7,10 @@ DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
 
+
 class Text(object):
-    def __init__(self, input_text, state_size=2, chain=None):
+
+    def __init__(self, input_text, state_size=None, chain=None):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -18,7 +20,7 @@ class Text(object):
 
         # Rejoined text lets us assess the novelty of generated setences
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
-        self.state_size = state_size        
+        state_size = state_size or 2
         self.chain = chain or Chain(runs, state_size)
 
     def sentence_split(self, text):
@@ -78,7 +80,7 @@ class Text(object):
         Given a generated list of words, accept or reject it. This one rejects
         sentences that too closely match the original text, namely those that
         contain any identical sequence of words of X length, where X is the
-        smaller number of (a) `max_overlap_ratio` (default: 0.7) of the total 
+        smaller number of (a) `max_overlap_ratio` (default: 0.7) of the total
         number of words, and (b) `max_overlap_total` (default: 15).
         """
         # Reject large chunks of similarity
@@ -93,10 +95,7 @@ class Text(object):
                 return False
         return True
             
-    def make_sentence(self, init_state=None,
-        tries=DEFAULT_TRIES,
-        max_overlap_ratio=DEFAULT_MAX_OVERLAP_RATIO,
-        max_overlap_total=DEFAULT_MAX_OVERLAP_TOTAL):
+    def make_sentence(self, init_state=None, **kwargs):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
         based on the model and `test_sentence_output`. Passes `max_overlap_ratio`
@@ -104,12 +103,15 @@ class Text(object):
 
         If successful, returns the sentence as a string. If not, returns None.
 
-        If `init_state` (a tuple of `self.state_size` words) is not specified,
+        If `init_state` (a tuple of `self.chain.state_size` words) is not specified,
         this method chooses a sentence-start at random, in accordance with
         the model.
         """
-        mor, mot = max_overlap_ratio, max_overlap_total
-        for i in range(tries):
+        tries = kwargs.get('tries', DEFAULT_TRIES)
+        mor = kwargs.get('max_overlap_ratio', DEFAULT_MAX_OVERLAP_RATIO)
+        mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
+
+        for _ in range(tries):
             words = self.chain.walk(init_state)
             if self.test_sentence_output(words, mor, mot):
                 return self.word_join(words)

@@ -23,7 +23,7 @@ class Chain(object):
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.
     """
-    def __init__(self, corpus, state_size, model=None):
+    def __init__(self, corpus, state_size=None, model=None):
         """
         `corpus`: A list of lists, where each outer list is a "run"
         of the process (e.g., a single sentence), and each inner list
@@ -34,8 +34,8 @@ class Chain(object):
         `state_size`: An integer indicating the number of items the model
         uses to represent its state. For text generation, 2 or 3 are typical.
         """
-        self.state_size = state_size
-        self.model = model or self.build(corpus, state_size)
+        self.state_size = state_size or 2
+        self.model = model or self.build(corpus, self.state_size)
 
     def build(self, corpus, state_size):
         """

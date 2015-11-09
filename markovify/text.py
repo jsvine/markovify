@@ -1,6 +1,6 @@
 import re
-import string
-import markovify
+from .splitters import split_into_sentences
+from .chain import Chain
 from unidecode import unidecode
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
@@ -15,16 +15,17 @@ class Text(object):
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
         runs = list(self.generate_corpus(input_text))
+
         # Rejoined text lets us assess the novelty of generated setences
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
         self.state_size = state_size        
-        self.chain = chain or markovify.Chain(runs, state_size)
+        self.chain = chain or Chain(runs, state_size)
 
     def sentence_split(self, text):
         """
         Splits full-text string into a list of sentences.
         """
-        return markovify.split_into_sentences(text)
+        return split_into_sentences(text)
 
     def sentence_join(self, sentences):
         """
@@ -114,7 +115,7 @@ class Text(object):
                 return self.word_join(words)
             else: continue
         return None
-    
+
     def make_short_sentence(self, char_limit, **kwargs):
         """
         Tries making a sentence of no more than `char_limit` characters`,
@@ -128,6 +129,16 @@ class Text(object):
     def make_sentence_with_start(self, beginning, **kwargs):
         init_state = tuple(self.word_split(beginning))
         return self.make_sentence(init_state, **kwargs)
+
+    @classmethod
+    def from_chain(cls, chain_json, corpus=None):
+        """
+        Init a Text class based on an existing chain JSON string or object
+        If corpus is None, overlap checking won't work.
+        """
+        chain = Chain.from_json(chain_json)
+        return cls(corpus or '', None, chain=chain)
+
 
 class NewlineText(Text):
     """

@@ -116,3 +116,4 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@deimos](https://github.com/deimos)
 - [@cjmochrie](https://github.com/cjmochrie)
 - [@Jaza](https://github.com/Jaza)
+- [@fitnr](https://github.com/fitnr)

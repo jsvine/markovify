@@ -106,6 +106,7 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [sekrits.herokuapp.com](https://sekrits.herokuapp.com/), a `markovify`-powered quiz that challenges you to tell the difference between "two file titles relating to matters of [Australian] national security" — one real and one fake. [[code](https://sekrits.herokuapp.com/)]
 - [Hacker News Simulator](http://news.ycombniator.com/), which does what it says on the tin. [[code](https://github.com/orf/hnewssimulator)]
 - [Stak Attak](http://www.stakattak.me/), a "poetic stackoverflow answer generator." [[code](https://github.com/theannielin/hackharvard)]
+- [MashBOT](https://twitter.com/mashomatic), a `markovify`-powered Twitter bot attached to a printer. Presented by [Helen J Burgess at Babel Toronto 2015](http://electric.press/mash/). [[code](https://github.com/hyperrhiz/mashbot)]
 
 Have other examples? Pull requests welcome.
 

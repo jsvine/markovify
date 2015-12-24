@@ -108,6 +108,9 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [Stak Attak](http://www.stakattak.me/), a "poetic stackoverflow answer generator." [[code](https://github.com/theannielin/hackharvard)]
 - [MashBOT](https://twitter.com/mashomatic), a `markovify`-powered Twitter bot attached to a printer. Presented by [Helen J Burgess at Babel Toronto 2015](http://electric.press/mash/). [[code](https://github.com/hyperrhiz/mashbot)]
 - [The Mansfield Reporter](http://maxlupo.com/mansfield-reporter/), "a simple device which can generate new text from some of history's greatest authors [...] running on a tiny Raspberry Pi, displaying through a tft screen from Adafruit." 
+- [twitter markov](https://github.com/fitnr/twitter_markov), a tool to "create markov chain ("_ebooks") accounts on Twitter."
+- [@Bern_Trump_Bot](https://twitter.com/bern_trump_bot), "Bernie Sanders and Donald Trump driven by Markov Chains." [[code](https://github.com/MichaelMartinez/Bern_Trump_Bot)]
+- [@RealTrumpTalk](https://twitter.com/RealTrumpTalk), "A bot that uses the things that @realDonaldTrump tweets to create it's own tweets." [[code](https://github.com/CastleCorp/TrumpTalk)]
 
 Have other examples? Pull requests welcome.
 

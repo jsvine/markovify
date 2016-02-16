@@ -111,6 +111,7 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [twitter markov](https://github.com/fitnr/twitter_markov), a tool to "create markov chain ("_ebooks") accounts on Twitter."
 - [@Bern_Trump_Bot](https://twitter.com/bern_trump_bot), "Bernie Sanders and Donald Trump driven by Markov Chains." [[code](https://github.com/MichaelMartinez/Bern_Trump_Bot)]
 - [@RealTrumpTalk](https://twitter.com/RealTrumpTalk), "A bot that uses the things that @realDonaldTrump tweets to create it's own tweets." [[code](https://github.com/CastleCorp/TrumpTalk)]
+- [Taylor Swift Song Generator](http://taytay.mlavin.org/), which does what it says. [[code](https://github.com/caktus/taytay)]
 
 Have other examples? Pull requests welcome.
 

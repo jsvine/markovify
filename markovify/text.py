@@ -10,7 +10,7 @@ DEFAULT_TRIES = 10
 
 class Text(object):
 
-    def __init__(self, input_text, state_size=None, chain=None):
+    def __init__(self, input_text, state_size=2, chain=None):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -20,7 +20,6 @@ class Text(object):
 
         # Rejoined text lets us assess the novelty of generated setences
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
-        state_size = state_size or 2
         self.chain = chain or Chain(runs, state_size)
 
     def sentence_split(self, text):
@@ -115,7 +114,7 @@ class Text(object):
             words = self.chain.walk(init_state)
             if self.test_sentence_output(words, mor, mot):
                 return self.word_join(words)
-            else: continue
+            continue
         return None
 
     def make_short_sentence(self, char_limit, **kwargs):

@@ -124,3 +124,4 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@cjmochrie](https://github.com/cjmochrie)
 - [@Jaza](https://github.com/Jaza)
 - [@fitnr](https://github.com/fitnr)
+- [@andela-mfalade](https://github.com/andela-mfalade)

@@ -114,7 +114,6 @@ class Text(object):
             words = self.chain.walk(init_state)
             if self.test_sentence_output(words, mor, mot):
                 return self.word_join(words)
-            continue
         return None
 
     def make_short_sentence(self, char_limit, **kwargs):

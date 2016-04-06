@@ -1,4 +1,4 @@
-VERSION_TUPLE = (0, 2, 5)
+VERSION_TUPLE = (0, 3, 0)
 VERSION = ".".join(map(str, VERSION_TUPLE))
 
 from .chain import Chain

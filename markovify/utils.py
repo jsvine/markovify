@@ -29,6 +29,11 @@ def combine(models, weights=None):
     except:
         raise ValueError("All `models` must have the same state size.")
 
+    try:
+        assert(len(set(map(type, models))) == 1)
+    except:
+        raise ValueError("All `models` must be of the same type.")
+
     c = {}
 
     for m, w in zip(model_dicts, weights):

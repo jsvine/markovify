@@ -1,6 +1,6 @@
 import re
 from .splitters import split_into_sentences
-from .chain import Chain
+from .chain import Chain, BEGIN, END
 from unidecode import unidecode
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
@@ -16,6 +16,7 @@ class Text(object):
         state_size: An integer, indicating the number of words in the model's state.
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
+        self.input_text = input_text
         runs = list(self.generate_corpus(input_text))
 
         # Rejoined text lets us assess the novelty of generated setences
@@ -111,7 +112,14 @@ class Text(object):
         mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
 
         for _ in range(tries):
-            words = self.chain.walk(init_state)
+            if init_state != None:
+                if init_state[0] == BEGIN:
+                    prefix = list(init_state[1:])
+                else:
+                    prefix = list(init_state)
+            else:
+                prefix = []
+            words = prefix + self.chain.walk(init_state)
             if self.test_sentence_output(words, mor, mot):
                 return self.word_join(words)
         return None

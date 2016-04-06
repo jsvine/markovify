@@ -2,7 +2,16 @@
 
 Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpora of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
 
-Some features include:
+- [Why Markovify?](#why-markovify)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Advanced Usage](#advanced-usage)
+- [Markovify In The Wild](#markovify-in-the-wild)
+- [Thanks](#thanks)
+
+## Why Markovify?
+
+Some reasons:
 
 - Simplicity. "Batteries included," but it's easy to override key methods.
 
@@ -12,9 +21,8 @@ Some features include:
 
 - Relies only on pure-Python libraries, and very few of them.
 
-Developed at [BuzzFeed](http://www.buzzfeed.com/).
+- Tested on Python 2.6, 2.7, 3.1, and 3.4.
 
-Tested on Python 2.6, 2.7, 3.1, and 3.4.
 
 ## Installation
 
@@ -62,6 +70,25 @@ By default, `markovify.Text` uses a state size of 2. But you can instantiate a m
 ```python
 text_model = markovify.Text(text, state_size=3)
 ```
+
+### Combining models
+
+With `markovify.combine(...)`, you can combine two or more Markov chains. The function accepts two arguments:
+
+- `models`: A list of `markovify` objects to combine. Can be instances of `markovify.Chain` or `markovify.Text` (or their subclasses), but all must be of the same type.
+- `weights`: Optional. A list — the exact length of `models` — of ints or floats indicating how much relative emphasis to place on each source. Default: `[ 1, 1, ... ]`.
+
+For instance:
+
+```python
+model_a = markovify.Text(text_a)
+model_b = markovify.Text(text_b)
+
+model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
+```
+
+... would combine `model_a` and `model_b`, but place 50% more weight on the connections from `model_a`.
+
 
 ### Extending `markovify.Text`
 
@@ -126,3 +153,5 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@Jaza](https://github.com/Jaza)
 - [@fitnr](https://github.com/fitnr)
 - [@andela-mfalade](https://github.com/andela-mfalade)
+
+Developed at [BuzzFeed](https://buzzfeed.com/).

@@ -119,8 +119,16 @@ class Chain(object):
             obj = json.loads(json_thing)
         else:
             obj = json_thing
-        state_size = len(obj[0][0])
-        rehydrated = dict((tuple(item[0]), item[1]) for item in obj)
+
+        if isinstance(obj, list):
+            rehydrated = dict((tuple(item[0]), item[1]) for item in obj)
+        elif isinstance(obj, dict):
+            rehydrated = obj
+        else:
+            raise ValueError("Object should be dict or list")
+
+        state_size = len(list(rehydrated.keys())[0])
+
         inst = cls(None, state_size, rehydrated)
         return inst
 

@@ -43,8 +43,10 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_make_sentence_with_start(self):
         text_model = markovify.Text(self.sherlock)
-        sent = text_model.make_sentence_with_start("Sherlock Holmes")
+        start_str = "Sherlock Holmes"
+        sent = text_model.make_sentence_with_start(start_str)
         assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
 
     def test_short_sentence(self):
         text_model = markovify.Text(self.sherlock)

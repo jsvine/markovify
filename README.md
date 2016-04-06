@@ -71,6 +71,25 @@ By default, `markovify.Text` uses a state size of 2. But you can instantiate a m
 text_model = markovify.Text(text, state_size=3)
 ```
 
+### Combining models
+
+With `markovify.combine(...)`, you can combine two or more Markov chains. The function accepts two arguments:
+
+- `models`: A list of `markovify` objects to combine. Can be instances of `markovify.Chain` or `markovify.Text` (or their subclasses), but all must be of the same type.
+- `weights`: Optional. A list — the exact length of `models` — of ints or floats indicating how much relative emphasis to place on each source. Default: `[ 1, 1, ... ]`.
+
+For instance:
+
+```python
+model_a = markovify.Text(text_a)
+model_b = markovify.Text(text_b)
+
+model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
+```
+
+... would combine `model_a` and `model_b`, but place 50% more weight on the connections from `model_a`.
+
+
 ### Extending `markovify.Text`
 
 The `markovify.Text` class is highly extensible; most methods can be overridden. For example, the following `POSifiedText` class uses NLTK's part-of-speech tagger to generate a Markov model that obeys sentence structure better than a naive model. (It works. But be warned: `pos_tag` is very slow.)

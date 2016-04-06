@@ -2,7 +2,16 @@
 
 Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpora of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
 
-Some features include:
+- [Why Markovify?](#why-markovify)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Advanced Usage](#advanced-usage)
+- [Markovify In The Wild](#markovify-in-the-wild)
+- [Thanks](#thanks)
+
+## Why Markovify?
+
+Some reasons:
 
 - Simplicity. "Batteries included," but it's easy to override key methods.
 
@@ -12,9 +21,8 @@ Some features include:
 
 - Relies only on pure-Python libraries, and very few of them.
 
-Developed at [BuzzFeed](http://www.buzzfeed.com/).
+- Tested on Python 2.6, 2.7, 3.1, and 3.4.
 
-Tested on Python 2.6, 2.7, 3.1, and 3.4.
 
 ## Installation
 
@@ -126,3 +134,5 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@Jaza](https://github.com/Jaza)
 - [@fitnr](https://github.com/fitnr)
 - [@andela-mfalade](https://github.com/andela-mfalade)
+
+Developed at [BuzzFeed](https://buzzfeed.com/).

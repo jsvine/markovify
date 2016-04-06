@@ -16,6 +16,7 @@ class Text(object):
         state_size: An integer, indicating the number of words in the model's state.
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
+        self.input_text = input_text
         runs = list(self.generate_corpus(input_text))
 
         # Rejoined text lets us assess the novelty of generated setences

@@ -50,7 +50,9 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_short_sentence(self):
         text_model = markovify.Text(self.sherlock)
-        sent = text_model.make_short_sentence(45)
+        sent = None
+        while sent == None:
+            sent = text_model.make_short_sentence(45)
         assert len(sent) < 45
 
 

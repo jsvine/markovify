@@ -155,5 +155,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@Jaza](https://github.com/Jaza)
 - [@fitnr](https://github.com/fitnr)
 - [@andela-mfalade](https://github.com/andela-mfalade)
+- [@ntratcliff](https://github.com/ntratcliff)
 
 Developed at [BuzzFeed](https://buzzfeed.com/).

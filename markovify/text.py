@@ -129,7 +129,8 @@ class Text(object):
         Tries making a sentence of no more than `char_limit` characters`,
         passing **kwargs to self.make_sentence.
         """
-        while True:
+        tries = kwargs.get('tries', DEFAULT_TRIES)
+        for _ in range(tries):
             sentence = self.make_sentence(**kwargs)
             if sentence and len(sentence) < char_limit:
                 return sentence

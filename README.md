@@ -157,4 +157,4 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@andela-mfalade](https://github.com/andela-mfalade)
 - [@ntratcliff](https://github.com/ntratcliff)
 
-Developed at [BuzzFeed](https://buzzfeed.com/).
+Developed at [BuzzFeed](https://www.buzzfeed.com).

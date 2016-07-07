@@ -36,8 +36,7 @@ class Chain(object):
         """
         self.state_size = state_size
         self.model = model or self.build(corpus, self.state_size)
-        self.begin_cumdist = []
-        self.begin_choices = []
+        self.precompute_begin_state()
 
     def build(self, corpus, state_size):
         """
@@ -68,23 +67,27 @@ class Chain(object):
                 model[state][follow] += 1
         return model
 
+    def precompute_begin_state(self):
+        """
+        Caches the summation calculation and available choices for BEGIN * state_size.
+        Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
+        """
+        begin_state = tuple([ BEGIN ] * self.state_size)
+        choices, weights = zip(*self.model[begin_state].items())
+        cumdist = list(accumulate(weights))
+        self.begin_cumdist = cumdist
+        self.begin_choices = choices
+
     def move(self, state):
         """
         Given a state, choose the next item at random.
         """
-        if state[0] == "___BEGIN__" and state[1] == "___BEGIN__":
-            if len(self.begin_cumdist) == 0:
-                choices, weights = zip(*self.model[state].items())
-                cumdist = list(accumulate(weights))
-                r = random.random() * cumdist[-1]
-                self.begin_cumdist = cumdist
-                self.begin_choices = choices
-                return choices[bisect.bisect(cumdist, r)]
-            else:
-                r = random.random() * self.begin_cumdist[-1]
-                return self.begin_choices[bisect.bisect(self.begin_cumdist, r)]
-        choices, weights = zip(*self.model[state].items())
-        cumdist = list(accumulate(weights))
+        if state == tuple([ BEGIN ] * self.state_size):
+            choices = self.begin_choices
+            cumdist = self.begin_cumdist
+        else:
+            choices, weights = zip(*self.model[state].items())
+            cumdist = list(accumulate(weights))
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection

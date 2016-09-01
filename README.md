@@ -143,7 +143,7 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [Internal Security Zones](http://rebecca-ricks.com/2016/05/06/internal-security-zones/), "Generative instructions for prison design & maintenance." [[code](https://github.com/baricks/internal-security-zones)]
 - [Miraculous Ladybot](http://miraculousladybot.tumblr.com/). Generates [Miraculous Ladybug](https://en.wikipedia.org/wiki/Miraculous:_Tales_of_Ladybug_%26_Cat_Noir) fanfictions and posts them on Tumblr. [[code](https://github.com/veggiedefender/miraculousladybot)]
 - [@HaikuBotto](https://twitter.com/HaikuBotto), "I'm a bot that writes haiku from literature. beep boop" [[code](https://github.com/balysv/HaikuBotto)]
-- [Chat Simulator Bot](http://www.telegram.me/ChatSimulatorBot), a bot for Telegram. [[http://www.telegram.me/ChatSimulatorBot](https://github.com/GuyAglionby/chatsimulatorbot)]
+- [Chat Simulator Bot](http://www.telegram.me/ChatSimulatorBot), a bot for Telegram. [[code](https://github.com/GuyAglionby/chatsimulatorbot)]
 - [emojipasta.club](http://emojipasta.club), "a web service that exposes RESTful endpoints for generating emojipastas, as well as a simple frontend for generating and tweeting emojipasta sentences." [[code](https://github.com/ntratcliff/emojipasta.club)]
 - [Towel Generator](http://towel.labs.wasv.me/), "A system for generating sentences similar to those from the hitchhikers series of books." [[code](https://github.com/wastevensv/towelday)]
 - [@mercurialbot](https://twitter.com/mercurialbot), "A twitter bot that generates tweets based on its mood." [[code](https://github.com/brahmcapoor/Mercury)]

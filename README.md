@@ -142,6 +142,16 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [@BOTtalks](https://twitter.com/bottalks) / [ideasworthautomating.com](http://ideasworthautomating.com/). "TIM generates talks on a broad spectrum of topics, based on the texts of slightly more coherent talks given under the auspices of his more famous big brother, who shall not be named here." [[code](https://github.com/alexislloyd/tedbot)]
 - [Internal Security Zones](http://rebecca-ricks.com/2016/05/06/internal-security-zones/), "Generative instructions for prison design & maintenance." [[code](https://github.com/baricks/internal-security-zones)]
 - [Miraculous Ladybot](http://miraculousladybot.tumblr.com/). Generates [Miraculous Ladybug](https://en.wikipedia.org/wiki/Miraculous:_Tales_of_Ladybug_%26_Cat_Noir) fanfictions and posts them on Tumblr. [[code](https://github.com/veggiedefender/miraculousladybot)]
+- [@HaikuBotto](https://twitter.com/HaikuBotto), "I'm a bot that writes haiku from literature. beep boop" [[code](https://github.com/balysv/HaikuBotto)]
+- [Chat Simulator Bot](http://www.telegram.me/ChatSimulatorBot), a bot for Telegram. [[http://www.telegram.me/ChatSimulatorBot](https://github.com/GuyAglionby/chatsimulatorbot)]
+- [emojipasta.club](http://emojipasta.club), "a web service that exposes RESTful endpoints for generating emojipastas, as well as a simple frontend for generating and tweeting emojipasta sentences." [[code](https://github.com/ntratcliff/emojipasta.club)]
+- [Towel Generator](http://towel.labs.wasv.me/), "A system for generating sentences similar to those from the hitchhikers series of books." [[code](https://github.com/wastevensv/towelday)]
+- [@mercurialbot](https://twitter.com/mercurialbot), "A twitter bot that generates tweets based on its mood." [[code](https://github.com/brahmcapoor/Mercury)]
+- [becomeacurator.com](http://becomeacurator.com/), which "generates curatorial statements for contemporary art expositions, using Markov chains and texts from galleries around the world." [[code](https://github.com/jjcastro/markov-curatorial-generator)]
+- [mannynotfound/interview-bot](https://github.com/mannynotfound/interview-bot), "A python based terminal prompt app to automate the interview process."
+- [Steam Game Generator](http://applepinegames.com/tech/steam-game-generator), which "uses data from real Steam games, randomized using Markov chains." [[code](https://github.com/applepinegames/steam_game_generator)]
+- [@DicedOnionBot](https://twitter.com/DicedOnionBot), which "generates new headlines by The Onion by regurgitating and combining old headlines." [[code](https://github.com/mobeets/fake-onion)]
+- [@thought__leader](https://twitter.com/thought__leader), "Thinking thoughts so you don't have to!" [[blog post](http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/)]
 
 Have other examples? Pull requests welcome.
 

@@ -154,7 +154,6 @@ class Text(object):
                 pass
         return self.make_sentence((first_word, second_word), **kwargs)
 
-
     @classmethod
     def from_chain(cls, chain_json, corpus=None):
         """

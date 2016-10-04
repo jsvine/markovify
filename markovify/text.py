@@ -52,7 +52,7 @@ class Text(object):
         """
         A basic sentence filter. This one rejects sentences that contain
         the type of punctuation that would look strange on its own
-        in a randomly-generated sentence. 
+        in a randomly-generated sentence.
         """
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
@@ -67,7 +67,7 @@ class Text(object):
     def generate_corpus(self, text):
         """
         Given a text string, returns a list of lists; that is, a list of
-        "sentences," each of which is a list of words. Before splitting into 
+        "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
         sentences = self.sentence_split(text)
@@ -94,7 +94,7 @@ class Text(object):
             if gram_joined in self.rejoined_text:
                 return False
         return True
-            
+
     def make_sentence(self, init_state=None, **kwargs):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
@@ -138,6 +138,22 @@ class Text(object):
     def make_sentence_with_start(self, beginning, **kwargs):
         init_state = tuple(self.word_split(beginning))
         return self.make_sentence(init_state, **kwargs)
+
+    def make_sentence_with_starting_letter(self, letter, **kwargs):
+        """
+        Tries to make a sentence whose first word starts with letter `letter`.
+        """
+        first_word = None
+        while first_word is None:
+            candidates = list(self.chain.gen())
+            try:
+                first_word = filter(lambda word: word[0] in [letter.upper(), letter.lower()],
+                                    candidates[:len(candidates) + 1])[0]
+                second_word = candidates[candidates.index(first_word) + 1]
+            except IndexError:
+                pass
+        return self.make_sentence((first_word, second_word), **kwargs)
+
 
     @classmethod
     def from_chain(cls, chain_json, corpus=None):

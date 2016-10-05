@@ -148,7 +148,7 @@ class Text(object):
             candidates = list(self.chain.gen())
             try:
                 first_word = filter(lambda word: word[0] in [letter.upper(), letter.lower()],
-                                    candidates[:len(candidates) + 1])[0]
+                                    candidates[:len(candidates) - 1])[0]
                 second_word = candidates[candidates.index(first_word) + 1]
             except IndexError:
                 pass

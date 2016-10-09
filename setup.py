@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="markovify",
-    version="0.4.0",
+    version="0.4.1",
     description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
     long_description="",
     classifiers=[

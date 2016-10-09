@@ -7,6 +7,8 @@ DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
 
+class ParamError(Exception):
+    pass
 
 class Text(object):
 
@@ -127,7 +129,7 @@ class Text(object):
     def make_short_sentence(self, char_limit, **kwargs):
         """
         Tries making a sentence of no more than `char_limit` characters`,
-        passing **kwargs to self.make_sentence.
+        passing **kwargs to `self.make_sentence`.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
         for _ in range(tries):
@@ -136,7 +138,21 @@ class Text(object):
                 return sentence
 
     def make_sentence_with_start(self, beginning, **kwargs):
-        init_state = tuple(self.word_split(beginning))
+        """
+        Tries making a sentence that begins with `beginning` string,
+        which should be a string of one or two words known to exist in the 
+        corpus. **kwargs are passed to `self.make_sentence`.
+        """
+        split = self.word_split(beginning)
+        word_count = len(split)
+        if word_count == 2:
+            init_state = tuple(split)
+        elif word_count == 1:
+            init_state = (BEGIN, split[0])
+        else:
+            err_msg = "`make_sentence_with_start` requires a string containing either one or two words. Yours has {0}: {1}".format(word_count, str(split))
+            raise ParamError(err_msg)
+
         return self.make_sentence(init_state, **kwargs)
 
     @classmethod

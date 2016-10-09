@@ -48,6 +48,22 @@ class MarkovifyTest(unittest.TestCase):
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
+    def test_make_sentence_with_start_one_word(self):
+        text_model = markovify.Text(self.sherlock)
+        start_str = "Sherlock"
+        sent = text_model.make_sentence_with_start(start_str)
+        assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
+
+    def test_make_sentence_with_start_three_words(self):
+        text_model = markovify.Text(self.sherlock)
+        start_str = "Sherlock Holmes was"
+        try:
+            text_model.make_sentence_with_start(start_str)
+            assert(False)
+        except markovify.text.ParamError:
+            assert(True)
+
     def test_short_sentence(self):
         text_model = markovify.Text(self.sherlock)
         sent = None

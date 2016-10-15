@@ -44,7 +44,7 @@ def combine(models, weights=None):
         return Chain.from_json(c)
     if isinstance(ret_inst, Text):
         combined_text = "\n".join(m.input_text for m in models)
-        return Text.from_chain(c, corpus=combined_text)
+        return ret_inst.from_chain(c, corpus=combined_text)
     if isinstance(ret_inst, list):
         return list(c.items())
     if isinstance(ret_inst, dict):

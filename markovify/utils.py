@@ -15,23 +15,17 @@ def combine(models, weights=None):
     if weights == None:
         weights = [ 1 for _ in range(len(models)) ]
 
-    try:
-        assert(len(models) == len(weights))
-    except:
+    if len(models) != len(weights):
         raise ValueError("`models` and `weights` lengths must be equal.")
 
     model_dicts = list(map(get_model_dict, models))
     state_sizes = [ len(list(md.keys())[0])
         for md in model_dicts ]
 
-    try:
-        assert(len(set(state_sizes)) == 1)
-    except:
+    if len(set(state_sizes)) != 1:
         raise ValueError("All `models` must have the same state size.")
 
-    try:
-        assert(len(set(map(type, models))) == 1)
-    except:
+    if len(set(map(type, models))) != 1:
         raise ValueError("All `models` must be of the same type.")
 
     c = {}

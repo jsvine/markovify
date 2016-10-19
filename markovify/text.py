@@ -19,6 +19,7 @@ class Text(object):
         chain: A trained markovify.Chain instance for this text, if pre-processed.
         """
         self.input_text = input_text
+        self.state_size = state_size
         runs = list(self.generate_corpus(input_text))
 
         # Rejoined text lets us assess the novelty of generated setences
@@ -145,12 +146,12 @@ class Text(object):
         """
         split = self.word_split(beginning)
         word_count = len(split)
-        if word_count == 2:
+        if word_count == self.state_size:
             init_state = tuple(split)
-        elif word_count == 1:
-            init_state = (BEGIN, split[0])
+        elif word_count > 0 and word_count < self.state_size:
+            init_state = tuple([ BEGIN ] * (self.state_size - word_count) + split)
         else:
-            err_msg = "`make_sentence_with_start` requires a string containing either one or two words. Yours has {0}: {1}".format(word_count, str(split))
+            err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
             raise ParamError(err_msg)
 
         return self.make_sentence(init_state, **kwargs)

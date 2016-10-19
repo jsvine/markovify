@@ -56,13 +56,16 @@ class MarkovifyTest(unittest.TestCase):
         assert(start_str == sent[:len(start_str)])
 
     def test_make_sentence_with_start_three_words(self):
-        text_model = markovify.Text(self.sherlock)
         start_str = "Sherlock Holmes was"
+        text_model = markovify.Text(self.sherlock)
         try:
             text_model.make_sentence_with_start(start_str)
             assert(False)
         except markovify.text.ParamError:
             assert(True)
+        text_model = markovify.Text(self.sherlock, state_size=3)
+        text_model.make_sentence_with_start(start_str)
+        text_model.make_sentence_with_start("Sherlock")
 
     def test_short_sentence(self):
         text_model = markovify.Text(self.sherlock)

@@ -152,6 +152,7 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 - [Steam Game Generator](http://applepinegames.com/tech/steam-game-generator), which "uses data from real Steam games, randomized using Markov chains." [[code](https://github.com/applepinegames/steam_game_generator)]
 - [@DicedOnionBot](https://twitter.com/DicedOnionBot), which "generates new headlines by The Onion by regurgitating and combining old headlines." [[code](https://github.com/mobeets/fake-onion)]
 - [@thought__leader](https://twitter.com/thought__leader), "Thinking thoughts so you don't have to!" [[blog post](http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/)]
+- [@_murakamibot](https://twitter.com/_murakamibot) and [@jamesjoycebot](https://twitter.com/jamesjoycebot), bots that tweet Haruki Murakami and James Joyce-like sentences. [[code](https://github.com/tmkuba/markovBot)]
 
 Have other examples? Pull requests welcome.
 

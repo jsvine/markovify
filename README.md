@@ -57,6 +57,8 @@ Notes:
 
 - Markovify works best with large, well-punctuated texts. If your text doesn't use `.`s to delineate sentences, put each sentence on a newline, and use the `markovify.NewlineText` class instead of `markovify.Text` class.
 
+- If you've accidentally read your text as one long sentence, markovify will be unable to generate new sentences from it due to a lack of beginning and ending delimiters. This can happen if you've read a newline delimited file using the `markovify.Text` command instead of `markovify.NewlineText`. To check this, the command `[key for key in txt.chain.model.keys() if "___BEGIN__" in key]` command will return all of the possible sentence starting words, and should return more than one result.
+
 - By default, the `make_sentence` method tries, a maximum of 10 times per invocation, to make a sentence that doesn't overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
 
 - By default, `markovify.Text` tries to generate sentences that don't simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by passing `max_overlap_ratio` and/or `max_overlap_total` to the `make_sentence` method.
@@ -120,6 +122,10 @@ The most useful `markovify.Text` models you can override are:
 - `test_sentence_output`
 
 For details on what they do, see [the (annotated) source code](markovify/text.py).
+
+## Exporting
+
+To export from a generated markovify Text model to json, use the `markovify.chain.to_json()` command to output it in a JSON format. Once saved it can be used to create a new `markovify.Text` object by using the `from_json()` command to read it back.
 
 ## Markovify In The Wild
 

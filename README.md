@@ -123,9 +123,9 @@ The most useful `markovify.Text` models you can override are:
 
 For details on what they do, see [the (annotated) source code](markovify/text.py).
 
-## Exporting
+### Exporting
 
-To export from a generated markovify Text model to json, use the `markovify.chain.to_json()` command to output it in a JSON format. Once saved it can be used to create a new `markovify.Text` object by using the `from_json()` command to read it back.
+To export a generated `markovify.Text` model, use `my_text_model.chain.to_json()` to output it in a JSON format. Once saved, you can reconstitute the model via `markovify.Text.from_json()`.
 
 ## Markovify In The Wild
 

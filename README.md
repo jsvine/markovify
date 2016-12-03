@@ -125,26 +125,22 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 
 ### Exporting
 
-It can take a while to generate a markov chain from a large corpus. Sometimes you'll want to pre-generate that chain and reconstitute it later. To export a generated `markovify.Text` chain, use `my_text_model.chain.to_json()` to output it in a JSON format. Once saved, you can reconstitute the underlying chain via `markovify.Chain.from_json()`, and pass it to `markovify.Text(corpus, state_size=state_size, chain=reconstituted_chain)`. For example:
+It can take a while to generate a Markov model from a large corpus. Sometimes you'll want to generate once and reuse it later. To export a generated `markovify.Text` model, use `my_text_model.to_json()`. For example:
 
 ```python
 corpus = open("sherlock.txt").read()
 
 text_model = markovify.Text(corpus, state_size=3)
-chain_json = text_model.chain.to_json()
-# In theory, here you'd save the chain to disk, and then read it back later.
+model_json = text_model.to_json()
+# In theory, here you'd save the JSON to disk, and then read it back later.
 
-reconstituted_chain = markovify.Chain.from_json(chain_json)
-reconstituted_model = markovify.Text(
-    corpus,
-    state_size=3,
-    chain=reconstituted_chain
-)
-
+reconstituted_model = markovify.Text.from_json(model_json)
 reconstituted_model.make_short_sentence(140)
 
->>> 'He thought no more of the matter to the Rucastles as I felt that it would swim and not sink.'
+>>> 'It cost me something in foolscap, and I had no idea that he was a man of evil reputation among women.'
 ```
+
+You can also export the underlying Markov chain on its own — i.e., excluding the original corpus and the `state_size` metadata — via `my_text_model.chain.to_json()`.
 
 ## Markovify In The Wild
 
@@ -196,5 +192,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@aalireza](https://github.com/aalireza)
 - [@bfontaine](https://github.com/bfontaine)
 - [@tmsherman](https://github.com/tmsherman)
+- [@wodim](https://github.com/wodim)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

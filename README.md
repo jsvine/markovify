@@ -125,7 +125,26 @@ For details on what they do, see [the (annotated) source code](markovify/text.py
 
 ### Exporting
 
-To export a generated `markovify.Text` model, use `my_text_model.chain.to_json()` to output it in a JSON format. Once saved, you can reconstitute the model via `markovify.Text.from_json()`.
+It can take a while to generate a markov chain from a large corpus. Sometimes you'll want to pre-generate that chain and reconstitute it later. To export a generated `markovify.Text` chain, use `my_text_model.chain.to_json()` to output it in a JSON format. Once saved, you can reconstitute the underlying chain via `markovify.Chain.from_json()`, and pass it to `markovify.Text(corpus, state_size=state_size, chain=reconstituted_chain)`. For example:
+
+```python
+corpus = open("sherlock.txt").read()
+
+text_model = markovify.Text(corpus, state_size=3)
+chain_json = text_model.chain.to_json()
+# In theory, here you'd save the chain to disk, and then read it back later.
+
+reconstituted_chain = markovify.Chain.from_json(chain_json)
+reconstituted_model = markovify.Text(
+    corpus,
+    state_size=3,
+    chain=reconstituted_chain
+)
+
+reconstituted_model.make_short_sentence(140)
+
+>>> 'He thought no more of the matter to the Rucastles as I felt that it would swim and not sink.'
+```
 
 ## Markovify In The Wild
 

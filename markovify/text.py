@@ -30,7 +30,7 @@ class Text(object):
         return {
             "input_text": self.input_text,
             "state_size": self.state_size,
-            "chain": self.chain
+            "chain": self.chain.to_json()
         }
 
     @classmethod
@@ -38,7 +38,7 @@ class Text(object):
         return cls(
             json_obj["input_text"],
             state_size=json_obj["state_size"],
-            chain=json_obj["chain"]
+            chain=Chain.from_json(json_obj["chain"])
         )
 
     def sentence_split(self, text):

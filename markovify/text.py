@@ -1,4 +1,5 @@
 import re
+import json
 from .splitters import split_into_sentences
 from .chain import Chain, BEGIN, END
 from unidecode import unidecode
@@ -26,20 +27,27 @@ class Text(object):
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
         self.chain = chain or Chain(runs, state_size)
 
-    def to_json(self):
+    def to_dict(self):
         return {
             "input_text": self.input_text,
             "state_size": self.state_size,
             "chain": self.chain.to_json()
         }
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
     @classmethod
-    def from_json(cls, json_obj):
+    def from_dict(cls, obj):
         return cls(
-            json_obj["input_text"],
-            state_size=json_obj["state_size"],
-            chain=Chain.from_json(json_obj["chain"])
+            obj["input_text"],
+            state_size=obj["state_size"],
+            chain=Chain.from_json(obj["chain"])
         )
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls.from_dict(json.loads(json_str))
 
     def sentence_split(self, text):
         """

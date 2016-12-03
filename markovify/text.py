@@ -26,6 +26,21 @@ class Text(object):
         self.rejoined_text = self.sentence_join(map(self.word_join, runs))
         self.chain = chain or Chain(runs, state_size)
 
+    def to_json(self):
+        return {
+            "input_text": self.input_text,
+            "state_size": self.state_size,
+            "chain": self.chain
+        }
+
+    @classmethod
+    def from_json(cls, json_obj):
+        return cls(
+            json_obj["input_text"],
+            state_size=json_obj["state_size"],
+            chain=json_obj["chain"]
+        )
+
     def sentence_split(self, text):
         """
         Splits full-text string into a list of sentences.

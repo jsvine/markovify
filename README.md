@@ -174,6 +174,7 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 - [@DicedOnionBot](https://twitter.com/DicedOnionBot), which "generates new headlines by The Onion by regurgitating and combining old headlines." [[code](https://github.com/mobeets/fake-onion)]
 - [@thought__leader](https://twitter.com/thought__leader), "Thinking thoughts so you don't have to!" [[blog post](http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/)]
 - [@_murakamibot](https://twitter.com/_murakamibot) and [@jamesjoycebot](https://twitter.com/jamesjoycebot), bots that tweet Haruki Murakami and James Joyce-like sentences. [[code](https://github.com/tmkuba/markovBot)]
+- [shartificialintelligence.com](http://www.shartificialintelligence.com/), "the world's first creative ad agency staffed entirely with copywriter robots." [[code](https://github.com/LesGuessing/shartificial-intelligence)]
 
 Have other examples? Pull requests welcome.
 

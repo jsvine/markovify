@@ -194,5 +194,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@bfontaine](https://github.com/bfontaine)
 - [@tmsherman](https://github.com/tmsherman)
 - [@wodim](https://github.com/wodim)
+- [@eh11fx](https://github.com/eh11fx)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

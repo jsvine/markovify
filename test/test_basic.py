@@ -24,7 +24,8 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_json(self):
         text_model = markovify.Text(self.sherlock)
-
+        json_model = text_model.to_json()
+        new_text_model = markovify.Text.from_json(json_model)
         sent = text_model.make_sentence()
         assert(len(sent) != 0)
 

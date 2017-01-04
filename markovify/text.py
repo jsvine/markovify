@@ -186,7 +186,7 @@ class Text(object):
         If corpus is None, overlap checking won't work.
         """
         chain = Chain.from_json(chain_json)
-        return cls(corpus or '', None, chain=chain)
+        return cls(corpus or '', state_size=chain.state_size, chain=chain)
 
 
 class NewlineText(Text):

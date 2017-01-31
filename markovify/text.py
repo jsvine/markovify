@@ -36,7 +36,7 @@ class Text(object):
         return {
             "input_text": self.input_text,
             "state_size": self.state_size,
-            "chain": self.chain.to_json()
+            "chain": self.chain.to_json(),
             "runs": self.runs
         }
 
@@ -48,7 +48,7 @@ class Text(object):
         return cls(
             obj["input_text"],
             state_size=obj["state_size"],
-            chain=Chain.from_json(obj["chain"])
+            chain=Chain.from_json(obj["chain"]),
             runs=obj["runs"]
         )
 

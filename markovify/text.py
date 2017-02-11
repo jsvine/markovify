@@ -133,10 +133,10 @@ class Text(object):
         this method chooses a sentence-start at random, in accordance with
         the model.
         
-        If `test_output` is passed as False then the `test_sentence_output` check
+        If `test_output` is set as False then the `test_sentence_output` check
         will be skipped.
         
-        If `max_words` is passed the word count for the sentence will be
+        If `max_words` is specified, the word count for the sentence will be
         evaluated against the provided limit.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)

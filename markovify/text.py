@@ -132,10 +132,18 @@ class Text(object):
         If `init_state` (a tuple of `self.chain.state_size` words) is not specified,
         this method chooses a sentence-start at random, in accordance with
         the model.
+        
+        If `test_output` is passed as False then the `test_sentence_output` check
+        will be skipped.
+        
+        If `max_words` is passed the word count for the sentence will be
+        evaluated against the provided limit.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
         mor = kwargs.get('max_overlap_ratio', DEFAULT_MAX_OVERLAP_RATIO)
         mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
+        test_output = kwargs.get('test_output', True)
+        max_words = kwargs.get('max_words', None)
 
         for _ in range(tries):
             if init_state != None:
@@ -146,7 +154,12 @@ class Text(object):
             else:
                 prefix = []
             words = prefix + self.chain.walk(init_state)
-            if self.test_sentence_output(words, mor, mot):
+            if max_words != None and len(words) > max_words:
+                continue
+            if test_output:
+                if self.test_sentence_output(words, mor, mot):
+                    return self.word_join(words)
+            else:
                 return self.word_join(words)
         return None
 

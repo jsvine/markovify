@@ -1,6 +1,7 @@
 from .chain import Chain
 from .text import Text
 
+
 def get_model_dict(thing):
     if isinstance(thing, Chain):
         return thing.model
@@ -11,16 +12,16 @@ def get_model_dict(thing):
     if isinstance(thing, dict):
         return thing
 
+
 def combine(models, weights=None):
-    if weights == None:
-        weights = [ 1 for _ in range(len(models)) ]
+    if weights is None:
+        weights = [1 for _ in range(len(models))]
 
     if len(models) != len(weights):
         raise ValueError("`models` and `weights` lengths must be equal.")
 
     model_dicts = list(map(get_model_dict, models))
-    state_sizes = [ len(list(md.keys())[0])
-        for md in model_dicts ]
+    state_sizes = [len(list(md.keys())[0]) for md in model_dicts]
 
     if len(set(state_sizes)) != 1:
         raise ValueError("All `models` must have the same state size.")
@@ -50,4 +51,7 @@ def combine(models, weights=None):
     if isinstance(ret_inst, dict):
         return c
 
-    raise ValueError("`models` should be instances of list, dict, markovify.Chain, or markovify.Text")
+    raise ValueError(
+        "`models` should be instances of list, dict, markovify.Chain, or "
+        "markovify.Text"
+    )

@@ -12,6 +12,7 @@ except NameError:
 BEGIN = "___BEGIN__"
 END = "___END__"
 
+
 def accumulate(iterable, func=operator.add):
     """
     Cumulative calculations. (Summation, by default.)
@@ -23,6 +24,7 @@ def accumulate(iterable, func=operator.add):
     for element in it:
         total = func(total, element)
         yield total
+
 
 class Chain(object):
     """
@@ -60,7 +62,7 @@ class Chain(object):
         model = {}
 
         for run in corpus:
-            items = ([ BEGIN ] * state_size) + run + [ END ]
+            items = ([BEGIN] * state_size) + run + [END]
             for i in range(len(run) + 1):
                 state = tuple(items[i:i+state_size])
                 follow = items[i+state_size]
@@ -78,7 +80,7 @@ class Chain(object):
         Caches the summation calculation and available choices for BEGIN * state_size.
         Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
         """
-        begin_state = tuple([ BEGIN ] * self.state_size)
+        begin_state = tuple([BEGIN] * self.state_size)
         choices, weights = zip(*self.model[begin_state].items())
         cumdist = list(accumulate(weights))
         self.begin_cumdist = cumdist
@@ -88,7 +90,7 @@ class Chain(object):
         """
         Given a state, choose the next item at random.
         """
-        if state == tuple([ BEGIN ] * self.state_size):
+        if state == tuple([BEGIN] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         else:
@@ -107,7 +109,8 @@ class Chain(object):
         state = init_state or (BEGIN,) * self.state_size
         while True:
             next_word = self.move(state)
-            if next_word == END: break
+            if next_word == END:
+                break
             yield next_word
             state = tuple(state[1:]) + (next_word,)
 
@@ -148,4 +151,3 @@ class Chain(object):
 
         inst = cls(None, state_size, rehydrated)
         return inst
-

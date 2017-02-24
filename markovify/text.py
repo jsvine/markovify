@@ -7,11 +7,15 @@ from unidecode import unidecode
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
+NoneType = type(None)
+
 
 class ParamError(Exception):
     pass
 
+
 class Text(object):
+    word_split_pattern = re.compile(r"\s+")
 
     def __init__(self, input_text, state_size=2, chain=None):
         """
@@ -61,7 +65,6 @@ class Text(object):
         """
         return " ".join(sentences)
 
-    word_split_pattern = re.compile(r"\s+")
     def word_split(self, sentence):
         """
         Splits a sentence into a list of words.
@@ -78,7 +81,7 @@ class Text(object):
         """
         A basic sentence filter. This one rejects sentences that contain
         the type of punctuation that would look strange on its own
-        in a randomly-generated sentence. 
+        in a randomly-generated sentence.
         """
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
@@ -86,14 +89,14 @@ class Text(object):
             decoded = sentence
         else:
             decoded = unidecode(sentence)
+
         # Sentence shouldn't contain problematic characters
-        if re.search(reject_pat, decoded): return False
-        return True
+        return isinstance(re.search(reject_pat, decoded), NoneType)
 
     def generate_corpus(self, text):
         """
         Given a text string, returns a list of lists; that is, a list of
-        "sentences," each of which is a list of words. Before splitting into 
+        "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
         sentences = self.sentence_split(text)
@@ -114,13 +117,14 @@ class Text(object):
         overlap_max = min(max_overlap_total, overlap_ratio)
         overlap_over = overlap_max + 1
         gram_count = max((len(words) - overlap_max), 1)
-        grams = [ words[i:i+overlap_over] for i in range(gram_count) ]
+        grams = [words[i:i+overlap_over] for i in range(gram_count)]
+
         for g in grams:
             gram_joined = self.word_join(g)
             if gram_joined in self.rejoined_text:
                 return False
         return True
-            
+
     def make_sentence(self, init_state=None, **kwargs):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
@@ -138,7 +142,7 @@ class Text(object):
         mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
 
         for _ in range(tries):
-            if init_state != None:
+            if init_state is not None:
                 if init_state[0] == BEGIN:
                     prefix = list(init_state[1:])
                 else:
@@ -164,7 +168,7 @@ class Text(object):
     def make_sentence_with_start(self, beginning, **kwargs):
         """
         Tries making a sentence that begins with `beginning` string,
-        which should be a string of one or two words known to exist in the 
+        which should be a string of one or two words known to exist in the
         corpus. **kwargs are passed to `self.make_sentence`.
         """
         split = self.word_split(beginning)
@@ -172,9 +176,12 @@ class Text(object):
         if word_count == self.state_size:
             init_state = tuple(split)
         elif word_count > 0 and word_count < self.state_size:
-            init_state = tuple([ BEGIN ] * (self.state_size - word_count) + split)
+            init_state = tuple([BEGIN] * (self.state_size - word_count) + split)
         else:
-            err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
+            err_msg = (
+                "`make_sentence_with_start` for this model requires a "
+                "string containing 1 to {0} words. Yours has {1}: {2}"
+            ).format(self.state_size, word_count, str(split))
             raise ParamError(err_msg)
 
         return self.make_sentence(init_state, **kwargs)

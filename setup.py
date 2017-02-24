@@ -1,10 +1,19 @@
 import sys
 from setuptools import setup, find_packages
 
+# Parse version from _version.py
+HERE = path.abspath(path.dirname(__file__))
+
+with open(path.join(HERE, 'markovify', '_version.py'), 'r') as fp:
+    VERSION = search('__version__ = \'([^\']+)\'', fp.read()).group(1)
+
 setup(
     name="markovify",
-    version="0.5.4",
-    description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
+    version=VERSION,
+    description=(
+        "A simple, extensible Markov chain generator. Uses include generating "
+        "random semi-plausible sentences based on an existing text."
+    ),
     long_description="",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -21,7 +30,7 @@ setup(
     author_email="jsvine@gmail.com",
     url="http://github.com/jsvine/markovify",
     license="MIT",
-    packages=find_packages(exclude=["test",]),
+    packages=find_packages(exclude=["test"]),
     namespace_packages=[],
     include_package_data=False,
     zip_safe=False,

@@ -1,10 +1,13 @@
 import unittest
 import markovify
-import sys, os
+import sys
+import os
 import operator
+
 
 def get_sorted(chain_json):
     return sorted(chain_json, key=operator.itemgetter(0))
+
 
 class MarkovifyTest(unittest.TestCase):
 
@@ -15,7 +18,7 @@ class MarkovifyTest(unittest.TestCase):
     def test_text_too_small(self):
         text = u"Example phrase. This is another example sentence."
         text_model = markovify.Text(text)
-        assert(text_model.make_sentence() == None)
+        assert(text_model.make_sentence() is None)
 
     def test_sherlock(self):
         text_model = markovify.Text(self.sherlock)
@@ -46,14 +49,14 @@ class MarkovifyTest(unittest.TestCase):
         text_model = markovify.Text(self.sherlock)
         start_str = "Sherlock Holmes"
         sent = text_model.make_sentence_with_start(start_str)
-        assert(sent != None)
+        assert(sent is not None)
         assert(start_str == sent[:len(start_str)])
 
     def test_make_sentence_with_start_one_word(self):
         text_model = markovify.Text(self.sherlock)
         start_str = "Sherlock"
         sent = text_model.make_sentence_with_start(start_str)
-        assert(sent != None)
+        assert(sent is not None)
         assert(start_str == sent[:len(start_str)])
 
     def test_make_sentence_with_start_three_words(self):
@@ -71,7 +74,7 @@ class MarkovifyTest(unittest.TestCase):
     def test_short_sentence(self):
         text_model = markovify.Text(self.sherlock)
         sent = None
-        while sent == None:
+        while sent is None:
             sent = text_model.make_short_sentence(45)
         assert len(sent) < 45
 

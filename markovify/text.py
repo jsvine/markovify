@@ -44,6 +44,7 @@ class Text(object):
     @classmethod
     def from_dict(cls, obj):
         return cls(
+            None,
             state_size=obj["state_size"],
             chain=Chain.from_json(obj["chain"]),
             parsed_sentences=obj["parsed_sentences"]

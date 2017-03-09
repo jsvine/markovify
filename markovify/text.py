@@ -13,31 +13,31 @@ class ParamError(Exception):
 
 class Text(object):
 
-    def __init__(self, input_text, state_size=2, chain=None, runs=None):
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
         chain: A trained markovify.Chain instance for this text, if pre-processed.
-        runs: A list of lists, where each outer list is a "run"
-              of the process (e.g., a single sentence), and each inner list
-              contains the steps (e.g., words) in the run. If you want to simulate
+        parsed_sentences: A list of lists, where each outer list is a "run"
+              of the process (e.g. a single sentence), and each inner list
+              contains the steps (e.g. words) in the run. If you want to simulate
               an infinite process, you can come very close by passing just one, very
               long run.
         """
         self.input_text = input_text
         self.state_size = state_size
-        self.runs = runs or list(self.generate_corpus(self.input_text))
+        self.parsed_sentences = parsed_sentences or list(self.generate_corpus(self.input_text))
 
-        # Rejoined text lets us assess the novelty of generated setences
-        self.rejoined_text = self.sentence_join(map(self.word_join, self.runs))
-        self.chain = chain or Chain(self.runs, state_size)
+        # Rejoined text lets us assess the novelty of generated sentences
+        self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
+        self.chain = chain or Chain(self.parsed_sentences, state_size)
 
     def to_dict(self):
         return {
             "input_text": self.input_text,
             "state_size": self.state_size,
             "chain": self.chain.to_json(),
-            "runs": self.runs
+            "parsed_sentences": self.parsed_sentences
         }
 
     def to_json(self):
@@ -49,7 +49,7 @@ class Text(object):
             obj["input_text"],
             state_size=obj["state_size"],
             chain=Chain.from_json(obj["chain"]),
-            runs=obj["runs"]
+            parsed_sentences=obj["parsed_sentences"]
         )
 
     @classmethod

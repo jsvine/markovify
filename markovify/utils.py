@@ -46,7 +46,7 @@ def combine(models, weights=None):
         combined_sentences = []
         for m in models:
             combined_sentences += m.parsed_sentences
-        return ret_inst.from_chain(c)
+        return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
     if isinstance(ret_inst, list):
         return list(c.items())
     if isinstance(ret_inst, dict):

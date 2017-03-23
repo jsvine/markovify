@@ -185,13 +185,13 @@ class Text(object):
         return self.make_sentence(init_state, **kwargs)
 
     @classmethod
-    def from_chain(cls, chain_json, corpus=None):
+    def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):
         """
         Init a Text class based on an existing chain JSON string or object
         If corpus is None, overlap checking won't work.
         """
         chain = Chain.from_json(chain_json)
-        return cls(corpus or '', state_size=chain.state_size, chain=chain)
+        return cls(corpus or '', parsed_sentences=parsed_sentences, state_size=chain.state_size, chain=chain)
 
 
 class NewlineText(Text):

@@ -1,3 +1,6 @@
+[![Version](https://img.shields.io/pypi/v/markovify.svg)](https://pypi.python.org/pypi/markovify) [![Build status](https://travis-ci.org/jsvine/markovify.png)](https://travis-ci.org/jsvine/markovify) [![Code coverage](https://img.shields.io/coveralls/jsvine/markovify.svg)](https://coveralls.io/github/jsvine/markovify) [![Support Python versions](https://img.shields.io/pypi/pyversions/markovify.svg)](https://pypi.python.org/pypi/markovify)
+
+
 # Markovify
 
 Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpora of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).

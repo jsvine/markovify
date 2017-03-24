@@ -1,20 +1,26 @@
-import sys
 from setuptools import setup, find_packages
+import sys, os
+
+NAME = "markovify"
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+version_ns = {}
+with open(os.path.join(HERE, NAME, '__version__.py')) as f:
+    exec(f.read(), {}, version_ns)
 
 setup(
     name="markovify",
-    version="0.5.4",
+    version=version_ns['__version__'],
     description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
     long_description="",
     classifiers=[
-        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.1",
         "Programming Language :: Python :: 3.4"
+        "Programming Language :: Python :: 3.5"
+        "Programming Language :: Python :: 3.6"
     ],
     keywords="markov chain text",
     author="Jeremy Singer-Vine",

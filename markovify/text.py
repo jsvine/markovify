@@ -13,36 +13,47 @@ class ParamError(Exception):
 
 class Text(object):
 
-    def __init__(self, input_text, state_size=2, chain=None):
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
         chain: A trained markovify.Chain instance for this text, if pre-processed.
+        parsed_sentences: A list of lists, where each outer list is a "run"
+              of the process (e.g. a single sentence), and each inner list
+              contains the steps (e.g. words) in the run. If you want to simulate
+              an infinite process, you can come very close by passing just one, very
+              long run.
         """
-        self.input_text = input_text
         self.state_size = state_size
-        runs = list(self.generate_corpus(input_text))
+        self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
 
-        # Rejoined text lets us assess the novelty of generated setences
-        self.rejoined_text = self.sentence_join(map(self.word_join, runs))
-        self.chain = chain or Chain(runs, state_size)
+        # Rejoined text lets us assess the novelty of generated sentences
+        self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
+        self.chain = chain or Chain(self.parsed_sentences, state_size)
 
     def to_dict(self):
+        """
+        Returns the underlying data as a Python dict.
+        """
         return {
-            "input_text": self.input_text,
             "state_size": self.state_size,
-            "chain": self.chain.to_json()
+            "chain": self.chain.to_json(),
+            "parsed_sentences": self.parsed_sentences
         }
 
     def to_json(self):
+        """
+        Returns the underlying data as a JSON string.
+        """
         return json.dumps(self.to_dict())
 
     @classmethod
     def from_dict(cls, obj):
         return cls(
-            obj["input_text"],
+            None,
             state_size=obj["state_size"],
-            chain=Chain.from_json(obj["chain"])
+            chain=Chain.from_json(obj["chain"]),
+            parsed_sentences=obj["parsed_sentences"]
         )
 
     @classmethod
@@ -180,13 +191,13 @@ class Text(object):
         return self.make_sentence(init_state, **kwargs)
 
     @classmethod
-    def from_chain(cls, chain_json, corpus=None):
+    def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):
         """
         Init a Text class based on an existing chain JSON string or object
         If corpus is None, overlap checking won't work.
         """
         chain = Chain.from_json(chain_json)
-        return cls(corpus or '', state_size=chain.state_size, chain=chain)
+        return cls(corpus or '', parsed_sentences=parsed_sentences, state_size=chain.state_size, chain=chain)
 
 
 class NewlineText(Text):

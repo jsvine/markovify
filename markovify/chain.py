@@ -4,9 +4,9 @@ import bisect
 import json
 
 # Python3 compatibility
-try:
+try: # pragma: no cover
     basestring
-except NameError:
+except NameError: # pragma: no cover
     basestring = str
 
 BEGIN = "___BEGIN__"

@@ -61,7 +61,7 @@ Notes:
 
 - By default, the `make_sentence` method tries, a maximum of 10 times per invocation, to make a sentence that doesn't overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
 
-- By default, `markovify.Text` tries to generate sentences that don't simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by passing `max_overlap_ratio` and/or `max_overlap_total` to the `make_sentence` method.
+- By default, `markovify.Text` tries to generate sentences that don't simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by passing `max_overlap_ratio` and/or `max_overlap_total` to the `make_sentence` method. Alternatively you can disable this check entirely by passing `test_output` as False.
 
 ## Advanced Usage
 
@@ -197,5 +197,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@wodim](https://github.com/wodim)
 - [@eh11fx](https://github.com/eh11fx)
 - [@ammgws](https://github.com/ammgws)
+- [@OtakuMegane](https://github.com/OtakuMegane)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

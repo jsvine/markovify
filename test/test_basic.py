@@ -73,7 +73,7 @@ class MarkovifyTest(unittest.TestCase):
         sent = None
         while sent is None:
             sent = text_model.make_short_sentence(45)
-        assert len(sent) < 45
+        assert len(sent) <= 45
 
     def test_short_sentence_min_chars(self):
         sent = None

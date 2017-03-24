@@ -198,5 +198,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@eh11fx](https://github.com/eh11fx)
 - [@ammgws](https://github.com/ammgws)
 - [@OtakuMegane](https://github.com/OtakuMegane)
+- [@tsunaminoai](https://github.com/tsunaminoai)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

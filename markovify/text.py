@@ -174,21 +174,22 @@ class Text(object):
                 return self.word_join(words)
         return None
 
-    def make_short_sentence(self, char_limit, **kwargs):
+    def make_short_sentence(self, max_chars, min_chars=0, **kwargs):
         """
-        Tries making a sentence of no more than `char_limit` characters`,
-        passing **kwargs to `self.make_sentence`.
+        Tries making a sentence of no more than `max_chars` characters and optionally
+        no less than `min_chars` charcaters, passing **kwargs to `self.make_sentence`.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
+
         for _ in range(tries):
             sentence = self.make_sentence(**kwargs)
-            if sentence and len(sentence) < char_limit:
+            if sentence and len(sentence) <= max_chars and len(sentence) >= min_chars:
                 return sentence
 
     def make_sentence_with_start(self, beginning, **kwargs):
         """
         Tries making a sentence that begins with `beginning` string,
-        which should be a string of one or two words known to exist in the 
+        which should be a string of one or two words known to exist in the
         corpus. **kwargs are passed to `self.make_sentence`.
         """
         split = self.word_split(beginning)

@@ -75,6 +75,16 @@ class MarkovifyTest(unittest.TestCase):
             sent = text_model.make_short_sentence(45)
         assert len(sent) < 45
 
+    def test_dont_test_output(self):
+        text_model = markovify.Text(self.sherlock)
+        sent = text_model.make_sentence(test_output=False)
+        assert sent is not None 
+
+    def test_max_words(self):
+        text_model = markovify.Text(self.sherlock)
+        sent = text_model.make_sentence(max_words=0)
+        assert sent is None 
+
     def test_newline_text(self):
         with open(os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")) as f:
             model = markovify.NewlineText(f.read())

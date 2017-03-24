@@ -93,9 +93,9 @@ class Text(object):
         """
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
-        if sentence.__class__.__name__ == "str":
+        if sentence.__class__.__name__ == "str": # pragma: no cover
             decoded = sentence
-        else:
+        else: # pragma: no cover
             decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
         if re.search(reject_pat, decoded): return False

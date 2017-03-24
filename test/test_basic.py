@@ -75,6 +75,18 @@ class MarkovifyTest(unittest.TestCase):
             sent = text_model.make_short_sentence(45)
         assert len(sent) < 45
 
+    def test_newline_text(self):
+        with open(os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")) as f:
+            model = markovify.NewlineText(f.read())
+        model.make_sentence()
+
+    def test_bad_corpus(self):
+        with self.assertRaises(Exception) as context:
+            markovify.Chain(corpus="testing, testing", state_size=2)
+
+    def test_bad_json(self):
+        with self.assertRaises(Exception) as context:
+            markovify.Chain.from_json(1)
 
 if __name__ == '__main__':
     unittest.main()

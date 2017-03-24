@@ -11,6 +11,8 @@ def get_model_dict(thing):
     if isinstance(thing, dict):
         return thing
 
+    raise ValueError("`models` should be instances of list, dict, markovify.Chain, or markovify.Text")
+
 def combine(models, weights=None):
     if weights == None:
         weights = [ 1 for _ in range(len(models)) ]
@@ -51,5 +53,3 @@ def combine(models, weights=None):
         return list(c.items())
     if isinstance(ret_inst, dict):
         return c
-
-    raise ValueError("`models` should be instances of list, dict, markovify.Chain, or markovify.Text")

@@ -32,6 +32,9 @@ class Text(object):
         self.chain = chain or Chain(self.parsed_sentences, state_size)
 
     def to_dict(self):
+        """
+        Returns the underlying data as a Python dict.
+        """
         return {
             "state_size": self.state_size,
             "chain": self.chain.to_json(),
@@ -39,6 +42,9 @@ class Text(object):
         }
 
     def to_json(self):
+        """
+        Returns the underlying data as a JSON string.
+        """
         return json.dumps(self.to_dict())
 
     @classmethod

@@ -79,7 +79,7 @@ class MarkovifyTest(unittest.TestCase):
         sent = None
         while sent is None:
             sent = sherlock_model.make_short_sentence(100, min_chars=50)
-        assert len(sent) < 100
+        assert len(sent) <= 100
         assert len(sent) >= 50
 
     def test_dont_test_output(self):

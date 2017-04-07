@@ -181,6 +181,8 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 - [@NightValeFeed](https://twitter.com/NightValeFeed), which "generates tweets by combining [@NightValeRadio](https://twitter.com/NightValeRadio) tweets with [@BuzzFeed](https://twitter.com/BuzzFeed) headlines." [[code](https://github.com/stepjue/night-vale-buzzfeed)]
 - [Wynbot9000](https://github.com/ammgws/wynbot), which "mimics your friends on Google Hangouts." [[code](https://github.com/ammgws/wynbot)]
 - [@sealDonaldTrump](https://twitter.com/sealdonaldtrump), "a twitter bot that sounds like @realDonaldTrump, with an aquatic twist." [[code](https://github.com/lukewrites/sealdonaldtrump)]
+- [@veeceebot](https://twitter.com/veeceebot), which is "like VCs but better!" [[code](https://github.com/yasyf/vcbot)]
+- [@mar_phil_bot](https://twitter.com/mar_phil_bot), a Twitter bot [trained](http://gfleetwood.github.io/philosophy-bot/) on Nietzsche, Russell, Kant, Machiavelli, and Plato. [[code](https://gist.github.com/gfleetwood/569804c4f2ab372746661996542a8065)]
 
 Have other examples? Pull requests welcome.
 

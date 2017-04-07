@@ -180,6 +180,7 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 - [shartificialintelligence.com](http://www.shartificialintelligence.com/), "the world's first creative ad agency staffed entirely with copywriter robots." [[code](https://github.com/LesGuessing/shartificial-intelligence)]
 - [@NightValeFeed](https://twitter.com/NightValeFeed), which "generates tweets by combining [@NightValeRadio](https://twitter.com/NightValeRadio) tweets with [@BuzzFeed](https://twitter.com/BuzzFeed) headlines." [[code](https://github.com/stepjue/night-vale-buzzfeed)]
 - [Wynbot9000](https://github.com/ammgws/wynbot), which "mimics your friends on Google Hangouts." [[code](https://github.com/ammgws/wynbot)]
+- [@sealDonaldTrump](https://twitter.com/sealdonaldtrump), "a twitter bot that sounds like @realDonaldTrump, with an aquatic twist." [[code](https://github.com/lukewrites/sealdonaldtrump)]
 
 Have other examples? Pull requests welcome.
 

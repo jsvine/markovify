@@ -17,8 +17,6 @@ abbr_capped = "|".join([
 
 abbr_lowercase = "etc|v|vs|viz|al|pct"
 
-exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
-
 def is_abbreviation(dotted_word):
     clipped = dotted_word[:-1]
     if clipped[0] in ascii_uppercase:
@@ -29,7 +27,6 @@ def is_abbreviation(dotted_word):
         else: return False
 
 def is_sentence_ender(word):
-    if word in exceptions: return False
     if word[-1] in [ "?", "!" ]:
         return True
     if len(re.sub(r"[^A-Z]", "", word)) > 1:

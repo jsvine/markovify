@@ -184,6 +184,7 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 - [@veeceebot](https://twitter.com/veeceebot), which is "like VCs but better!" [[code](https://github.com/yasyf/vcbot)]
 - [@mar_phil_bot](https://twitter.com/mar_phil_bot), a Twitter bot [trained](http://gfleetwood.github.io/philosophy-bot/) on Nietzsche, Russell, Kant, Machiavelli, and Plato. [[code](https://gist.github.com/gfleetwood/569804c4f2ab372746661996542a8065)]
 - [funzo-facts](https://github.com/smalawi/funzo-facts), a program that generates never-before-seen trivia based on Jeopardy! questions. [[code](https://github.com/smalawi/funzo-facts/blob/master/funzo_fact_gen.py)]
+- [Chains Invent Insanity](http://chainsinventinsanity.com), A [Cards Against Humanity](https://cardsagainsthumanity.com) Answer Card Generator
 
 Have other examples? Pull requests welcome.
 

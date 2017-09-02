@@ -52,8 +52,6 @@ class Chain(object):
         for the "next" item in the chain, along with the count of times it
         appears.
         """
-        if (type(corpus) != list) or (type(corpus[0]) != list):
-            raise Exception("`corpus` must be list of lists")
 
         # Using a DefaultDict here would be a lot more convenient, however the memory
         # usage is far higher.

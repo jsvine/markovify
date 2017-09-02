@@ -13,7 +13,7 @@ class ParamError(Exception):
 
 class Text(object):
 
-    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None):
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -25,11 +25,17 @@ class Text(object):
               long run.
         """
         self.state_size = state_size
-        self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
+        self.retain_original = retain_original
 
-        # Rejoined text lets us assess the novelty of generated sentences
-        self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
-        self.chain = chain or Chain(self.parsed_sentences, state_size)
+        if retain_original:
+            self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
+
+            # Rejoined text lets us assess the novelty of generated sentences
+            self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
+            self.chain = chain or Chain(self.parsed_sentences, state_size)
+        else:
+            parsed = parsed_sentences or self.generate_corpus(input_text)
+            self.chain = chain or Chain(parsed, state_size)
 
     def to_dict(self):
         """
@@ -38,7 +44,7 @@ class Text(object):
         return {
             "state_size": self.state_size,
             "chain": self.chain.to_json(),
-            "parsed_sentences": self.parsed_sentences
+            "parsed_sentences": self.parsed_sentences if self.retain_original else None
         }
 
     def to_json(self):
@@ -53,7 +59,7 @@ class Text(object):
             None,
             state_size=obj["state_size"],
             chain=Chain.from_json(obj["chain"]),
-            parsed_sentences=obj["parsed_sentences"]
+            parsed_sentences=obj.get("parsed_sentences")
         )
 
     @classmethod
@@ -91,6 +97,7 @@ class Text(object):
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence. 
         """
+        if len(sentence.strip()) == 0: return False
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
         if sentence.__class__.__name__ == "str": # pragma: no cover
@@ -107,7 +114,12 @@ class Text(object):
         "sentences," each of which is a list of words. Before splitting into 
         words, the sentences are filtered through `self.test_sentence_input`
         """
-        sentences = self.sentence_split(text)
+        if isinstance(text, str):
+            sentences = self.sentence_split(text)
+        else:
+            sentences = []
+            for line in text:
+                sentences += self.sentence_split(line)
         passing = filter(self.test_sentence_input, sentences)
         runs = map(self.word_split, passing)
         return runs
@@ -167,7 +179,7 @@ class Text(object):
             words = prefix + self.chain.walk(init_state)
             if max_words != None and len(words) > max_words:
                 continue
-            if test_output:
+            if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):
                     return self.word_join(words)
             else:

@@ -145,6 +145,18 @@ reconstituted_model.make_short_sentence(140)
 
 You can also export the underlying Markov chain on its own — i.e., excluding the original corpus and the `state_size` metadata — via `my_text_model.chain.to_json()`.
 
+### Generating `markovify.Text` models from very large corpora
+
+By default, the `markovify.Text` class loads, and retains, the your textual corpus, so that it can compare generated sentences with the original (and only emit novel sentences). But, with very large corpora, loading the entire text at once (and retaining it) can be memory-intensive. To overcome this, you can `(a)` read in the corpus line-by-line, and `(b)` tell Markovify not to retain the original:
+
+```python
+with open("path/to/my/huge/corpus.txt") as f:
+    text_model = markovify.Text(f, retain_original=False)
+
+print(text_model.make_sentence())
+```
+
+
 ## Markovify In The Wild
 
 - BuzzFeed's [Tom Friedman Sentence Generator](http://www.buzzfeed.com/jsvine/the-tom-friedman-sentence-generator) / [@mot_namdeirf](https://twitter.com/mot_namdeirf).

@@ -35,7 +35,8 @@ class Text(object):
             self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
             self.chain = chain or Chain(self.parsed_sentences, state_size)
         else:
-            parsed = parsed_sentences or self.generate_corpus(input_text)
+            if not chain:
+                parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
     def to_dict(self):

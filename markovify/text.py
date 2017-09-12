@@ -24,17 +24,19 @@ class Text(object):
               an infinite process, you can come very close by passing just one, very
               long run.
         """
+        can_make_sentences = parsed_sentences is not None or input_text is not None
+        self.retain_original = retain_original and can_make_sentences
         self.state_size = state_size
-        self.retain_original = retain_original
 
-        if retain_original:
+        if self.retain_original:
             self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
 
             # Rejoined text lets us assess the novelty of generated sentences
             self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
             self.chain = chain or Chain(self.parsed_sentences, state_size)
         else:
-            parsed = parsed_sentences or self.generate_corpus(input_text)
+            if not chain:
+                parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
     def to_dict(self):
@@ -54,7 +56,7 @@ class Text(object):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_dict(cls, obj):
+    def from_dict(cls, obj, **kwargs):
         return cls(
             None,
             state_size=obj["state_size"],

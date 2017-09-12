@@ -220,5 +220,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@ammgws](https://github.com/ammgws)
 - [@OtakuMegane](https://github.com/OtakuMegane)
 - [@tsunaminoai](https://github.com/tsunaminoai)
+- [@MatthewScholefield](https://github.com/MatthewScholefield)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

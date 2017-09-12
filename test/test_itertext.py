@@ -19,6 +19,15 @@ class MarkovifyTest(unittest.TestCase):
         assert sent is not None
         assert len(sent) != 0
 
+    def test_from_json_without_retaining(self):
+        with open(os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")) as f:
+            original_model = markovify.Text(f, retain_original=False)
+        d = original_model.to_json()
+        new_model = markovify.Text.from_json(d)
+        sent = new_model.make_sentence()
+        assert sent is not None
+        assert len(sent) != 0
+
 if __name__ == '__main__':
     unittest.main()
 

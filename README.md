@@ -115,6 +115,24 @@ class POSifiedText(markovify.Text):
         return sentence
 ```
 
+Or, you can use [spaCy](https://spacy.io/) which is [way faster](https://spacy.io/docs/api/#benchmarks):
+
+```python
+import markovify
+import re
+import spacy
+
+nlp = spacy.load("en")
+
+class POSifiedText(markovify.Text):
+    def word_split(self, sentence):
+        return ["::".join((word.orth_, word.pos_)) for word in nlp(sentence)]
+
+    def word_join(self, words):
+        sentence = " ".join(word.split("::")[0] for word in words)
+        return sentence
+```
+
 The most useful `markovify.Text` models you can override are:
 
 - `sentence_split`

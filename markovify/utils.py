@@ -45,10 +45,13 @@ def combine(models, weights=None):
     if isinstance(ret_inst, Chain):
         return Chain.from_json(c)
     if isinstance(ret_inst, Text):
-        combined_sentences = []
-        for m in models:
-            combined_sentences += m.parsed_sentences
-        return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
+        if ret_inst.retain_original:
+            combined_sentences = []
+            for m in models:
+                combined_sentences += m.parsed_sentences
+            return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
+        else:
+            return ret_inst.from_chain(c)
     if isinstance(ret_inst, list):
         return list(c.items())
     if isinstance(ret_inst, dict):

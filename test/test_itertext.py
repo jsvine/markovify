@@ -28,6 +28,17 @@ class MarkovifyTest(unittest.TestCase):
         assert sent is not None
         assert len(sent) != 0
 
+    def test_from_mult_files_without_retaining(self):
+        models = []
+        for (dirpath, _, filenames) in os.walk(os.path.join(os.path.dirname(__file__), "texts")):
+            for filename in filenames:
+                with open(os.path.join(dirpath, filename)) as f:
+                    models.append(markovify.Text(f, retain_original=False))
+        combined_model = markovify.combine(models)
+        sent = combined_model.make_sentence()
+        assert sent is not None
+        assert len(sent) != 0
+
 if __name__ == '__main__':
     unittest.main()
 

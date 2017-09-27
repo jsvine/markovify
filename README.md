@@ -115,6 +115,24 @@ class POSifiedText(markovify.Text):
         return sentence
 ```
 
+Or, you can use [spaCy](https://spacy.io/) which is [way faster](https://spacy.io/docs/api/#benchmarks):
+
+```python
+import markovify
+import re
+import spacy
+
+nlp = spacy.load("en")
+
+class POSifiedText(markovify.Text):
+    def word_split(self, sentence):
+        return ["::".join((word.orth_, word.pos_)) for word in nlp(sentence)]
+
+    def word_join(self, words):
+        sentence = " ".join(word.split("::")[0] for word in words)
+        return sentence
+```
+
 The most useful `markovify.Text` models you can override are:
 
 - `sentence_split`
@@ -147,7 +165,7 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 
 ### Generating `markovify.Text` models from very large corpora
 
-By default, the `markovify.Text` class loads, and retains, the your textual corpus, so that it can compare generated sentences with the original (and only emit novel sentences). But, with very large corpora, loading the entire text at once (and retaining it) can be memory-intensive. To overcome this, you can `(a)` read in the corpus line-by-line, and `(b)` tell Markovify not to retain the original:
+By default, the `markovify.Text` class loads, and retains, the your textual corpus, so that it can compare generated sentences with the original (and only emit novel sentences). But, with very large corpora, loading the entire text at once (and retaining it) can be memory-intensive. To overcome this, you can `(a)` tell Markovify not to retain the original:
 
 ```python
 with open("path/to/my/huge/corpus.txt") as f:
@@ -156,6 +174,18 @@ with open("path/to/my/huge/corpus.txt") as f:
 print(text_model.make_sentence())
 ```
 
+And `(b)` read in the corpus line-by-line or file-by-file and combine it into one model at the end:
+
+```python
+models = []
+for (dirpath, _, filenames) in os.walk("path/to/my/huge/corpus"):
+    for filename in filenames:
+        with open(os.path.join(dirpath, filename)) as f:
+            models.append(markovify.Text(f, retain_original=False))
+
+combined_model = markovify.combine(models)
+print(combined_model.make_sentence())
+```
 
 ## Markovify In The Wild
 

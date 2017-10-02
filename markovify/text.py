@@ -97,7 +97,7 @@ class Text(object):
         """
         A basic sentence filter. This one rejects sentences that contain
         the type of punctuation that would look strange on its own
-        in a randomly-generated sentence. 
+        in a randomly-generated sentence.
         """
         if len(sentence.strip()) == 0: return False
         reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
@@ -113,7 +113,7 @@ class Text(object):
     def generate_corpus(self, text):
         """
         Given a text string, returns a list of lists; that is, a list of
-        "sentences," each of which is a list of words. Before splitting into 
+        "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
         if isinstance(text, str):
@@ -145,7 +145,7 @@ class Text(object):
             if gram_joined in self.rejoined_text:
                 return False
         return True
-            
+
     def make_sentence(self, init_state=None, **kwargs):
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
@@ -157,10 +157,10 @@ class Text(object):
         If `init_state` (a tuple of `self.chain.state_size` words) is not specified,
         this method chooses a sentence-start at random, in accordance with
         the model.
-        
+
         If `test_output` is set as False then the `test_sentence_output` check
         will be skipped.
-        
+
         If `max_words` is specified, the word count for the sentence will be
         evaluated against the provided limit.
         """
@@ -214,6 +214,25 @@ class Text(object):
             init_state = tuple([ BEGIN ] * (self.state_size - word_count) + split)
         else:
             err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
+            raise ParamError(err_msg)
+
+        return self.make_sentence(init_state, **kwargs)
+
+    def make_sentence_with_words(self, beginning, **kwargs):
+        """
+        Tries making a sentence that contains the `beginning` string,
+        which should be a string of one or two words known to exist in the
+        corpus. Similar to make_sentence_with_start, but doesn't require
+        word to start the sentence.**kwargs are passed to `self.make_sentence`.
+        """
+        split = self.word_split(beginning)
+        word_count = len(split)
+        if word_count == self.state_size:
+            init_state = tuple(split)
+        elif word_count > 0 and word_count < self.state_size:
+            init_state = tuple(split)
+        else:
+            err_msg = "`make_sentence_with_words` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
             raise ParamError(err_msg)
 
         return self.make_sentence(init_state, **kwargs)

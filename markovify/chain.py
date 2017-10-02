@@ -2,6 +2,7 @@ import random
 import operator
 import bisect
 import json
+import pdb
 
 # Python3 compatibility
 try: # pragma: no cover
@@ -82,6 +83,9 @@ class Chain(object):
         self.begin_cumdist = cumdist
         self.begin_choices = choices
 
+    def isSubSet(self, superset = [], subset = []):
+        return all(x in superset for x in subset) and len(subset)>0
+
     def move(self, state):
         """
         Given a state, choose the next item at random.
@@ -89,6 +93,12 @@ class Chain(object):
         if state == tuple([ BEGIN ] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
+        elif len(state) < self.state_size:
+
+            possibleKeys = [key for key in self.model.keys() if self.isSubSet(key,state)]
+            initialState = random.choice(possibleKeys)
+            choices, weights = zip(*self.model[initialState].items())
+            cumdist = list(accumulate(weights))
         else:
             choices, weights = zip(*self.model[state].items())
             cumdist = list(accumulate(weights))
@@ -146,4 +156,3 @@ class Chain(object):
 
         inst = cls(None, state_size, rehydrated)
         return inst
-

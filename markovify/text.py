@@ -227,9 +227,7 @@ class Text(object):
         """
         split = self.word_split(beginning)
         word_count = len(split)
-        if word_count == self.state_size:
-            init_state = tuple(split)
-        elif word_count > 0 and word_count < self.state_size:
+        if word_count == self.state_size or (word_count > 0 and word_count < self.state_size):
             init_state = tuple(split)
         else:
             err_msg = "`make_sentence_with_words` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))

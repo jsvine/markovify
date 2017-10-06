@@ -59,13 +59,21 @@ class MarkovifyTest(unittest.TestCase):
     def test_combine_no_retain(self):
         text_model = sherlock_model_no_retain
         combo = markovify.combine([ text_model, text_model ])
-        assert(combo.retain_original == False)
+        assert(not combo.retain_original)
 
-    def test_combine_retain_and_no_retain(self):
+    def test_combine_retain_on_no_retain(self):
         text_model_a = sherlock_model_no_retain
         text_model_b = sherlock_model
         combo = markovify.combine([ text_model_a, text_model_b ])
-        assert(not combo.retain_original)
+        assert(combo.retain_original)
+        assert(combo.parsed_sentences == text_model_b.parsed_sentences)
+
+    def test_combine_no_retain_on_retain(self):
+        text_model_a = sherlock_model_no_retain
+        text_model_b = sherlock_model
+        combo = markovify.combine([ text_model_b, text_model_a ])
+        assert(combo.retain_original)
+        assert(combo.parsed_sentences == text_model_b.parsed_sentences)
 
 if __name__ == '__main__':
     unittest.main()

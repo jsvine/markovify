@@ -187,6 +187,22 @@ combined_model = markovify.combine(models)
 print(combined_model.make_sentence())
 ```
 
+To save more memory, you might want to combine the models as they are generated so you only have at most two models in memory:
+
+```python
+combined_model = None
+for (dirpath, _, filenames) in os.walk("path/to/my/huge/corpus"):
+    for filename in filenames:
+        with open(os.path.join(dirpath, filename)) as f:
+            model = markovify.Text(file, retain_original=False)
+            if combined_model:
+                combined_model = markovify.combine(models=[combined_model, model])
+            else:
+                combined_model = model
+
+print(combined_model.make_sentence())
+```
+
 ## Markovify In The Wild
 
 - BuzzFeed's [Tom Friedman Sentence Generator](http://www.buzzfeed.com/jsvine/the-tom-friedman-sentence-generator) / [@mot_namdeirf](https://twitter.com/mot_namdeirf).

@@ -174,20 +174,7 @@ with open("path/to/my/huge/corpus.txt") as f:
 print(text_model.make_sentence())
 ```
 
-And `(b)` read in the corpus line-by-line or file-by-file and combine it into one model at the end:
-
-```python
-models = []
-for (dirpath, _, filenames) in os.walk("path/to/my/huge/corpus"):
-    for filename in filenames:
-        with open(os.path.join(dirpath, filename)) as f:
-            models.append(markovify.Text(f, retain_original=False))
-
-combined_model = markovify.combine(models)
-print(combined_model.make_sentence())
-```
-
-To save more memory, you might want to combine the models as they are generated so you only have at most two models in memory:
+And `(b)` read in the corpus line-by-line or file-by-file and combine them into one model at each step:
 
 ```python
 combined_model = None
@@ -202,6 +189,7 @@ for (dirpath, _, filenames) in os.walk("path/to/my/huge/corpus"):
 
 print(combined_model.make_sentence())
 ```
+
 
 ## Markovify In The Wild
 

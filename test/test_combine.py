@@ -9,6 +9,7 @@ def get_sorted(chain_json):
 with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
     sherlock = f.read()
     sherlock_model = markovify.Text(sherlock)
+    sherlock_model_no_retain = markovify.Text(sherlock, retain_original=False)
 
 class MarkovifyTest(unittest.TestCase):
 
@@ -54,6 +55,17 @@ class MarkovifyTest(unittest.TestCase):
             text_model_a = sherlock_model
             text_model_b = markovify.NewlineText(sherlock)
             combo = markovify.combine([ text_model_a, text_model_b ])
+
+    def test_combine_no_retain(self):
+        text_model = sherlock_model_no_retain
+        combo = markovify.combine([ text_model, text_model ])
+        assert(combo.retain_original == False)
+
+    def test_combine_retain_and_no_retain(self):
+        text_model_a = sherlock_model_no_retain
+        text_model_b = sherlock_model
+        combo = markovify.combine([ text_model_a, text_model_b ])
+        assert(not combo.retain_original)
 
 if __name__ == '__main__':
     unittest.main()

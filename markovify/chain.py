@@ -39,23 +39,29 @@ class Chain(object):
 
         `state_size`: An integer indicating the number of items the model
         uses to represent its state. For text generation, 2 or 3 are typical.
+
+        `model`: A dict of a Markov model that, if provided, will be used
+        internally by the Chain instead of building one from the corpus.
         """
         self.state_size = state_size
         self.model = model or self.build(corpus, self.state_size)
         self.precompute_begin_state()
 
-    def build(self, corpus, state_size):
+    def build(self, corpus, state_size, overwrite=False):
         """
         Build a Python representation of the Markov model. Returns a dict
         of dicts where the keys of the outer dict represent all possible states,
         and point to the inner dicts. The inner dicts represent all possibilities
         for the "next" item in the chain, along with the count of times it
         appears.
+
+        When overwrite is True, this method will update the self.model dict
+        instead of starting from scratch with an empty dict.
         """
 
         # Using a DefaultDict here would be a lot more convenient, however the memory
         # usage is far higher.
-        model = {}
+        model = self.model if overwrite else {}
 
         for run in corpus:
             items = ([ BEGIN ] * state_size) + run + [ END ]
@@ -77,8 +83,12 @@ class Chain(object):
         Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
         """
         begin_state = tuple([ BEGIN ] * self.state_size)
-        choices, weights = zip(*self.model[begin_state].items())
-        cumdist = list(accumulate(weights))
+        if self.model == {}:
+            choices = [END]
+            cumdist = [1]
+        else:
+            choices, weights = zip(*self.model[begin_state].items())
+            cumdist = list(accumulate(weights))
         self.begin_cumdist = cumdist
         self.begin_choices = choices
 
@@ -122,6 +132,15 @@ class Chain(object):
         Dump the model as a JSON object, for loading later.
         """
         return json.dumps(list(self.model.items()))
+
+    def update(self, corpus):
+        """
+        Update the internal Markov model with words from `corpus`.
+
+        This instance of Chain will be mutated (this function returns None).
+        """
+        self.model = self.build(corpus, self.state_size, overwrite=True)
+        self.precompute_begin_state()
 
     @classmethod
     def from_json(cls, json_thing):

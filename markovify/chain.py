@@ -83,8 +83,20 @@ class Chain(object):
         self.begin_cumdist = cumdist
         self.begin_choices = choices
 
-    def isSubSet(self, superset = [], subset = []):
-        return all(x in superset for x in subset) and len(subset)>0
+    def isOrderedSubSet(self, superset = [], subset = []):
+        """
+        Makes sure the subset is an in order match of superset.
+        This implementation expects exact match as in "not do" won't match "no doing"
+
+        Many interesting things could be done here:
+        * optimization on single word cases (previous implementation was faster)
+        * purposefully matching partials
+        * optionally match any order of subset
+        """
+        if ("_".join(superset).startswith("_".join(subset)+('_'))):
+            return superset
+        else:
+            return ()
 
     def move(self, state):
         """
@@ -94,11 +106,9 @@ class Chain(object):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         elif len(state) < self.state_size:
-
-            possibleKeys = [key for key in self.model.keys() if self.isSubSet(key,state)]
+            possibleKeys = [key for key in self.model.keys() if self.isOrderedSubSet(key,state)]
             initialState = random.choice(possibleKeys)
-            choices, weights = zip(*self.model[initialState].items())
-            cumdist = list(accumulate(weights))
+            return(initialState[-1])
         else:
             choices, weights = zip(*self.model[state].items())
             cumdist = list(accumulate(weights))
@@ -117,7 +127,10 @@ class Chain(object):
             next_word = self.move(state)
             if next_word == END: break
             yield next_word
-            state = tuple(state[1:]) + (next_word,)
+            if (len(state) < self.state_size):
+                state = tuple(state) + (next_word,)
+            else:
+                state = tuple(state[1:]) + (next_word,)
 
     def walk(self, init_state=None):
         """

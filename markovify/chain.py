@@ -25,6 +25,26 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
+def is_ordered_subset(superset = [], subset = []):
+    """
+    Makes sure the subset is an in order match of superset.
+    This implementation expects exact match as in "not do" won't match "no doing"
+
+    Many interesting things could be done here:
+    * optimization on single word cases (previous implementation was faster)
+    * purposefully matching partials
+    * optionally match any order of subset
+    """
+    if superset[:len(subset)] == subset:
+        return superset
+    else:
+        return ()
+
+def sublist_begins_superlist(sub_list, super_list):
+    if super_list[:len(sub_list)] == sub_list:
+        return True
+    return False
+
 class Chain(object):
     """
     A Markov chain representing processes that have both beginnings and ends.
@@ -83,21 +103,6 @@ class Chain(object):
         self.begin_cumdist = cumdist
         self.begin_choices = choices
 
-    def isOrderedSubSet(self, superset = [], subset = []):
-        """
-        Makes sure the subset is an in order match of superset.
-        This implementation expects exact match as in "not do" won't match "no doing"
-
-        Many interesting things could be done here:
-        * optimization on single word cases (previous implementation was faster)
-        * purposefully matching partials
-        * optionally match any order of subset
-        """
-        if ("_".join(superset).startswith("_".join(subset)+('_'))):
-            return superset
-        else:
-            return ()
-
     def move(self, state):
         """
         Given a state, choose the next item at random.
@@ -106,7 +111,7 @@ class Chain(object):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         elif len(state) < self.state_size:
-            possibleKeys = [key for key in self.model.keys() if self.isOrderedSubSet(key,state)]
+            possibleKeys = [key for key in self.model.keys() if is_ordered_subset(key,state)]
             initialState = random.choice(possibleKeys)
             return(initialState[-1])
         else:

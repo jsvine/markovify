@@ -78,6 +78,19 @@ class MarkovifyTest(unittest.TestCase):
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
+    def test_make_sentence_with_words_not_at_start_of_sentence_miss(self):
+        text_model = markovify.Text(sherlock, state_size=3)
+        start_str = "was werewolf"
+        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        assert(sent == None)
+
+    def test_make_sentence_with_words_not_at_start_of_sentence_of_state_size(self):
+        text_model = markovify.Text(sherlock, state_size=2)
+        start_str = "was I"
+        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
+
     def test_make_sentence_with_words_to_many(self):
         text_model = sherlock_model
         start_str = ("dog is good")

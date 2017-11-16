@@ -40,11 +40,6 @@ def is_ordered_subset(superset = [], subset = []):
     else:
         return ()
 
-def sublist_begins_superlist(sub_list, super_list):
-    if super_list[:len(sub_list)] == sub_list:
-        return True
-    return False
-
 class Chain(object):
     """
     A Markov chain representing processes that have both beginnings and ends.
@@ -110,16 +105,17 @@ class Chain(object):
         if state == tuple([ BEGIN ] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
-        elif len(state) < self.state_size:
-            possibleKeys = [key for key in self.model.keys() if is_ordered_subset(key,state)]
-            initialState = random.choice(possibleKeys)
-            return(initialState[-1])
         else:
             choices, weights = zip(*self.model[state].items())
             cumdist = list(accumulate(weights))
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection
+
+    def extended_initial_states(self, init_state):
+        possible_keys = [key for key in self.model.keys() if is_ordered_subset(key,init_state)]
+        random.shuffle(possible_keys)
+        return possible_keys
 
     def gen(self, init_state=None):
         """
@@ -132,10 +128,7 @@ class Chain(object):
             next_word = self.move(state)
             if next_word == END: break
             yield next_word
-            if (len(state) < self.state_size):
-                state = tuple(state) + (next_word,)
-            else:
-                state = tuple(state[1:]) + (next_word,)
+            state = tuple(state[1:]) + (next_word,)
 
     def walk(self, init_state=None):
         """

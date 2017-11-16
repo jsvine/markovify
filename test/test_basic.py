@@ -84,12 +84,6 @@ class MarkovifyTest(unittest.TestCase):
         with self.assertRaises(markovify.text.ParamError) as context:
             sent = text_model.make_sentence_with_words(start_str)
 
-    def test_chain_move_of_smaller_state_size(self):
-        text_model = sherlock_model
-        start_str = "dog"
-        sent = text_model.chain.move((start_str,))
-        assert(sent != None)
-
     def test_make_sentence_with_start_three_words(self):
         start_str = "Sherlock Holmes was"
         text_model = sherlock_model

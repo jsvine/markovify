@@ -2,7 +2,6 @@ import random
 import operator
 import bisect
 import json
-import pdb
 
 # Python3 compatibility
 try: # pragma: no cover
@@ -24,21 +23,6 @@ def accumulate(iterable, func=operator.add):
     for element in it:
         total = func(total, element)
         yield total
-
-def is_ordered_subset(superset = [], subset = []):
-    """
-    Makes sure the subset is an in order match of superset.
-    This implementation expects exact match as in "not do" won't match "no doing"
-
-    Many interesting things could be done here:
-    * optimization on single word cases (previous implementation was faster)
-    * purposefully matching partials
-    * optionally match any order of subset
-    """
-    if superset[:len(subset)] == subset:
-        return superset
-    else:
-        return ()
 
 class Chain(object):
     """
@@ -111,11 +95,6 @@ class Chain(object):
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection
-
-    def extended_initial_states(self, init_state):
-        possible_keys = [key for key in self.model.keys() if is_ordered_subset(key,init_state)]
-        random.shuffle(possible_keys)
-        return possible_keys
 
     def gen(self, init_state=None):
         """

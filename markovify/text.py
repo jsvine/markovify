@@ -1,5 +1,6 @@
 import re
 import json
+import random
 from .splitters import split_into_sentences
 from .chain import Chain, BEGIN, END
 from unidecode import unidecode
@@ -225,17 +226,21 @@ class Text(object):
         corpus. Similar to make_sentence_with_start, but doesn't require
         word to start the sentence.**kwargs are passed to `self.make_sentence`.
         """
-        split = self.word_split(beginning)
+        split = tuple(self.word_split(beginning))
         word_count = len(split)
         if (word_count > 0 and word_count < self.state_size):
-            for possible_state in self.chain.extended_initial_states(tuple(split)):
-                init_state = tuple(possible_state)
-                output = self.make_sentence(init_state, **kwargs)
-                if output!=None:
+            possible_keys = [ key for key in self.chain.model.keys()
+                # check for starting with begin as well ordered lists
+                if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split ]
+            random.shuffle(possible_keys)
+
+            for possible_state in possible_keys:
+                output = self.make_sentence(possible_state, **kwargs)
+                if output is not None:
                     return output
             return None
         elif word_count == self.state_size:
-            init_state = tuple(split)
+            init_state = split
         else:
             err_msg = "`make_sentence_with_words` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
             raise ParamError(err_msg)

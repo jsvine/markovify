@@ -256,5 +256,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@OtakuMegane](https://github.com/OtakuMegane)
 - [@tsunaminoai](https://github.com/tsunaminoai)
 - [@MatthewScholefield](https://github.com/MatthewScholefield)
+- [@danmayer](https://github.com/danmayer)
 
 Developed at [BuzzFeed](https://www.buzzfeed.com).

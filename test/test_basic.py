@@ -65,7 +65,7 @@ class MarkovifyTest(unittest.TestCase):
     def test_make_sentence_with_word_not_at_start_of_sentence(self):
         text_model = sherlock_model
         start_str = "dog"
-        sent = text_model.make_sentence_with_words(start_str)
+        sent = text_model.make_sentence_with_start(start_str, strict=False)
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
@@ -74,28 +74,28 @@ class MarkovifyTest(unittest.TestCase):
         # " I was " has 128 matches in sherlock.txt
         # " was I " has 2 matches in sherlock.txt
         start_str = "was I"
-        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
     def test_make_sentence_with_words_not_at_start_of_sentence_miss(self):
         text_model = markovify.Text(sherlock, state_size=3)
         start_str = "was werewolf"
-        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
         assert(sent == None)
 
     def test_make_sentence_with_words_not_at_start_of_sentence_of_state_size(self):
         text_model = markovify.Text(sherlock, state_size=2)
         start_str = "was I"
-        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
     def test_make_sentence_with_words_to_many(self):
         text_model = sherlock_model
-        start_str = ("dog is good")
+        start_str = "dog is good"
         with self.assertRaises(markovify.text.ParamError) as context:
-            sent = text_model.make_sentence_with_words(start_str)
+            sent = text_model.make_sentence_with_start(start_str, strict=False)
 
     def test_make_sentence_with_start_three_words(self):
         start_str = "Sherlock Holmes was"

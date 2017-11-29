@@ -201,50 +201,46 @@ class Text(object):
             if sentence and len(sentence) <= max_chars and len(sentence) >= min_chars:
                 return sentence
 
-    def make_sentence_with_start(self, beginning, **kwargs):
+    def make_sentence_with_start(self, beginning, strict=True, **kwargs):
         """
         Tries making a sentence that begins with `beginning` string,
-        which should be a string of one or two words known to exist in the
-        corpus. **kwargs are passed to `self.make_sentence`.
+        which should be a string of one to `self.state` words known
+        to exist in the corpus.
+        
+        If strict == True, then markovify will draw its initial inspiration
+        only from sentences that start with the specified word/phrase.
+
+        If strict == False, then markovify will draw its initial inspiration
+        from any sentence containing the specified word/phrase.
+
+        **kwargs are passed to `self.make_sentence`
         """
-        split = self.word_split(beginning)
+        split = tuple(self.word_split(beginning))
         word_count = len(split)
+
         if word_count == self.state_size:
-            init_state = tuple(split)
+            init_states = [ split ]
+
         elif word_count > 0 and word_count < self.state_size:
-            init_state = tuple([ BEGIN ] * (self.state_size - word_count) + split)
+            if strict:
+                init_states = [ (BEGIN,) * (self.state_size - word_count) + split ]
+
+            else:
+                init_states = [ key for key in self.chain.model.keys()
+                    # check for starting with begin as well ordered lists
+                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split ]
+
+                random.shuffle(init_states)
         else:
             err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
             raise ParamError(err_msg)
 
-        return self.make_sentence(init_state, **kwargs)
+        for init_state in init_states:
+            output = self.make_sentence(init_state, **kwargs)
+            if output is not None:
+                return output
 
-    def make_sentence_with_words(self, beginning, **kwargs):
-        """
-        Tries making a sentence that contains the `beginning` string,
-        which should be a string of one or two words known to exist in the
-        corpus. Similar to make_sentence_with_start, but doesn't require
-        word to start the sentence.**kwargs are passed to `self.make_sentence`.
-        """
-        split = tuple(self.word_split(beginning))
-        word_count = len(split)
-        if (word_count > 0 and word_count < self.state_size):
-            possible_keys = [ key for key in self.chain.model.keys()
-                # check for starting with begin as well ordered lists
-                if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split ]
-            random.shuffle(possible_keys)
-
-            for possible_state in possible_keys:
-                output = self.make_sentence(possible_state, **kwargs)
-                if output is not None:
-                    return output
-            return None
-        elif word_count == self.state_size:
-            init_state = split
-        else:
-            err_msg = "`make_sentence_with_words` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
-            raise ParamError(err_msg)
-        return self.make_sentence(init_state, **kwargs)
+        return None
 
     @classmethod
     def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):

@@ -56,6 +56,47 @@ class MarkovifyTest(unittest.TestCase):
         assert(sent != None)
         assert(start_str == sent[:len(start_str)])
 
+    def test_make_sentence_with_start_one_word_that_doesnt_begin_a_sentence(self):
+        text_model = sherlock_model
+        start_str = "dog"
+        with self.assertRaises(KeyError) as context:
+            sent = text_model.make_sentence_with_start(start_str)
+
+    def test_make_sentence_with_word_not_at_start_of_sentence(self):
+        text_model = sherlock_model
+        start_str = "dog"
+        sent = text_model.make_sentence_with_words(start_str)
+        assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
+
+    def test_make_sentence_with_words_not_at_start_of_sentence(self):
+        text_model = markovify.Text(sherlock, state_size=3)
+        # " I was " has 128 matches in sherlock.txt
+        # " was I " has 2 matches in sherlock.txt
+        start_str = "was I"
+        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
+
+    def test_make_sentence_with_words_not_at_start_of_sentence_miss(self):
+        text_model = markovify.Text(sherlock, state_size=3)
+        start_str = "was werewolf"
+        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        assert(sent == None)
+
+    def test_make_sentence_with_words_not_at_start_of_sentence_of_state_size(self):
+        text_model = markovify.Text(sherlock, state_size=2)
+        start_str = "was I"
+        sent = text_model.make_sentence_with_words(start_str, tries=50)
+        assert(sent != None)
+        assert(start_str == sent[:len(start_str)])
+
+    def test_make_sentence_with_words_to_many(self):
+        text_model = sherlock_model
+        start_str = ("dog is good")
+        with self.assertRaises(markovify.text.ParamError) as context:
+            sent = text_model.make_sentence_with_words(start_str)
+
     def test_make_sentence_with_start_three_words(self):
         start_str = "Sherlock Holmes was"
         text_model = sherlock_model
@@ -85,12 +126,12 @@ class MarkovifyTest(unittest.TestCase):
     def test_dont_test_output(self):
         text_model = sherlock_model
         sent = text_model.make_sentence(test_output=False)
-        assert sent is not None 
+        assert sent is not None
 
     def test_max_words(self):
         text_model = sherlock_model
         sent = text_model.make_sentence(max_words=0)
-        assert sent is None 
+        assert sent is None
 
     def test_newline_text(self):
         with open(os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")) as f:

@@ -146,4 +146,3 @@ class Chain(object):
 
         inst = cls(None, state_size, rehydrated)
         return inst
-

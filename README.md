@@ -233,7 +233,7 @@ print(combined_model.make_sentence())
 - [Chains Invent Insanity](http://chainsinventinsanity.com), a [Cards Against Humanity](https://cardsagainsthumanity.com) answer card generator. [[code](https://github.com/TuxOtaku/chains-invent-insanity)]
 - [@CanDennisDream](https://twitter.com/CanDennisDream), a twitter bot that contemplates life by training on existential literature discussions. [[code](https://github.com/GiantsLoveDeathMetal/dennis_bot)]
 - [B-9 Indifference](https://github.com/eoinnoble/b9-indifference), a program that generates a _Star Trek: The Next Generation_ script of arbitrary length using Markov chains trained on the show’s episode and movie scripts. [[code](https://github.com/eoinnoble/b9-indifference)]
-- [adam](http://bziarkowski.pl), polish poetry generator. [[code]](https://github.com/bziarkowski/adam)
+- [adam](http://bziarkowski.pl/adam), polish poetry generator. [[code]](https://github.com/bziarkowski/adam)
 Have other examples? Pull requests welcome.
 
 ## Thanks

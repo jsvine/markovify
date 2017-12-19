@@ -171,14 +171,17 @@ class Text(object):
         test_output = kwargs.get('test_output', True)
         max_words = kwargs.get('max_words', None)
 
-        for _ in range(tries):
-            if init_state != None:
-                if init_state[0] == BEGIN:
-                    prefix = list(init_state[1:])
+        if init_state != None:
+            prefix = list(init_state)
+            for word in prefix:
+                if word == BEGIN:
+                    prefix = prefix[1:]
                 else:
-                    prefix = list(init_state)
-            else:
-                prefix = []
+                    break
+        else:
+            prefix = []
+
+        for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
             if max_words != None and len(words) > max_words:
                 continue

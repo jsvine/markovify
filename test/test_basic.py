@@ -107,7 +107,8 @@ class MarkovifyTest(unittest.TestCase):
             assert(True)
         text_model = markovify.Text(sherlock, state_size=3)
         text_model.make_sentence_with_start(start_str)
-        text_model.make_sentence_with_start("Sherlock")
+        sent = text_model.make_sentence_with_start("Sherlock")
+        assert(markovify.chain.BEGIN not in sent)
 
     def test_short_sentence(self):
         text_model = sherlock_model

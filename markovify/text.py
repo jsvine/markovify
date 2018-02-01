@@ -16,7 +16,7 @@ class Text(object):
 
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
-    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True, well_formed=True, reject_pat=''):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -41,6 +41,10 @@ class Text(object):
             if not chain:
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
+
+        self.well_formed = well_formed
+        if well_formed and reject_pat != '':
+            self.reject_pat = re.compile(reject_pat)
 
     def to_dict(self):
         """
@@ -109,7 +113,7 @@ class Text(object):
         else: # pragma: no cover
             decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
-        if self.reject_pat.search(decoded): return False
+        if self.well_formed and self.reject_pat.search(decoded): return False
         return True
 
     def generate_corpus(self, text):

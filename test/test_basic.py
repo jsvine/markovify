@@ -147,5 +147,9 @@ class MarkovifyTest(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             markovify.Chain.from_json(1)
 
+    def test_custom_regex(self):
+        with self.assertRaises(Exception) as context:
+            model = markovify.NewlineText('This sucks.', reject_reg=r'sucks')
+
 if __name__ == '__main__':
     unittest.main()

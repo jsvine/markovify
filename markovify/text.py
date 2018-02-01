@@ -37,7 +37,7 @@ class Text(object):
         self.well_formed = well_formed
         if well_formed and reject_reg != '':
             self.reject_pat = re.compile(reject_reg)
-            
+
         can_make_sentences = parsed_sentences is not None or input_text is not None
         self.retain_original = retain_original and can_make_sentences
         self.state_size = state_size
@@ -109,7 +109,7 @@ class Text(object):
 
     def test_sentence_input(self, sentence):
         """
-        A basic sentence filter. This one rejects sentences that contain
+        A basic sentence filter. The default rejects sentences that contain
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence.
         """

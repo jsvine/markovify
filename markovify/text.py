@@ -33,6 +33,11 @@ class Text(object):
         reject_reg: If well_formed is True, this can be provided to override the
               standard rejection pattern.
         """
+
+        self.well_formed = well_formed
+        if well_formed and reject_reg != '':
+            self.reject_pat = re.compile(reject_reg)
+            
         can_make_sentences = parsed_sentences is not None or input_text is not None
         self.retain_original = retain_original and can_make_sentences
         self.state_size = state_size
@@ -47,10 +52,6 @@ class Text(object):
             if not chain:
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
-
-        self.well_formed = well_formed
-        if well_formed and reject_reg != '':
-            self.reject_pat = re.compile(reject_reg)
 
     def to_dict(self):
         """

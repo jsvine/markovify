@@ -14,6 +14,8 @@ class ParamError(Exception):
 
 class Text(object):
 
+    reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
+
     def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
         """
         input_text: A string.
@@ -101,14 +103,13 @@ class Text(object):
         in a randomly-generated sentence.
         """
         if len(sentence.strip()) == 0: return False
-        reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
         if sentence.__class__.__name__ == "str": # pragma: no cover
             decoded = sentence
         else: # pragma: no cover
             decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
-        if re.search(reject_pat, decoded): return False
+        if self.reject_pat.search(decoded): return False
         return True
 
     def generate_corpus(self, text):

@@ -16,7 +16,7 @@ class Text(object):
 
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
-    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True, well_formed=True, reject_pat=''):
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True, well_formed=True, reject_reg=''):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -26,6 +26,12 @@ class Text(object):
               contains the steps (e.g. words) in the run. If you want to simulate
               an infinite process, you can come very close by passing just one, very
               long run.
+        retain_original: Indicates whether to keep the original corpus.
+        well_formed: Indicates whether sentences should be well-formed, preventing
+              unmatched quotes, parenthesis by default, or a custom regular expression
+              can be provided.
+        reject_reg: If well_formed is True, this can be provided to override the
+              standard rejection pattern.
         """
         can_make_sentences = parsed_sentences is not None or input_text is not None
         self.retain_original = retain_original and can_make_sentences
@@ -43,8 +49,8 @@ class Text(object):
             self.chain = chain or Chain(parsed, state_size)
 
         self.well_formed = well_formed
-        if well_formed and reject_pat != '':
-            self.reject_pat = re.compile(reject_pat)
+        if well_formed and reject_reg != '':
+            self.reject_pat = re.compile(reject_reg)
 
     def to_dict(self):
         """

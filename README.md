@@ -234,6 +234,7 @@ print(combined_model.make_sentence())
 - [@CanDennisDream](https://twitter.com/CanDennisDream), a twitter bot that contemplates life by training on existential literature discussions. [[code](https://github.com/GiantsLoveDeathMetal/dennis_bot)]
 - [B-9 Indifference](https://github.com/eoinnoble/b9-indifference), a program that generates a _Star Trek: The Next Generation_ script of arbitrary length using Markov chains trained on the show’s episode and movie scripts. [[code](https://github.com/eoinnoble/b9-indifference)]
 - [adam](http://bziarkowski.pl/adam), polish poetry generator. [[code](https://github.com/bziarkowski/adam)]
+- [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 
 Have other examples? Pull requests welcome.
 

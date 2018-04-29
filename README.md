@@ -194,10 +194,8 @@ print(combined_model.make_sentence())
 ## Markovify In The Wild
 
 - BuzzFeed's [Tom Friedman Sentence Generator](http://www.buzzfeed.com/jsvine/the-tom-friedman-sentence-generator) / [@mot_namdeirf](https://twitter.com/mot_namdeirf).
-- [UserSim](https://github.com/trambelus/UserSim), which powers [/u/user_simulator](https://www.reddit.com/user/user_simulator) bot on Reddit and generates comments based on a user's comment history.
-- [SubredditSimulator](https://www.reddit.com/r/SubredditSimulator), which generates random Reddit submissions and comments based on a subreddit's previous activity.
-    - ["What is /r/SubredditSimulator?"](https://www.reddit.com/r/SubredditSimulator/comments/391ria/what_is_rsubredditsimulator/)
-    - [Note re. `markovify`](https://www.reddit.com/r/SubredditSimMeta/comments/3d910r/i_was_inspired_by_this_place_and_made_a_twitter/ct3vjp0)
+- [/u/user_simulator](https://www.reddit.com/user/user_simulator), a Reddit bot that generates comments based on a user's comment history. [[code](https://github.com/trambelus/UserSim)]
+- [SubredditSimulator](https://www.reddit.com/r/SubredditSimulator), which [uses `markovify`](https://www.reddit.com/r/SubredditSimMeta/comments/3d910r/i_was_inspired_by_this_place_and_made_a_twitter/ct3vjp0) to generate random Reddit submissions and comments based on a subreddit's previous activity. [[code](https://github.com/Deimos/SubredditSimulator)]
 - [college crapplication](http://college-crapplication.appspot.com/), a web-app that generates college application essays. [[code](https://github.com/mattr555/college-crapplication)]
 - [@MarkovPicard](https://twitter.com/MarkovPicard), a Twitter bot based on *Star Trek: The Next Generation* transcripts. [[code](https://github.com/rdsheppard95/MarkovPicard)]
 - [sekrits.herokuapp.com](https://sekrits.herokuapp.com/), a `markovify`-powered quiz that challenges you to tell the difference between "two file titles relating to matters of [Australian] national security" — one real and one fake. [[code](https://sekrits.herokuapp.com/)]
@@ -234,7 +232,7 @@ print(combined_model.make_sentence())
 - [@CanDennisDream](https://twitter.com/CanDennisDream), a twitter bot that contemplates life by training on existential literature discussions. [[code](https://github.com/GiantsLoveDeathMetal/dennis_bot)]
 - [B-9 Indifference](https://github.com/eoinnoble/b9-indifference), a program that generates a _Star Trek: The Next Generation_ script of arbitrary length using Markov chains trained on the show’s episode and movie scripts. [[code](https://github.com/eoinnoble/b9-indifference)]
 - [adam](http://bziarkowski.pl/adam), polish poetry generator. [[code](https://github.com/bziarkowski/adam)]
-- [Stackexchange Simulator](https://se-simulator.lw1.at/), using Stackexchange dumps to generate random questions and answers [[code](https://github.com/Findus23/se-simulator)]
+- [Stackexchange Simulator](https://se-simulator.lw1.at/), which uses StackExchange's bulk data to generate random questions and answers. [[code](https://github.com/Findus23/se-simulator)]
 
 Have other examples? Pull requests welcome.
 
@@ -261,4 +259,4 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@MatthewScholefield](https://github.com/MatthewScholefield)
 - [@danmayer](https://github.com/danmayer)
 
-Developed at [BuzzFeed](https://www.buzzfeed.com).
+Initially developed at [BuzzFeed](https://www.buzzfeed.com).

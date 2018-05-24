@@ -233,6 +233,7 @@ print(combined_model.make_sentence())
 - [B-9 Indifference](https://github.com/eoinnoble/b9-indifference), a program that generates a _Star Trek: The Next Generation_ script of arbitrary length using Markov chains trained on the show’s episode and movie scripts. [[code](https://github.com/eoinnoble/b9-indifference)]
 - [adam](http://bziarkowski.pl/adam), polish poetry generator. [[code](https://github.com/bziarkowski/adam)]
 - [Stackexchange Simulator](https://se-simulator.lw1.at/), which uses StackExchange's bulk data to generate random questions and answers. [[code](https://github.com/Findus23/se-simulator)]
+- [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 
 Have other examples? Pull requests welcome.
 

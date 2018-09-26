@@ -43,6 +43,7 @@ class Chain(object):
         self.state_size = state_size
         self.model = model or self.build(corpus, self.state_size)
         self.precompute_begin_state()
+        self.mem = {}
 
     def build(self, corpus, state_size):
         """
@@ -90,8 +91,12 @@ class Chain(object):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         else:
-            choices, weights = zip(*self.model[state].items())
-            cumdist = list(accumulate(weights))
+            try:
+                choices, cumdist = self.mem[state]
+            except:
+                choices, weights = zip(*self.model[state].items())
+                cumdist = list(accumulate(weights))
+                self.mem[state] = (choices, cumdist)
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection

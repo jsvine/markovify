@@ -195,7 +195,7 @@ class Text(object):
     def make_short_sentence(self, max_chars, min_chars=0, **kwargs):
         """
         Tries making a sentence of no more than `max_chars` characters and optionally
-        no less than `min_chars` charcaters, passing **kwargs to `self.make_sentence`.
+        no less than `min_chars` characters, passing **kwargs to `self.make_sentence`.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
 

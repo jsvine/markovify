@@ -74,7 +74,7 @@ class Chain(object):
     def precompute_begin_state(self):
         """
         Caches the summation calculation and available choices for BEGIN * state_size.
-        Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
+        Significantly speeds up chain generation on large corpora. Thanks, @schollz!
         """
         begin_state = tuple([ BEGIN ] * self.state_size)
         choices, weights = zip(*self.model[begin_state].items())

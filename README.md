@@ -94,6 +94,14 @@ model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
 
 ... would combine `model_a` and `model_b`, but place 50% more weight on the connections from `model_a`.
 
+### Working with messy tesxt
+
+Starting with `v0.7.2`, `markovify.Text` accepts two additional parameters: `well_formed` and `reject_reg`.
+
+- Setting `well_formed = False` skips the step in which input sentences are rejected if they contain one of the 'bad characters' (i.e. `()[]'"`)
+
+- Setting `reject_reg` to a regular expression of your choice allows you change the input-sentence rejection pattern. This only applies if `well_formed` is True, and if the expression is non-empty.
+
 
 ### Extending `markovify.Text`
 
@@ -260,5 +268,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@tsunaminoai](https://github.com/tsunaminoai)
 - [@MatthewScholefield](https://github.com/MatthewScholefield)
 - [@danmayer](https://github.com/danmayer)
+- [@kade-robertson](https://github.com/kade-robertson)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

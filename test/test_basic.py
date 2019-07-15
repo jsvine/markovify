@@ -149,7 +149,12 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_custom_regex(self):
         with self.assertRaises(Exception) as context:
-            model = markovify.NewlineText('This sucks.', reject_reg=r'sucks')
+            model = markovify.NewlineText('This sentence contains a custom bad character: #.', reject_reg=r'#')
+
+        with self.assertRaises(Exception) as context:
+            model = markovify.NewlineText('This sentence (would normall fail')
+
+        model = markovify.NewlineText('This sentence (would normall fail', well_formed = False)
 
 if __name__ == '__main__':
     unittest.main()

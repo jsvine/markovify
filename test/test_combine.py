@@ -10,6 +10,8 @@ with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
     sherlock = f.read()
     sherlock_model = markovify.Text(sherlock)
     sherlock_model_no_retain = markovify.Text(sherlock, retain_original=False)
+    sherlock_model_compiled = markovify.Text(sherlock)
+    sherlock_model_compiled.compile()
 
 class MarkovifyTest(unittest.TestCase):
 
@@ -54,6 +56,18 @@ class MarkovifyTest(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             text_model_a = sherlock_model
             text_model_b = markovify.NewlineText(sherlock)
+            combo = markovify.combine([ text_model_a, text_model_b ])
+
+    def test_compiled_model_fail(self):
+        with self.assertRaises(Exception) as context:
+            model_a = sherlock_model
+            model_b = sherlock_model_compiled
+            combo = markovify.combine([ text_model_a, text_model_b ])
+
+    def test_compiled_chain_fail(self):
+        with self.assertRaises(Exception) as context:
+            model_a = sherlock_model.chain
+            model_b = sherlock_model_compiled.chain
             combo = markovify.combine([ text_model_a, text_model_b ])
 
     def test_combine_no_retain(self):

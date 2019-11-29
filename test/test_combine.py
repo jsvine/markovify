@@ -62,13 +62,13 @@ class MarkovifyTest(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             model_a = sherlock_model
             model_b = sherlock_model_compiled
-            combo = markovify.combine([ text_model_a, text_model_b ])
+            combo = markovify.combine([ model_a, model_b ])
 
     def test_compiled_chain_fail(self):
         with self.assertRaises(Exception) as context:
             model_a = sherlock_model.chain
             model_b = sherlock_model_compiled.chain
-            combo = markovify.combine([ text_model_a, text_model_b ])
+            combo = markovify.combine([ model_a, model_b ])
 
     def test_combine_no_retain(self):
         text_model = sherlock_model_no_retain

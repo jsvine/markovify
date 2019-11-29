@@ -53,6 +53,9 @@ class Text(object):
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
+    def compile(self):
+        self.chain.compile()
+
     def to_dict(self):
         """
         Returns the underlying data as a Python dict.

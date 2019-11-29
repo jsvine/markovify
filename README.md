@@ -94,6 +94,17 @@ model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
 
 This code snippet would combine `model_a` and `model_b`, but, it would also place 50% more weight on the connections from `model_a`.
 
+### Compiling a model
+
+Once a model has been generated, it may also be compiled for improved text generation speed and reduced size.
+```python
+text_model = markovify.Text(text, state_size=3)
+text_model.compile()
+```
+
+Once a model is compiled, it may not currently be combined with other models using `markovify.combine(...)`.
+If you wish to combine models, do that first and then compile the result.
+
 ### Working with messy texts
 
 Starting with `v0.7.2`, `markovify.Text` accepts two additional parameters: `well_formed` and `reject_reg`.

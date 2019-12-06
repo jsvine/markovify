@@ -2,6 +2,7 @@ import random
 import operator
 import bisect
 import json
+import copy
 
 # Python3 compatibility
 try: # pragma: no cover
@@ -51,13 +52,15 @@ class Chain(object):
         if not self.compiled:
             self.precompute_begin_state()
 
-    def compile(self):
-        if not self.compiled:
-            del self.begin_cumdist
-            del self.begin_choices
-            sxf = { state: compile_next(next_dict) for (state, next_dict) in self.model.items() }
-            self.model = sxf
-            self.compiled = True
+    def compile(self, inplace = False):
+        if self.compiled:
+            if inplace: return self
+            return Chain(None, self.state_size, model = copy.deepcopy(self.model))
+        mdict = { state: compile_next(next_dict) for (state, next_dict) in self.model.items() }
+        if not inplace: return Chain(None, self.state_size, model = mdict)
+        self.model = mdict
+        self.compiled = True
+        return self
 
     def build(self, corpus, state_size):
         """

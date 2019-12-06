@@ -53,8 +53,21 @@ class Text(object):
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
-    def compile(self):
-        self.chain.compile()
+    def compile(self, inplace = False):
+        if inplace:
+            self.chain.compile(inplace = True)
+            return self
+        cchain = self.chain.compile(inplace = False)
+        psent = None
+        if hasattr(self, 'parsed_sentences'):
+            psent = self.parsed_sentences
+        return Text(None, \
+                    state_size = self.state_size, \
+                    chain = cchain, \
+                    parsed_sentences = psent, \
+                    retain_original = self.retain_original, \
+                    well_formed = self.well_formed, \
+                    reject_reg = self.reject_pat)
 
     def to_dict(self):
         """

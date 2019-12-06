@@ -10,8 +10,7 @@ with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
     sherlock = f.read()
     sherlock_model = markovify.Text(sherlock)
     sherlock_model_no_retain = markovify.Text(sherlock, retain_original=False)
-    sherlock_model_compiled = markovify.Text(sherlock)
-    sherlock_model_compiled.compile()
+    sherlock_model_compiled = sherlock_model.compile()
 
 class MarkovifyTest(unittest.TestCase):
 

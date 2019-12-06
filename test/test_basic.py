@@ -167,12 +167,30 @@ class MarkovifyTestCompiled(MarkovifyTestBase):
 
     with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
         sherlock_text = f.read()
+        sherlock_model = (markovify.Text(sherlock_text)).compile()
+        sherlock_model_ss2 = (markovify.Text(sherlock_text, state_size = 2)).compile()
+        sherlock_model_ss3 = (markovify.Text(sherlock_text, state_size = 3)).compile()
+
+    def test_recompiling(self):
+        model_recompile = self.sherlock_model.compile()
+        sent = model_recompile.make_sentence()
+        assert(len(sent) != 0)
+
+        model_recompile.compile(inplace = True)
+        sent = model_recompile.make_sentence()
+        assert(len(sent) != 0)
+
+class MarkovifyTestCompiledInPlace(MarkovifyTestBase):
+    __test__ = True
+
+    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+        sherlock_text = f.read()
         sherlock_model = markovify.Text(sherlock_text)
         sherlock_model_ss2 = markovify.Text(sherlock_text, state_size = 2)
         sherlock_model_ss3 = markovify.Text(sherlock_text, state_size = 3)
-        sherlock_model.compile()
-        sherlock_model_ss2.compile()
-        sherlock_model_ss3.compile()
+        sherlock_model.compile(inplace = True)
+        sherlock_model_ss2.compile(inplace = True)
+        sherlock_model_ss3.compile(inplace = True)
 
 if __name__ == '__main__':
     unittest.main()

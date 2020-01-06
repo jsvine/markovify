@@ -264,6 +264,8 @@ print(combined_model.make_sentence())
 - [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)]
 - [Personal Whatsapp Chat Analyzer](https://github.com/Giuzzilla/Personal-Whatsapp-Chat-Analyzer), some basic analytics for WhatsApp chat exports (private & groups), word counting & markov chain phrase generator 
 - [DeepfakeBot](https://deepfake-bot.readthedocs.io/) - A system for converting your friends into Discord bots. [[code](https://github.com/rustygentile/deepfake-bot)]
+- [python-markov-novel](https://github.com/accraze/python-markov-novel), writes a random novel using markov chains, broken down into chapters
+- [python-ia-markov](https://github.com/accraze/python-ia-markov), trains Markov models on Internet Archive text files
 
 Have other examples? Pull requests welcome.
 

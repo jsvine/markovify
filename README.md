@@ -260,6 +260,7 @@ print(combined_model.make_sentence())
 - [Stackexchange Simulator](https://se-simulator.lw1.at/), which uses StackExchange's bulk data to generate random questions and answers. [[code](https://github.com/Findus23/se-simulator)]
 - [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 - [Commencement Speech Generator](https://github.com/whatrocks/markov-commencement-speech), generates "graduation speech"-style quotes from a dataset of the "greatest of all time" commencement speeches)
+- [@alg_testament](https://twitter.com/alg_testament), tweets sentences based on The Old Testament and two coding textbooks in Russian. [[code](https://github.com/maryszmary/Algorithm-Testament)]  
 - [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)
 
 Have other examples? Pull requests welcome.

@@ -94,6 +94,23 @@ model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
 
 This code snippet would combine `model_a` and `model_b`, but, it would also place 50% more weight on the connections from `model_a`.
 
+### Compiling a model
+
+Once a model has been generated, it may also be compiled for improved text generation speed and reduced size.
+```python
+text_model = markovify.Text(text)
+text_model = text_model.compile()
+```
+
+Models may also be compiled in-place:
+```python
+text_model = markovify.Text(text)
+text_model.compile(inplace = True)
+```
+
+Currently, compiled models may not be combined with other models using `markovify.combine(...)`.
+If you wish to combine models, do that first and then compile the result.
+
 ### Working with messy texts
 
 Starting with `v0.7.2`, `markovify.Text` accepts two additional parameters: `well_formed` and `reject_reg`.
@@ -243,6 +260,9 @@ print(combined_model.make_sentence())
 - [Stackexchange Simulator](https://se-simulator.lw1.at/), which uses StackExchange's bulk data to generate random questions and answers. [[code](https://github.com/Findus23/se-simulator)]
 - [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 - [Commencement Speech Generator](https://github.com/whatrocks/markov-commencement-speech), generates "graduation speech"-style quotes from a dataset of the "greatest of all time" commencement speeches)
+- [@alg_testament](https://twitter.com/alg_testament), tweets sentences based on The Old Testament and two coding textbooks in Russian. [[code](https://github.com/maryszmary/Algorithm-Testament)]  
+- [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)]
+- [Personal Whatsapp Chat Analyzer](https://github.com/Giuzzilla/Personal-Whatsapp-Chat-Analyzer), some basic analytics for WhatsApp chat exports (private & groups), word counting & markov chain phrase generator 
 - [DeepfakeBot](https://deepfake-bot.readthedocs.io/) - A system for converting your friends into Discord bots. [[code](https://github.com/rustygentile/deepfake-bot)]
 
 Have other examples? Pull requests welcome.
@@ -270,5 +290,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@MatthewScholefield](https://github.com/MatthewScholefield)
 - [@danmayer](https://github.com/danmayer)
 - [@kade-robertson](https://github.com/kade-robertson)
+- [@erikerlandson](https://github.com/erikerlandson)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

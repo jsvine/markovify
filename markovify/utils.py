@@ -3,8 +3,12 @@ from .text import Text
 
 def get_model_dict(thing):
     if isinstance(thing, Chain):
+        if thing.compiled:
+            raise ValueError("Not implemented for compiled markovify.Chain")
         return thing.model
     if isinstance(thing, Text):
+        if thing.chain.compiled:
+            raise ValueError("Not implemented for compiled markovify.Chain")
         return thing.chain.model
     if isinstance(thing, list):
         return dict(thing)

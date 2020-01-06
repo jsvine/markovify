@@ -24,7 +24,7 @@ Some reasons:
 
 - Relies only on pure-Python libraries, and very few of them.
 
-- Tested on Python 2.7, 3.4, 3.5, and 3.6.
+- Tested on Python 2.7, 3.4, 3.5, 3.6 and 3.7.
 
 
 ## Installation
@@ -69,6 +69,8 @@ Notes:
 ## Advanced Usage
 
 ### Specifying the model's state size
+
+State size is a number of words the probability of a next word depends on.
 
 By default, `markovify.Text` uses a state size of 2. But you can instantiate a model with a different state size. E.g.,:
 

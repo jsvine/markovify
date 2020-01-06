@@ -70,6 +70,8 @@ Notes:
 
 ### Specifying the model's state size
 
+State size is a number of words the probability of a next word depends on.
+
 By default, `markovify.Text` uses a state size of 2. But you can instantiate a model with a different state size. E.g.,:
 
 ```python

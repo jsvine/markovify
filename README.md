@@ -261,7 +261,8 @@ print(combined_model.make_sentence())
 - [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 - [Commencement Speech Generator](https://github.com/whatrocks/markov-commencement-speech), generates "graduation speech"-style quotes from a dataset of the "greatest of all time" commencement speeches)
 - [@alg_testament](https://twitter.com/alg_testament), tweets sentences based on The Old Testament and two coding textbooks in Russian. [[code](https://github.com/maryszmary/Algorithm-Testament)]  
-- [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)
+- [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)]
+- [Personal Whatsapp Chat Analyzer](https://github.com/Giuzzilla/Personal-Whatsapp-Chat-Analyzer), some basic analytics for WhatsApp chat exports (private & groups), word counting & markov chain phrase generator 
 
 Have other examples? Pull requests welcome.
 

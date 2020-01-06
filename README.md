@@ -24,7 +24,7 @@ Some reasons:
 
 - Relies only on pure-Python libraries, and very few of them.
 
-- Tested on Python 2.7, 3.4, 3.5, and 3.6.
+- Tested on Python 2.7, 3.4, 3.5, 3.6 and 3.7.
 
 
 ## Installation

@@ -3,7 +3,7 @@
 
 # Markovify
 
-Markovify is a simple, extensible Markov chain generator. Right now, its main use is for building Markov models of large corpora of text, and generating random sentences from that. But, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
+Markovify is a simple, extensible Markov chain generator. Right now, its primary use is for building Markov models of large corpora of text and generating random sentences from that. However, in theory, it could be used for [other applications](http://en.wikipedia.org/wiki/Markov_chain#Applications).
 
 - [Why Markovify?](#why-markovify)
 - [Installation](#installation)
@@ -16,7 +16,7 @@ Markovify is a simple, extensible Markov chain generator. Right now, its main us
 
 Some reasons:
 
-- Simplicity. "Batteries included," but it's easy to override key methods.
+- Simplicity. "Batteries included," but it is easy to override key methods.
 
 - Models can be stored as JSON, allowing you to cache your results and save them for later.
 
@@ -49,22 +49,22 @@ text_model = markovify.Text(text)
 for i in range(5):
     print(text_model.make_sentence())
 
-# Print three randomly-generated sentences of no more than 140 characters
+# Print three randomly-generated sentences of no more than 280 characters
 for i in range(3):
-    print(text_model.make_short_sentence(140))
+    print(text_model.make_short_sentence(280))
 ```
 
 Notes:
 
-- The usage examples here assume you're trying to markovify text. If you'd like to use the underlying `markovify.Chain` class, which is not text-specific, check out [the (annotated) source code](markovify/chain.py).
+- The usage examples here assume you are trying to markovify text. If you would like to use the underlying `markovify.Chain` class, which is not text-specific, check out [the (annotated) source code](markovify/chain.py).
 
-- Markovify works best with large, well-punctuated texts. If your text doesn't use `.`s to delineate sentences, put each sentence on a newline, and use the `markovify.NewlineText` class instead of `markovify.Text` class.
+- Markovify works best with large, well-punctuated texts. If your text does not use `.`s to delineate sentences, put each sentence on a newline, and use the `markovify.NewlineText` class instead of `markovify.Text` class.
 
-- If you've accidentally read your text as one long sentence, markovify will be unable to generate new sentences from it due to a lack of beginning and ending delimiters. This can happen if you've read a newline delimited file using the `markovify.Text` command instead of `markovify.NewlineText`. To check this, the command `[key for key in txt.chain.model.keys() if "___BEGIN__" in key]` command will return all of the possible sentence starting words, and should return more than one result.
+- If you have accidentally read the input text as one long sentence, markovify will be unable to generate new sentences from it due to a lack of beginning and ending delimiters. This issue can occur if you have read a newline delimited file using the `markovify.Text` command instead of `markovify.NewlineText`. To check this, the command `[key for key in txt.chain.model.keys() if "___BEGIN__" in key]` command will return all of the possible sentence-starting words and should return more than one result.
 
-- By default, the `make_sentence` method tries, a maximum of 10 times per invocation, to make a sentence that doesn't overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
+- By default, the `make_sentence` method tries a maximum of 10 times per invocation, to make a sentence that does not overlap too much with the original text. If it is successful, the method returns the sentence as a string. If not, it returns `None`. To increase or decrease the number of attempts, use the `tries` keyword argument, e.g., call `.make_sentence(tries=100)`.
 
-- By default, `markovify.Text` tries to generate sentences that don't simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by passing `max_overlap_ratio` and/or `max_overlap_total` to the `make_sentence` method. Alternatively you can disable this check entirely by passing `test_output` as False.
+- By default, `markovify.Text` tries to generate sentences that do not simply regurgitate chunks of the original text. The default rule is to suppress any generated sentences that exactly overlaps the original text by 15 words or 70% of the sentence's word count. You can change this rule by passing `max_overlap_ratio` and/or `max_overlap_total` to the `make_sentence` method. Alternatively, this check can be disabled entirely by passing `test_output` as False.
 
 ## Advanced Usage
 
@@ -92,12 +92,37 @@ model_b = markovify.Text(text_b)
 model_combo = markovify.combine([ model_a, model_b ], [ 1.5, 1 ])
 ```
 
-... would combine `model_a` and `model_b`, but place 50% more weight on the connections from `model_a`.
+This code snippet would combine `model_a` and `model_b`, but, it would also place 50% more weight on the connections from `model_a`.
+
+### Compiling a model
+
+Once a model has been generated, it may also be compiled for improved text generation speed and reduced size.
+```python
+text_model = markovify.Text(text)
+text_model = text_model.compile()
+```
+
+Models may also be compiled in-place:
+```python
+text_model = markovify.Text(text)
+text_model.compile(inplace = True)
+```
+
+Currently, compiled models may not be combined with other models using `markovify.combine(...)`.
+If you wish to combine models, do that first and then compile the result.
+
+### Working with messy texts
+
+Starting with `v0.7.2`, `markovify.Text` accepts two additional parameters: `well_formed` and `reject_reg`.
+
+- Setting `well_formed = False` skips the step in which input sentences are rejected if they contain one of the 'bad characters' (i.e. `()[]'"`)
+
+- Setting `reject_reg` to a regular expression of your choice allows you change the input-sentence rejection pattern. This only applies if `well_formed` is True, and if the expression is non-empty.
 
 
 ### Extending `markovify.Text`
 
-The `markovify.Text` class is highly extensible; most methods can be overridden. For example, the following `POSifiedText` class uses NLTK's part-of-speech tagger to generate a Markov model that obeys sentence structure better than a naive model. (It works. But be warned: `pos_tag` is very slow.)
+The `markovify.Text` class is highly extensible; most methods can be overridden. For example, the following `POSifiedText` class uses NLTK's part-of-speech tagger to generate a Markov model that obeys sentence structure better than a naive model. (It works; however, be warned: `pos_tag` is very slow.)
 
 ```python
 import markovify
@@ -156,7 +181,7 @@ model_json = text_model.to_json()
 # In theory, here you'd save the JSON to disk, and then read it back later.
 
 reconstituted_model = markovify.Text.from_json(model_json)
-reconstituted_model.make_short_sentence(140)
+reconstituted_model.make_short_sentence(280)
 
 >>> 'It cost me something in foolscap, and I had no idea that he was a man of evil reputation among women.'
 ```
@@ -165,7 +190,7 @@ You can also export the underlying Markov chain on its own — i.e., excluding 
 
 ### Generating `markovify.Text` models from very large corpora
 
-By default, the `markovify.Text` class loads, and retains, the your textual corpus, so that it can compare generated sentences with the original (and only emit novel sentences). But, with very large corpora, loading the entire text at once (and retaining it) can be memory-intensive. To overcome this, you can `(a)` tell Markovify not to retain the original:
+By default, the `markovify.Text` class loads, and retains, your textual corpus, so that it can compare generated sentences with the original (and only emit novel sentences). However, with very large corpora, loading the entire text at once (and retaining it) can be memory-intensive. To overcome this, you can `(a)` tell Markovify not to retain the original:
 
 ```python
 with open("path/to/my/huge/corpus.txt") as f:
@@ -236,6 +261,7 @@ print(combined_model.make_sentence())
 - [@BloggingBot](https://twitter.com/BloggingBot), tweets sentences based on a corpus of 17 years of [blogging](http://artlung.com/blog/2018/02/23/markov-chains-are-hilarious/).
 - [Commencement Speech Generator](https://github.com/whatrocks/markov-commencement-speech), generates "graduation speech"-style quotes from a dataset of the "greatest of all time" commencement speeches)
 - [@alg_testament](https://twitter.com/alg_testament), tweets sentences based on The Old Testament and two coding textbooks in Russian. [[code](https://github.com/maryszmary/Algorithm-Testament)]  
+- [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)
 
 Have other examples? Pull requests welcome.
 
@@ -261,5 +287,7 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@tsunaminoai](https://github.com/tsunaminoai)
 - [@MatthewScholefield](https://github.com/MatthewScholefield)
 - [@danmayer](https://github.com/danmayer)
+- [@kade-robertson](https://github.com/kade-robertson)
+- [@erikerlandson](https://github.com/erikerlandson)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

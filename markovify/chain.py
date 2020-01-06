@@ -2,6 +2,7 @@ import random
 import operator
 import bisect
 import json
+import copy
 
 # Python3 compatibility
 try: # pragma: no cover
@@ -24,6 +25,11 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
+def compile_next(next_dict):
+    words = list(next_dict.keys())
+    cff = list(accumulate(next_dict.values()))
+    return [words, cff]
+
 class Chain(object):
     """
     A Markov chain representing processes that have both beginnings and ends.
@@ -42,7 +48,19 @@ class Chain(object):
         """
         self.state_size = state_size
         self.model = model or self.build(corpus, self.state_size)
-        self.precompute_begin_state()
+        self.compiled = (len(self.model) > 0) and (type(self.model[tuple([BEGIN]*state_size)]) == list)
+        if not self.compiled:
+            self.precompute_begin_state()
+
+    def compile(self, inplace = False):
+        if self.compiled:
+            if inplace: return self
+            return Chain(None, self.state_size, model = copy.deepcopy(self.model))
+        mdict = { state: compile_next(next_dict) for (state, next_dict) in self.model.items() }
+        if not inplace: return Chain(None, self.state_size, model = mdict)
+        self.model = mdict
+        self.compiled = True
+        return self
 
     def build(self, corpus, state_size):
         """
@@ -74,11 +92,10 @@ class Chain(object):
     def precompute_begin_state(self):
         """
         Caches the summation calculation and available choices for BEGIN * state_size.
-        Significantly speeds up chain generation on large corpuses. Thanks, @schollz!
+        Significantly speeds up chain generation on large corpora. Thanks, @schollz!
         """
         begin_state = tuple([ BEGIN ] * self.state_size)
-        choices, weights = zip(*self.model[begin_state].items())
-        cumdist = list(accumulate(weights))
+        choices, cumdist = compile_next(self.model[begin_state])
         self.begin_cumdist = cumdist
         self.begin_choices = choices
 
@@ -86,7 +103,9 @@ class Chain(object):
         """
         Given a state, choose the next item at random.
         """
-        if state == tuple([ BEGIN ] * self.state_size):
+        if self.compiled:
+            choices, cumdist = self.model[state]
+        elif state == tuple([ BEGIN ] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         else:

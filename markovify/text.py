@@ -14,7 +14,9 @@ class ParamError(Exception):
 
 class Text(object):
 
-    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
+    reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
+
+    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True, well_formed=True, reject_reg=''):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -24,7 +26,18 @@ class Text(object):
               contains the steps (e.g. words) in the run. If you want to simulate
               an infinite process, you can come very close by passing just one, very
               long run.
+        retain_original: Indicates whether to keep the original corpus.
+        well_formed: Indicates whether sentences should be well-formed, preventing
+              unmatched quotes, parenthesis by default, or a custom regular expression
+              can be provided.
+        reject_reg: If well_formed is True, this can be provided to override the
+              standard rejection pattern.
         """
+
+        self.well_formed = well_formed
+        if well_formed and reject_reg != '':
+            self.reject_pat = re.compile(reject_reg)
+
         can_make_sentences = parsed_sentences is not None or input_text is not None
         self.retain_original = retain_original and can_make_sentences
         self.state_size = state_size
@@ -39,6 +52,22 @@ class Text(object):
             if not chain:
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
+
+    def compile(self, inplace = False):
+        if inplace:
+            self.chain.compile(inplace = True)
+            return self
+        cchain = self.chain.compile(inplace = False)
+        psent = None
+        if hasattr(self, 'parsed_sentences'):
+            psent = self.parsed_sentences
+        return Text(None, \
+                    state_size = self.state_size, \
+                    chain = cchain, \
+                    parsed_sentences = psent, \
+                    retain_original = self.retain_original, \
+                    well_formed = self.well_formed, \
+                    reject_reg = self.reject_pat)
 
     def to_dict(self):
         """
@@ -96,19 +125,18 @@ class Text(object):
 
     def test_sentence_input(self, sentence):
         """
-        A basic sentence filter. This one rejects sentences that contain
+        A basic sentence filter. The default rejects sentences that contain
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence.
         """
         if len(sentence.strip()) == 0: return False
-        reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
         # Decode unicode, mainly to normalize fancy quotation marks
         if sentence.__class__.__name__ == "str": # pragma: no cover
             decoded = sentence
         else: # pragma: no cover
             decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
-        if re.search(reject_pat, decoded): return False
+        if self.well_formed and self.reject_pat.search(decoded): return False
         return True
 
     def generate_corpus(self, text):
@@ -195,7 +223,7 @@ class Text(object):
     def make_short_sentence(self, max_chars, min_chars=0, **kwargs):
         """
         Tries making a sentence of no more than `max_chars` characters and optionally
-        no less than `min_chars` charcaters, passing **kwargs to `self.make_sentence`.
+        no less than `min_chars` characters, passing **kwargs to `self.make_sentence`.
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
 

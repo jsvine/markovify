@@ -268,6 +268,7 @@ print(combined_model.make_sentence())
 - [DeepfakeBot](https://deepfake-bot.readthedocs.io/) - A system for converting your friends into Discord bots. [[code](https://github.com/rustygentile/deepfake-bot)]
 - [python-markov-novel](https://github.com/accraze/python-markov-novel), writes a random novel using markov chains, broken down into chapters
 - [python-ia-markov](https://github.com/accraze/python-ia-markov), trains Markov models on Internet Archive text files
+- [@bot_homer](https://twitter.com/bot_homer), a Twitter bot trained using Homer Simpson's dialogues of 600 chapters. [[code](https://github.com/ivanlen/simpsons_bot)].
 
 Have other examples? Pull requests welcome.
 

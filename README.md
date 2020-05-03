@@ -269,6 +269,7 @@ print(combined_model.make_sentence())
 - [python-markov-novel](https://github.com/accraze/python-markov-novel), writes a random novel using markov chains, broken down into chapters
 - [python-ia-markov](https://github.com/accraze/python-ia-markov), trains Markov models on Internet Archive text files
 - [@bot_homer](https://twitter.com/bot_homer), a Twitter bot trained using Homer Simpson's dialogues of 600 chapters. [[code](https://github.com/ivanlen/simpsons_bot)].
+- [git-commit-gen](https://github.com/solean/git-commit-gen), generates git commit messages by using markovify to build a model of a repo's git log
 
 Have other examples? Pull requests welcome.
 

@@ -2,7 +2,6 @@ import unittest
 import markovify
 import sys, os
 import operator
-from pytest import raises
 
 def get_sorted(chain_json):
     return sorted(chain_json, key=operator.itemgetter(0))

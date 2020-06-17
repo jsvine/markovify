@@ -190,14 +190,15 @@ class Text(object):
         If `test_output` is set as False then the `test_sentence_output` check
         will be skipped.
 
-        If `max_words` is specified, the word count for the sentence will be
-        evaluated against the provided limit.
+        If `max_words` or `min_words` are specified, the word count for the sentence will be
+        evaluated against the provided limit(s).
         """
         tries = kwargs.get('tries', DEFAULT_TRIES)
         mor = kwargs.get('max_overlap_ratio', DEFAULT_MAX_OVERLAP_RATIO)
         mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
         test_output = kwargs.get('test_output', True)
         max_words = kwargs.get('max_words', None)
+        min_words = kwargs.get('min_words', None)
 
         if init_state != None:
             prefix = list(init_state)
@@ -211,7 +212,7 @@ class Text(object):
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if max_words != None and len(words) > max_words:
+            if max_words != None and len(words) > max_words or len(words) < min_words:
                 continue
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):

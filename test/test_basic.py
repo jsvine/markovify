@@ -131,6 +131,11 @@ class MarkovifyTestBase(unittest.TestCase):
         sent = text_model.make_sentence(max_words=0)
         assert sent is None
 
+    def test_min_words(self):
+        text_model = self.sherlock_model
+        sent = text_model.make_sentence(min_words=5)
+        assert len(sent.split(' ')) >= 5
+
     def test_newline_text(self):
         with open(os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")) as f:
             model = markovify.NewlineText(f.read())

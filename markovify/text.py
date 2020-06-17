@@ -270,6 +270,8 @@ class Text(object):
             output = self.make_sentence(init_state, **kwargs)
             if output is not None:
                 return output
+        err_msg = "`make_sentence_with_start` can't find sentence beginning with {0}".format(beginning)
+        raise ParamError(err_msg)
 
         return None
 

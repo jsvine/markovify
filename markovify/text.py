@@ -212,7 +212,7 @@ class Text(object):
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if max_words != None and len(words) > max_words or len(words) < min_words:
+            if (max_words != None and len(words) > max_words) or (min_words != None and len(words) < min_words):
                 continue
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):

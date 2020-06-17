@@ -8,11 +8,15 @@ version_ns = {}
 with open(os.path.join(HERE, NAME, '__version__.py')) as f:
     exec(f.read(), {}, version_ns)
 
+with open(os.path.join(HERE, 'README.md')) as f:
+    long_description = f.read()
+
 setup(
     name="markovify",
     version=version_ns['__version__'],
     description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
-    long_description="",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",

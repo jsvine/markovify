@@ -2,6 +2,7 @@ import unittest
 import markovify
 import sys, os
 import operator
+from pytest import raises
 
 def get_sorted(chain_json):
     return sorted(chain_json, key=operator.itemgetter(0))
@@ -78,8 +79,8 @@ class MarkovifyTestBase(unittest.TestCase):
     def test_make_sentence_with_words_not_at_start_of_sentence_miss(self):
         text_model = self.sherlock_model_ss3
         start_str = "was werewolf"
-        sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
-        assert(sent == None)
+        with self.assertRaises(markovify.text.ParamError):
+            sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
 
     def test_make_sentence_with_words_not_at_start_of_sentence_of_state_size(self):
         text_model = self.sherlock_model_ss2
@@ -102,6 +103,7 @@ class MarkovifyTestBase(unittest.TestCase):
             assert(False)
         except markovify.text.ParamError:
             assert(True)
+	
         text_model = self.sherlock_model_ss3
         text_model.make_sentence_with_start(start_str)
         sent = text_model.make_sentence_with_start("Sherlock")

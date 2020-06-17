@@ -297,5 +297,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@danmayer](https://github.com/danmayer)
 - [@kade-robertson](https://github.com/kade-robertson)
 - [@erikerlandson](https://github.com/erikerlandson)
+- [@briennakh](https://github.com/briennakh)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

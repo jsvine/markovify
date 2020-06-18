@@ -273,8 +273,6 @@ class Text(object):
         err_msg = "`make_sentence_with_start` can't find sentence beginning with {0}".format(beginning)
         raise ParamError(err_msg)
 
-        return None
-
     @classmethod
     def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):
         """

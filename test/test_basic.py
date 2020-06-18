@@ -104,7 +104,6 @@ class MarkovifyTestBase(unittest.TestCase):
             assert(True)
 	
         text_model = self.sherlock_model_ss3
-        text_model.make_sentence_with_start(start_str)
         sent = text_model.make_sentence_with_start("Sherlock")
         assert(markovify.chain.BEGIN not in sent)
 

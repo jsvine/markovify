@@ -103,6 +103,8 @@ class MarkovifyTestBase(unittest.TestCase):
         except markovify.text.ParamError:
             assert(True)
 	
+        with self.assertRaises(Exception) as context:
+            text_model.make_sentence_with_start(start_str)
         text_model = self.sherlock_model_ss3
         sent = text_model.make_sentence_with_start("Sherlock")
         assert(markovify.chain.BEGIN not in sent)

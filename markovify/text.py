@@ -271,8 +271,8 @@ class Text(object):
             output = self.make_sentence(init_state, **kwargs)
             if output is not None:
                 return output
-
-        return None
+        err_msg = "`make_sentence_with_start` can't find sentence beginning with {0}".format(beginning)
+        raise ParamError(err_msg)
 
     @classmethod
     def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):

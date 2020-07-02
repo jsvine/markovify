@@ -106,7 +106,7 @@ class MarkovifyTestBase(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             text_model.make_sentence_with_start(start_str)
         text_model = self.sherlock_model_ss3
-        sent = text_model.make_sentence_with_start("Sherlock")
+        sent = text_model.make_sentence_with_start("Sherlock", tries=50)
         assert(markovify.chain.BEGIN not in sent)
 
     def test_short_sentence(self):

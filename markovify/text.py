@@ -213,7 +213,7 @@ class Text(object):
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
             if (max_words != None and len(words) > max_words) or (min_words != None and len(words) < min_words):
-                continue
+                continue # pragma: no cover # see https://github.com/nedbat/coveragepy/issues/198
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):
                     return self.word_join(words)

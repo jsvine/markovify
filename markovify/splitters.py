@@ -15,7 +15,7 @@ abbr_capped = "|".join([
     "|".join(ascii_lowercase) # Initials
 ]).split("|")
 
-abbr_lowercase = "etc|v|vs|viz|al|pct"
+abbr_lowercase = "etc|v|vs|viz|al|pct".split("|")
 
 exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
 

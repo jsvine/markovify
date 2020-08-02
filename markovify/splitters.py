@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*- 
 import re
 
-ascii_lowercase = "abcdefghijklmnopqrstuvwxyz"
-ascii_uppercase = ascii_lowercase.upper()
+uppercase_letter_pat = re.compile(r"^[A-Z]$", re.UNICODE)
+initialism_pat = re.compile(r"^[A-Za-z0-9]{1,2}(\.[A-Za-z0-9]{1,2})+\.$", re.UNICODE)
 
 # States w/ with thanks to https://github.com/unitedstates/python-us
 # Titles w/ thanks to https://github.com/nytimes/emphasis and @donohoe
@@ -12,24 +12,25 @@ abbr_capped = "|".join([
     "mr|ms|mrs|msr|dr|gov|pres|sen|sens|rep|reps|prof|gen|messrs|col|sr|jf|sgt|mgr|fr|rev|jr|snr|atty|supt", # Titles
     "ave|blvd|st|rd|hwy", # Streets
     "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec", # Months
-    "|".join(ascii_lowercase) # Initials
 ]).split("|")
 
 abbr_lowercase = "etc|v|vs|viz|al|pct".split("|")
 
-exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
-
 def is_abbreviation(dotted_word):
     clipped = dotted_word[:-1]
-    if clipped[0] in ascii_uppercase:
-        if clipped.lower() in abbr_capped: return True
-        else: return False
+    if re.match(uppercase_letter_pat, clipped[0]):
+        if len(clipped) == 1: # Initial
+            return True
+        elif clipped.lower() in abbr_capped:
+            return True
+        else:
+            return False
     else:
         if clipped in abbr_lowercase: return True
         else: return False
 
 def is_sentence_ender(word):
-    if word in exceptions: return False
+    if re.match(initialism_pat, word) is not None: return False
     if word[-1] in [ "?", "!" ]:
         return True
     if len(re.sub(r"[^A-Z]", "", word)) > 1:

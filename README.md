@@ -301,5 +301,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@briennakh](https://github.com/briennakh)
 - [@berfr](https://github.com/berfr)
 - [@Freestackmejai](https://github.com/Freestackmejai)
+- [@rokala](https://github.com/rokala)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

@@ -271,6 +271,7 @@ print(combined_model.make_sentence())
 - [@bot_homer](https://twitter.com/bot_homer), a Twitter bot trained using Homer Simpson's dialogues of 600 chapters. [[code](https://github.com/ivanlen/simpsons_bot)].
 - [git-commit-gen](https://github.com/solean/git-commit-gen), generates git commit messages by using markovify to build a model of a repo's git log
 - [fakesocial](https://fakesocial.net),  Fake social network using generated content. [[code](https://github.com/berfr/fakesocial)]
+- [Slovodel Bot](https://github.com/weiss-d/slovodel-bot), a Telegram bot that generates non-existent Russian words using corpus made by algorithmically dividing existent words into syllables.
 
 Have other examples? Pull requests welcome.
 

@@ -4,12 +4,6 @@ import bisect
 import json
 import copy
 
-# Python3 compatibility
-try: # pragma: no cover
-    basestring
-except NameError: # pragma: no cover
-    basestring = str
-
 BEGIN = "___BEGIN__"
 END = "___END__"
 
@@ -149,7 +143,7 @@ class Chain(object):
         return the corresponding markovify.Chain.
         """
 
-        if isinstance(json_thing, basestring):
+        if isinstance(json_thing, str):
             obj = json.loads(json_thing)
         else:
             obj = json_thing

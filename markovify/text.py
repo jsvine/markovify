@@ -176,7 +176,7 @@ class Text:
         number of words, and (b) `max_overlap_total` (default: 15).
         """
         # Reject large chunks of similarity
-        overlap_ratio = int(round(max_overlap_ratio * len(words)))
+        overlap_ratio = round(max_overlap_ratio * len(words))
         overlap_max = min(max_overlap_total, overlap_ratio)
         overlap_over = overlap_max + 1
         gram_count = max((len(words) - overlap_max), 1)

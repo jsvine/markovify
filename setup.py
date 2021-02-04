@@ -5,10 +5,10 @@ NAME = "markovify"
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 version_ns = {}
-with open(os.path.join(HERE, NAME, '__version__.py')) as f:
+with open(os.path.join(HERE, NAME, '__version__.py'), encoding='utf-8') as f:
     exec(f.read(), {}, version_ns)
 
-with open(os.path.join(HERE, 'README.md')) as f:
+with open(os.path.join(HERE, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(

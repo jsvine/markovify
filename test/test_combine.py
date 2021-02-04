@@ -1,18 +1,21 @@
-import unittest
-import markovify
-import os
 import operator
+import unittest
+from pathlib import Path
+
+import markovify
+
+
+TEXTS = Path(__file__).resolve().parent / 'texts'
 
 
 def get_sorted(chain_json):
     return sorted(chain_json, key=operator.itemgetter(0))
 
 
-with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
-    sherlock = f.read()
-    sherlock_model = markovify.Text(sherlock)
-    sherlock_model_no_retain = markovify.Text(sherlock, retain_original=False)
-    sherlock_model_compiled = sherlock_model.compile()
+sherlock_text = (TEXTS / 'sherlock.txt').read_text()
+sherlock_model = markovify.Text(sherlock_text)
+sherlock_model_no_retain = markovify.Text(sherlock_text, retain_original=False)
+sherlock_model_compiled = sherlock_model.compile()
 
 
 class MarkovifyTest(unittest.TestCase):
@@ -55,14 +58,14 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_mismatched_state_sizes(self):
         with self.assertRaises(Exception):
-            text_model_a = markovify.Text(sherlock, state_size=2)
-            text_model_b = markovify.Text(sherlock, state_size=3)
+            text_model_a = markovify.Text(sherlock_text, state_size=2)
+            text_model_b = markovify.Text(sherlock_text, state_size=3)
             markovify.combine([text_model_a, text_model_b])
 
     def test_mismatched_model_types(self):
         with self.assertRaises(Exception):
             text_model_a = sherlock_model
-            text_model_b = markovify.NewlineText(sherlock)
+            text_model_b = markovify.NewlineText(sherlock_text)
             markovify.combine([text_model_a, text_model_b])
 
     def test_compiled_model_fail(self):

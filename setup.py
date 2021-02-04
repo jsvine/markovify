@@ -1,15 +1,13 @@
+from pathlib import Path
 from setuptools import setup, find_packages
-import os
 
 NAME = "markovify"
-HERE = os.path.abspath(os.path.dirname(__file__))
+HERE = Path(__file__).resolve().parent
 
 version_ns = {}
-with open(os.path.join(HERE, NAME, '__version__.py'), encoding='utf-8') as f:
-    exec(f.read(), {}, version_ns)
+exec((HERE / NAME / '__version__.py').read_text(), {}, version_ns)
 
-with open(os.path.join(HERE, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+long_description = (HERE / 'README.md').read_text()
 
 setup(
     name="markovify",

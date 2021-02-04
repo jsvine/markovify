@@ -1,34 +1,34 @@
 import unittest
+from pathlib import Path
+
 import markovify
-import os
+
+
+TEXTS = Path(__file__).resolve().parent / 'texts'
 
 
 class MarkovifyTest(unittest.TestCase):
 
     @staticmethod
     def test_simple():
-        with open(os.path.join(os.path.dirname(__file__),
-                               "texts/sherlock.txt")) as f:
-            sherlock_model = markovify.Text(f)
+        sherlock_model = markovify.Text((TEXTS / 'sherlock.txt').read_text())
         sent = sherlock_model.make_sentence()
         assert sent is not None
         assert len(sent) != 0
 
     @staticmethod
     def test_without_retaining():
-        with open(os.path.join(os.path.dirname(__file__),
-                               "texts/senate-bills.txt")) as f:
-            senate_model = markovify.Text(f, retain_original=False)
+        senate_model = markovify.Text((TEXTS / 'senate-bills.txt').read_text(),
+                                      retain_original=False)
         sent = senate_model.make_sentence()
         assert sent is not None
         assert len(sent) != 0
 
     @staticmethod
     def test_from_json_without_retaining():
-        with open(os.path.join(os.path.dirname(__file__),
-                               "texts/senate-bills.txt")) as f:
-            original_model = markovify.Text(f, retain_original=False)
-        d = original_model.to_json()
+        senate_model = markovify.Text((TEXTS / 'senate-bills.txt').read_text(),
+                                      retain_original=False)
+        d = senate_model.to_json()
         new_model = markovify.Text.from_json(d)
         sent = new_model.make_sentence()
         assert sent is not None
@@ -37,11 +37,9 @@ class MarkovifyTest(unittest.TestCase):
     @staticmethod
     def test_from_mult_files_without_retaining():
         models = []
-        for (dirpath, _, filenames) in os.walk(
-                os.path.join(os.path.dirname(__file__), "texts")):
-            for filename in filenames:
-                with open(os.path.join(dirpath, filename)) as f:
-                    models.append(markovify.Text(f, retain_original=False))
+        for path in TEXTS.glob('*.txt'):
+            models.append(markovify.Text(path.read_text(),
+                                         retain_original=False))
         combined_model = markovify.combine(models)
         sent = combined_model.make_sentence()
         assert sent is not None

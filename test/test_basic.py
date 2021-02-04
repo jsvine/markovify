@@ -1,7 +1,11 @@
-import unittest
-import markovify
-import os
 import operator
+import unittest
+from pathlib import Path
+
+import markovify
+
+
+TEXTS = Path(__file__).resolve().parent / 'texts'
 
 
 def get_sorted(chain_json):
@@ -149,9 +153,7 @@ class MarkovifyTestBase(unittest.TestCase):
 
     @staticmethod
     def test_newline_text():
-        with open(os.path.join(os.path.dirname(__file__),
-                               "texts/senate-bills.txt")) as f:
-            model = markovify.NewlineText(f.read())
+        model = markovify.NewlineText((TEXTS / 'senate-bills.txt').read_text())
         model.make_sentence()
 
     def test_bad_corpus(self):
@@ -178,25 +180,19 @@ class MarkovifyTestBase(unittest.TestCase):
 class MarkovifyTest(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__),
-                           "texts/sherlock.txt")) as f:
-        sherlock_text = f.read()
-        sherlock_model = markovify.Text(sherlock_text)
-        sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
-        sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3)
+    sherlock_text = (TEXTS / 'sherlock.txt').read_text()
+    sherlock_model = markovify.Text(sherlock_text)
+    sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
+    sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3)
 
 
 class MarkovifyTestCompiled(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__),
-                           "texts/sherlock.txt")) as f:
-        sherlock_text = f.read()
-        sherlock_model = (markovify.Text(sherlock_text)).compile()
-        sherlock_model_ss2 = (
-            markovify.Text(sherlock_text, state_size=2)).compile()
-        sherlock_model_ss3 = (
-            markovify.Text(sherlock_text, state_size=3)).compile()
+    sherlock_text = (TEXTS / 'sherlock.txt').read_text()
+    sherlock_model = markovify.Text(sherlock_text).compile()
+    sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2).compile()
+    sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3).compile()
 
     def test_recompiling(self):
         model_recompile = self.sherlock_model.compile()
@@ -211,15 +207,13 @@ class MarkovifyTestCompiled(MarkovifyTestBase):
 class MarkovifyTestCompiledInPlace(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__),
-                           "texts/sherlock.txt")) as f:
-        sherlock_text = f.read()
-        sherlock_model = markovify.Text(sherlock_text)
-        sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
-        sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3)
-        sherlock_model.compile(inplace=True)
-        sherlock_model_ss2.compile(inplace=True)
-        sherlock_model_ss3.compile(inplace=True)
+    sherlock_text = (TEXTS / 'sherlock.txt').read_text()
+    sherlock_model = markovify.Text(sherlock_text)
+    sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
+    sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3)
+    sherlock_model.compile(inplace=True)
+    sherlock_model_ss2.compile(inplace=True)
+    sherlock_model_ss3.compile(inplace=True)
 
 
 if __name__ == '__main__':

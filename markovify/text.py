@@ -131,10 +131,7 @@ class Text(object):
         """
         if len(sentence.strip()) == 0: return False
         # Decode unicode, mainly to normalize fancy quotation marks
-        if sentence.__class__.__name__ == "str": # pragma: no cover
-            decoded = sentence
-        else: # pragma: no cover
-            decoded = unidecode(sentence)
+        decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
         if self.well_formed and self.reject_pat.search(decoded): return False
         return True

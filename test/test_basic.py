@@ -10,7 +10,7 @@ class MarkovifyTestBase(unittest.TestCase):
     __test__ = False
 
     def test_text_too_small(self):
-        text = u"Example phrase. This is another example sentence."
+        text = "Example phrase. This is another example sentence."
         text_model = markovify.Text(text)
         assert(text_model.make_sentence() == None)
 

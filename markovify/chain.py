@@ -7,6 +7,7 @@ import copy
 BEGIN = "___BEGIN__"
 END = "___END__"
 
+
 def accumulate(iterable, func=operator.add):
     """
     Cumulative calculations. (Summation, by default.)
@@ -19,16 +20,19 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
+
 def compile_next(next_dict):
     words = list(next_dict.keys())
     cff = list(accumulate(next_dict.values()))
     return [words, cff]
+
 
 class Chain:
     """
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.
     """
+
     def __init__(self, corpus, state_size, model=None):
         """
         `corpus`: A list of lists, where each outer list is a "run"
@@ -42,38 +46,44 @@ class Chain:
         """
         self.state_size = state_size
         self.model = model or self.build(corpus, self.state_size)
-        self.compiled = (len(self.model) > 0) and (type(self.model[tuple([BEGIN]*state_size)]) == list)
+        self.compiled = (len(self.model) > 0) and (
+                    type(self.model[tuple([BEGIN] * state_size)]) == list)
         if not self.compiled:
             self.precompute_begin_state()
 
-    def compile(self, inplace = False):
+    def compile(self, inplace=False):
         if self.compiled:
-            if inplace: return self
-            return Chain(None, self.state_size, model = copy.deepcopy(self.model))
-        mdict = { state: compile_next(next_dict) for (state, next_dict) in self.model.items() }
-        if not inplace: return Chain(None, self.state_size, model = mdict)
+            if inplace:
+                return self
+            return Chain(None, self.state_size,
+                         model=copy.deepcopy(self.model))
+        mdict = {state: compile_next(next_dict)
+                 for (state, next_dict) in self.model.items()}
+        if not inplace:
+            return Chain(None, self.state_size, model=mdict)
         self.model = mdict
         self.compiled = True
         return self
 
-    def build(self, corpus, state_size):
+    @staticmethod
+    def build(corpus, state_size):
         """
         Build a Python representation of the Markov model. Returns a dict
-        of dicts where the keys of the outer dict represent all possible states,
-        and point to the inner dicts. The inner dicts represent all possibilities
-        for the "next" item in the chain, along with the count of times it
-        appears.
+        of dicts where the keys of the outer dict represent all possible
+        states, and point to the inner dicts. The inner dicts represent all
+        possibilities for the "next" item in the chain, along with the count
+        of times it appears.
         """
 
-        # Using a DefaultDict here would be a lot more convenient, however the memory
-        # usage is far higher.
+        # Using a DefaultDict here would be a lot more convenient,
+        # however the memory usage is far higher.
         model = {}
 
         for run in corpus:
-            items = ([ BEGIN ] * state_size) + run + [ END ]
+            items = ([BEGIN] * state_size) + run + [END]
             for i in range(len(run) + 1):
-                state = tuple(items[i:i+state_size])
-                follow = items[i+state_size]
+                state = tuple(items[i:i + state_size])
+                follow = items[i + state_size]
                 if state not in model:
                     model[state] = {}
 
@@ -85,10 +95,11 @@ class Chain:
 
     def precompute_begin_state(self):
         """
-        Caches the summation calculation and available choices for BEGIN * state_size.
-        Significantly speeds up chain generation on large corpora. Thanks, @schollz!
+        Caches the summation calculation and available choices for
+        BEGIN * state_size. Significantly speeds up chain generation
+        on large corpora. Thanks, @schollz!
         """
-        begin_state = tuple([ BEGIN ] * self.state_size)
+        begin_state = tuple([BEGIN] * self.state_size)
         choices, cumdist = compile_next(self.model[begin_state])
         self.begin_cumdist = cumdist
         self.begin_choices = choices
@@ -99,7 +110,7 @@ class Chain:
         """
         if self.compiled:
             choices, cumdist = self.model[state]
-        elif state == tuple([ BEGIN ] * self.state_size):
+        elif state == tuple([BEGIN] * self.state_size):
             choices = self.begin_choices
             cumdist = self.begin_cumdist
         else:
@@ -118,7 +129,8 @@ class Chain:
         state = init_state or (BEGIN,) * self.state_size
         while True:
             next_word = self.move(state)
-            if next_word == END: break
+            if next_word == END:
+                break
             yield next_word
             state = tuple(state[1:]) + (next_word,)
 

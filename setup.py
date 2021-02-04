@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-import sys, os
+import os
 
 NAME = "markovify"
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -14,7 +14,9 @@ with open(os.path.join(HERE, 'README.md'), encoding='utf-8') as f:
 setup(
     name="markovify",
     version=version_ns['__version__'],
-    description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
+    description=("A simple, extensible Markov chain generator. Uses include "
+                 "generating random semi-plausible sentences based on an "
+                 "existing text."),
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
@@ -31,7 +33,7 @@ setup(
     author_email="jsvine@gmail.com",
     url="http://github.com/jsvine/markovify",
     license="MIT",
-    packages=find_packages(exclude=["test",]),
+    packages=find_packages(exclude=["test", ]),
     namespace_packages=[],
     include_package_data=False,
     zip_safe=False,

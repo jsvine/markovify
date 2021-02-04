@@ -227,7 +227,7 @@ class Text:
 
         for _ in range(tries):
             sentence = self.make_sentence(**kwargs)
-            if sentence and len(sentence) <= max_chars and len(sentence) >= min_chars:
+            if sentence and min_chars <= len(sentence) <= max_chars:
                 return sentence
 
     def make_sentence_with_start(self, beginning, strict=True, **kwargs):
@@ -250,7 +250,7 @@ class Text:
         if word_count == self.state_size:
             init_states = [ split ]
 
-        elif word_count > 0 and word_count < self.state_size:
+        elif 0 < word_count < self.state_size:
             if strict:
                 init_states = [ (BEGIN,) * (self.state_size - word_count) + split ]
 

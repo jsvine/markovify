@@ -1,4 +1,8 @@
-[![Version](https://img.shields.io/pypi/v/markovify.svg)](https://pypi.python.org/pypi/markovify) [![Build status](https://travis-ci.org/jsvine/markovify.png)](https://travis-ci.org/jsvine/markovify) [![Code coverage](https://img.shields.io/coveralls/jsvine/markovify.svg)](https://coveralls.io/github/jsvine/markovify) [![Support Python versions](https://img.shields.io/pypi/pyversions/markovify.svg)](https://pypi.python.org/pypi/markovify)
+[![CI](https://github.com/jsvine/markovify/workflows/CI/badge.svg)](https://github.com/jsvine/markovify/actions)
+[![Version](https://img.shields.io/pypi/v/markovify.svg)](https://pypi.python.org/pypi/markovify)
+[![Build status](https://travis-ci.org/jsvine/markovify.png)](https://travis-ci.org/jsvine/markovify)
+[![Code coverage](https://img.shields.io/coveralls/jsvine/markovify.svg)](https://coveralls.io/github/jsvine/markovify)
+[![Support Python versions](https://img.shields.io/pypi/pyversions/markovify.svg)](https://pypi.python.org/pypi/markovify)
 
 
 # Markovify

@@ -153,7 +153,7 @@ import markovify
 import re
 import spacy
 
-nlp = spacy.load("en")
+nlp = spacy.load("en_core_web_sm")
 
 class POSifiedText(markovify.Text):
     def word_split(self, sentence):

@@ -1,4 +1,5 @@
 import random
+import secrets
 import operator
 import bisect
 import json
@@ -105,7 +106,8 @@ class Chain(object):
         else:
             choices, weights = zip(*self.model[state].items())
             cumdist = list(accumulate(weights))
-        r = random.random() * cumdist[-1]
+        # r = random.random() * cumdist[-1]
+        r = secrets.choice([random.random(), random.random()]) * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection
 

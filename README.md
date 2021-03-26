@@ -269,14 +269,14 @@ print(combined_model.make_sentence())
 - [@alg_testament](https://twitter.com/alg_testament), tweets sentences based on The Old Testament and two coding textbooks in Russian. [[code](https://github.com/maryszmary/Algorithm-Testament)]  
 - [@IRAMockBot](https://twitter.com/IRAMockBot), uses Twitter's data on tweets from Russian IRA-associated accounts to produce fake IRA tweets, for educational and study purposes.[[code](https://github.com/nwithan8/IRAMockBot)]
 - [Personal Whatsapp Chat Analyzer](https://github.com/Giuzzilla/Personal-Whatsapp-Chat-Analyzer), some basic analytics for WhatsApp chat exports (private & groups), word counting & markov chain phrase generator 
-- [DeepfakeBot](https://deepfake-bot.readthedocs.io/) - A system for converting your friends into Discord bots. [[code](https://github.com/rustygentile/deepfake-bot)]
+- [DeepfakeBot](https://deepfake-bot.readthedocs.io/), a system for converting your friends into Discord bots. [[code](https://github.com/rustygentile/deepfake-bot)]
 - [python-markov-novel](https://github.com/accraze/python-markov-novel), writes a random novel using markov chains, broken down into chapters
 - [python-ia-markov](https://github.com/accraze/python-ia-markov), trains Markov models on Internet Archive text files
 - [@bot_homer](https://twitter.com/bot_homer), a Twitter bot trained using Homer Simpson's dialogues of 600 chapters. [[code](https://github.com/ivanlen/simpsons_bot)].
 - [git-commit-gen](https://github.com/solean/git-commit-gen), generates git commit messages by using markovify to build a model of a repo's git log
-- [fakesocial](https://fakesocial.net),  Fake social network using generated content. [[code](https://github.com/berfr/fakesocial)]
+- [fakesocial](https://fakesocial.net), a fake social network using generated content. [[code](https://github.com/berfr/fakesocial)]
 - [Slovodel Bot](https://github.com/weiss-d/slovodel-bot), a Telegram bot that generates non-existent Russian words using corpus made by algorithmically dividing existent words into syllables.
-- [Deuterium](https://github.com/portasynthinca3/deuterium) is a Discord bot that generates messages on its own, after analyzing yours, and learning constantly. There's also a global model shared with all other servers.
+- [Deuterium](https://github.com/portasynthinca3/deuterium), a Discord bot that generates messages on its own, after analyzing yours, and learning constantly. There's also a global model shared with all other servers.
 - [Markovify Piano](https://github.com/asigalov61/Markovify-Piano), generates coherent and plausible music generation.
 
 Have other examples? Pull requests welcome.

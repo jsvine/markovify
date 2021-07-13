@@ -12,7 +12,7 @@ class MarkovifyTestBase(unittest.TestCase):
     def test_text_too_small(self):
         text = u"Example phrase. This is another example sentence."
         text_model = markovify.Text(text)
-        assert(text_model.make_sentence() == None)
+        assert(text_model.make_sentence() is None)
 
     def test_sherlock(self):
         text_model = self.sherlock_model
@@ -102,7 +102,7 @@ class MarkovifyTestBase(unittest.TestCase):
             assert(False)
         except markovify.text.ParamError:
             assert(True)
-	
+
         with self.assertRaises(Exception) as context:
             text_model.make_sentence_with_start(start_str)
         text_model = self.sherlock_model_ss3

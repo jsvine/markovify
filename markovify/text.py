@@ -197,15 +197,15 @@ class Text(object):
         max_words = kwargs.get('max_words', None)
         min_words = kwargs.get('min_words', None)
 
-        if init_state != None:
+        if init_state is None:
+            prefix = []
+        else:
             prefix = list(init_state)
             for word in prefix:
                 if word == BEGIN:
                     prefix = prefix[1:]
                 else:
                     break
-        else:
-            prefix = []
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
@@ -235,7 +235,7 @@ class Text(object):
         Tries making a sentence that begins with `beginning` string,
         which should be a string of one to `self.state` words known
         to exist in the corpus.
-        
+
         If strict == True, then markovify will draw its initial inspiration
         only from sentences that start with the specified word/phrase.
 

@@ -150,7 +150,7 @@ class Chain(object):
         )
 
         if isinstance(obj, list):
-            rehydrated = dict((tuple(item[0]), item[1]) for item in obj)
+            rehydrated = {tuple(item[0]): item[1] for item in obj}
         elif isinstance(obj, dict):
             rehydrated = obj
         else:

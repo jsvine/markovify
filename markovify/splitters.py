@@ -7,9 +7,13 @@ initialism_pat = re.compile(r"^[A-Za-z0-9]{1,2}(\.[A-Za-z0-9]{1,2})+\.$", re.UNI
 # Titles w/ thanks to https://github.com/nytimes/emphasis and @donohoe
 abbr_capped = "|".join(
     [
-        "ala|ariz|ark|calif|colo|conn|del|fla|ga|ill|ind|kan|ky|la|md|mass|mich|minn|miss|mo|mont|neb|nev|okla|ore|pa|tenn|vt|va|wash|wis|wyo",  # States
+        "ala|ariz|ark|calif|colo|conn|del|fla|ga|ill|ind",  # States
+        "kan|ky|la|md|mass|mich|minn|miss|mo|mont",  # States
+        "neb|nev|okla|ore|pa|tenn|vt|va|wash|wis|wyo",  # States
         "u.s",
-        "mr|ms|mrs|msr|dr|gov|pres|sen|sens|rep|reps|prof|gen|messrs|col|sr|jf|sgt|mgr|fr|rev|jr|snr|atty|supt",  # Titles
+        "mr|ms|mrs|msr|dr|gov|pres|sen|sens|rep|reps",  # Titles
+        "prof|gen|messrs|col|sr|jf|sgt|mgr|fr|rev",  # Titles
+        "jr|snr|atty|supt",  # Titles
         "ave|blvd|st|rd|hwy",  # Streets
         "jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec",  # Months
     ]
@@ -52,7 +56,7 @@ def split_into_sentences(text):
             [
                 r"([\w\.'’&\]\)]+[\.\?!])",  # A word that ends with punctuation
                 r"([‘’“”'\"\)\]]*)",  # Followed by optional quote/parens/etc
-                r"(\s+(?![a-z\-–—]))",  # Followed by whitespace + non-(lowercase or dash)
+                r"(\s+(?![a-z\-–—]))",  # Followed by whitespace + non-(lowercase/dash)
             ]
         ),
         re.U,

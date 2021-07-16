@@ -2,7 +2,7 @@ import re
 import json
 import random
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN, END
+from .chain import Chain, BEGIN
 from unidecode import unidecode
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
@@ -207,8 +207,8 @@ class Text:
         If `test_output` is set as False then the `test_sentence_output` check
         will be skipped.
 
-        If `max_words` or `min_words` are specified, the word count for the sentence will be
-        evaluated against the provided limit(s).
+        If `max_words` or `min_words` are specified, the word count for the
+        sentence will be evaluated against the provided limit(s).
         """
         tries = kwargs.get("tries", DEFAULT_TRIES)
         mor = kwargs.get("max_overlap_ratio", DEFAULT_MAX_OVERLAP_RATIO)
@@ -229,10 +229,10 @@ class Text:
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if (max_words != None and len(words) > max_words) or (
-                min_words != None and len(words) < min_words
+            if (max_words is not None and len(words) > max_words) or (
+                min_words is not None and len(words) < min_words
             ):
-                continue  # pragma: no cover # see https://github.com/nedbat/coveragepy/issues/198
+                continue  # pragma: no cover # see coveragepy/issues/198
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):
                     return self.word_join(words)
@@ -286,7 +286,11 @@ class Text:
 
                 random.shuffle(init_states)
         else:
-            err_msg = f"`make_sentence_with_start` for this model requires a string containing 1 to {self.state_size} words. Yours has {word_count}: {str(split)}"
+            err_msg = (
+                f"`make_sentence_with_start` for this model requires a string "
+                f"containing 1 to {self.state_size} words. "
+                f"Yours has {word_count}: {str(split)}"
+            )
             raise ParamError(err_msg)
 
         for init_state in init_states:

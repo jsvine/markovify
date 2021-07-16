@@ -2,21 +2,32 @@ import re
 import json
 import random
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN, END
+from .chain import Chain, BEGIN
 from unidecode import unidecode
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
 
+
 class ParamError(Exception):
     pass
 
-class Text(object):
+
+class Text:
 
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
-    def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True, well_formed=True, reject_reg=''):
+    def __init__(
+        self,
+        input_text,
+        state_size=2,
+        chain=None,
+        parsed_sentences=None,
+        retain_original=True,
+        well_formed=True,
+        reject_reg="",
+    ):
         """
         input_text: A string.
         state_size: An integer, indicating the number of words in the model's state.
@@ -35,7 +46,7 @@ class Text(object):
         """
 
         self.well_formed = well_formed
-        if well_formed and reject_reg != '':
+        if well_formed and reject_reg != "":
             self.reject_pat = re.compile(reject_reg)
 
         can_make_sentences = parsed_sentences is not None or input_text is not None
@@ -43,31 +54,37 @@ class Text(object):
         self.state_size = state_size
 
         if self.retain_original:
-            self.parsed_sentences = parsed_sentences or list(self.generate_corpus(input_text))
+            self.parsed_sentences = parsed_sentences or list(
+                self.generate_corpus(input_text)
+            )
 
             # Rejoined text lets us assess the novelty of generated sentences
-            self.rejoined_text = self.sentence_join(map(self.word_join, self.parsed_sentences))
+            self.rejoined_text = self.sentence_join(
+                map(self.word_join, self.parsed_sentences)
+            )
             self.chain = chain or Chain(self.parsed_sentences, state_size)
         else:
             if not chain:
                 parsed = parsed_sentences or self.generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
-    def compile(self, inplace = False):
+    def compile(self, inplace=False):
         if inplace:
-            self.chain.compile(inplace = True)
+            self.chain.compile(inplace=True)
             return self
-        cchain = self.chain.compile(inplace = False)
+        cchain = self.chain.compile(inplace=False)
         psent = None
-        if hasattr(self, 'parsed_sentences'):
+        if hasattr(self, "parsed_sentences"):
             psent = self.parsed_sentences
-        return Text(None, \
-                    state_size = self.state_size, \
-                    chain = cchain, \
-                    parsed_sentences = psent, \
-                    retain_original = self.retain_original, \
-                    well_formed = self.well_formed, \
-                    reject_reg = self.reject_pat)
+        return Text(
+            None,
+            state_size=self.state_size,
+            chain=cchain,
+            parsed_sentences=psent,
+            retain_original=self.retain_original,
+            well_formed=self.well_formed,
+            reject_reg=self.reject_pat,
+        )
 
     def to_dict(self):
         """
@@ -76,7 +93,7 @@ class Text(object):
         return {
             "state_size": self.state_size,
             "chain": self.chain.to_json(),
-            "parsed_sentences": self.parsed_sentences if self.retain_original else None
+            "parsed_sentences": self.parsed_sentences if self.retain_original else None,
         }
 
     def to_json(self):
@@ -91,7 +108,7 @@ class Text(object):
             None,
             state_size=obj["state_size"],
             chain=Chain.from_json(obj["chain"]),
-            parsed_sentences=obj.get("parsed_sentences")
+            parsed_sentences=obj.get("parsed_sentences"),
         )
 
     @classmethod
@@ -111,6 +128,7 @@ class Text(object):
         return " ".join(sentences)
 
     word_split_pattern = re.compile(r"\s+")
+
     def word_split(self, sentence):
         """
         Splits a sentence into a list of words.
@@ -129,11 +147,13 @@ class Text(object):
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence.
         """
-        if len(sentence.strip()) == 0: return False
+        if len(sentence.strip()) == 0:
+            return False
         # Decode unicode, mainly to normalize fancy quotation marks
         decoded = unidecode(sentence)
         # Sentence shouldn't contain problematic characters
-        if self.well_formed and self.reject_pat.search(decoded): return False
+        if self.well_formed and self.reject_pat.search(decoded):
+            return False
         return True
 
     def generate_corpus(self, text):
@@ -161,11 +181,11 @@ class Text(object):
         number of words, and (b) `max_overlap_total` (default: 15).
         """
         # Reject large chunks of similarity
-        overlap_ratio = int(round(max_overlap_ratio * len(words)))
+        overlap_ratio = round(max_overlap_ratio * len(words))
         overlap_max = min(max_overlap_total, overlap_ratio)
         overlap_over = overlap_max + 1
         gram_count = max((len(words) - overlap_max), 1)
-        grams = [ words[i:i+overlap_over] for i in range(gram_count) ]
+        grams = [words[i : i + overlap_over] for i in range(gram_count)]
         for g in grams:
             gram_joined = self.word_join(g)
             if gram_joined in self.rejoined_text:
@@ -187,15 +207,15 @@ class Text(object):
         If `test_output` is set as False then the `test_sentence_output` check
         will be skipped.
 
-        If `max_words` or `min_words` are specified, the word count for the sentence will be
-        evaluated against the provided limit(s).
+        If `max_words` or `min_words` are specified, the word count for the
+        sentence will be evaluated against the provided limit(s).
         """
-        tries = kwargs.get('tries', DEFAULT_TRIES)
-        mor = kwargs.get('max_overlap_ratio', DEFAULT_MAX_OVERLAP_RATIO)
-        mot = kwargs.get('max_overlap_total', DEFAULT_MAX_OVERLAP_TOTAL)
-        test_output = kwargs.get('test_output', True)
-        max_words = kwargs.get('max_words', None)
-        min_words = kwargs.get('min_words', None)
+        tries = kwargs.get("tries", DEFAULT_TRIES)
+        mor = kwargs.get("max_overlap_ratio", DEFAULT_MAX_OVERLAP_RATIO)
+        mot = kwargs.get("max_overlap_total", DEFAULT_MAX_OVERLAP_TOTAL)
+        test_output = kwargs.get("test_output", True)
+        max_words = kwargs.get("max_words", None)
+        min_words = kwargs.get("min_words", None)
 
         if init_state is None:
             prefix = []
@@ -209,8 +229,10 @@ class Text(object):
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if (max_words != None and len(words) > max_words) or (min_words != None and len(words) < min_words):
-                continue # pragma: no cover # see https://github.com/nedbat/coveragepy/issues/198
+            if (max_words is not None and len(words) > max_words) or (
+                min_words is not None and len(words) < min_words
+            ):
+                continue  # pragma: no cover # see coveragepy/issues/198
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):
                     return self.word_join(words)
@@ -223,11 +245,11 @@ class Text(object):
         Tries making a sentence of no more than `max_chars` characters and optionally
         no less than `min_chars` characters, passing **kwargs to `self.make_sentence`.
         """
-        tries = kwargs.get('tries', DEFAULT_TRIES)
+        tries = kwargs.get("tries", DEFAULT_TRIES)
 
         for _ in range(tries):
             sentence = self.make_sentence(**kwargs)
-            if sentence and len(sentence) <= max_chars and len(sentence) >= min_chars:
+            if sentence and min_chars <= len(sentence) <= max_chars:
                 return sentence
 
     def make_sentence_with_start(self, beginning, strict=True, **kwargs):
@@ -248,27 +270,36 @@ class Text(object):
         word_count = len(split)
 
         if word_count == self.state_size:
-            init_states = [ split ]
+            init_states = [split]
 
-        elif word_count > 0 and word_count < self.state_size:
+        elif 0 < word_count < self.state_size:
             if strict:
-                init_states = [ (BEGIN,) * (self.state_size - word_count) + split ]
+                init_states = [(BEGIN,) * (self.state_size - word_count) + split]
 
             else:
-                init_states = [ key for key in self.chain.model.keys()
+                init_states = [
+                    key
+                    for key in self.chain.model.keys()
                     # check for starting with begin as well ordered lists
-                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split ]
+                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split
+                ]
 
                 random.shuffle(init_states)
         else:
-            err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
+            err_msg = (
+                f"`make_sentence_with_start` for this model requires a string "
+                f"containing 1 to {self.state_size} words. "
+                f"Yours has {word_count}: {str(split)}"
+            )
             raise ParamError(err_msg)
 
         for init_state in init_states:
             output = self.make_sentence(init_state, **kwargs)
             if output is not None:
                 return output
-        err_msg = "`make_sentence_with_start` can't find sentence beginning with {0}".format(beginning)
+        err_msg = (
+            f"`make_sentence_with_start` can't find sentence beginning with {beginning}"
+        )
         raise ParamError(err_msg)
 
     @classmethod
@@ -278,7 +309,12 @@ class Text(object):
         If corpus is None, overlap checking won't work.
         """
         chain = Chain.from_json(chain_json)
-        return cls(corpus or None, parsed_sentences=parsed_sentences, state_size=chain.state_size, chain=chain)
+        return cls(
+            corpus or None,
+            parsed_sentences=parsed_sentences,
+            state_size=chain.state_size,
+            chain=chain,
+        )
 
 
 class NewlineText(Text):
@@ -286,5 +322,6 @@ class NewlineText(Text):
     A (usable) example of subclassing markovify.Text. This one lets you markovify
     text where the sentences are separated by newlines instead of ". "
     """
+
     def sentence_split(self, text):
         return re.split(r"\s*\n\s*", text)

@@ -12,7 +12,7 @@ DEFAULT_TRIES = 10
 class ParamError(Exception):
     pass
 
-class Text(object):
+class Text:
 
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
@@ -261,14 +261,14 @@ class Text(object):
 
                 random.shuffle(init_states)
         else:
-            err_msg = "`make_sentence_with_start` for this model requires a string containing 1 to {0} words. Yours has {1}: {2}".format(self.state_size, word_count, str(split))
+            err_msg = f"`make_sentence_with_start` for this model requires a string containing 1 to {self.state_size} words. Yours has {word_count}: {str(split)}"
             raise ParamError(err_msg)
 
         for init_state in init_states:
             output = self.make_sentence(init_state, **kwargs)
             if output is not None:
                 return output
-        err_msg = "`make_sentence_with_start` can't find sentence beginning with {0}".format(beginning)
+        err_msg = f"`make_sentence_with_start` can't find sentence beginning with {beginning}"
         raise ParamError(err_msg)
 
     @classmethod

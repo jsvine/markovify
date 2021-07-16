@@ -24,7 +24,7 @@ def compile_next(next_dict):
     cff = list(accumulate(next_dict.values()))
     return [words, cff]
 
-class Chain(object):
+class Chain:
     """
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.

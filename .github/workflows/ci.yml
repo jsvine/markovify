@@ -61,7 +61,7 @@ jobs:
         python -m site
         python -m pip install --upgrade pip setuptools wheel
         pip install -r requirements.txt
-        pip install -r requirements-dev.txt
+        pip install nose coveralls
 
     - name: Run tests
       run: |

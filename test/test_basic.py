@@ -1,6 +1,6 @@
 import unittest
 import markovify
-import sys, os
+import os
 import operator
 
 
@@ -45,27 +45,27 @@ class MarkovifyTestBase(unittest.TestCase):
         text_model = self.sherlock_model
         start_str = "Sherlock Holmes"
         sent = text_model.make_sentence_with_start(start_str)
-        assert sent != None
+        assert sent is not None
         assert start_str == sent[: len(start_str)]
 
     def test_make_sentence_with_start_one_word(self):
         text_model = self.sherlock_model
         start_str = "Sherlock"
         sent = text_model.make_sentence_with_start(start_str)
-        assert sent != None
+        assert sent is not None
         assert start_str == sent[: len(start_str)]
 
     def test_make_sentence_with_start_one_word_that_doesnt_begin_a_sentence(self):
         text_model = self.sherlock_model
         start_str = "dog"
-        with self.assertRaises(KeyError) as context:
-            sent = text_model.make_sentence_with_start(start_str)
+        with self.assertRaises(KeyError):
+            text_model.make_sentence_with_start(start_str)
 
     def test_make_sentence_with_word_not_at_start_of_sentence(self):
         text_model = self.sherlock_model
         start_str = "dog"
         sent = text_model.make_sentence_with_start(start_str, strict=False)
-        assert sent != None
+        assert sent is not None
         assert start_str == sent[: len(start_str)]
 
     def test_make_sentence_with_words_not_at_start_of_sentence(self):
@@ -74,29 +74,27 @@ class MarkovifyTestBase(unittest.TestCase):
         # " was I " has 2 matches in sherlock.txt
         start_str = "was I"
         sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
-        assert sent != None
+        assert sent is not None
         assert start_str == sent[: len(start_str)]
 
     def test_make_sentence_with_words_not_at_start_of_sentence_miss(self):
         text_model = self.sherlock_model_ss3
         start_str = "was werewolf"
         with self.assertRaises(markovify.text.ParamError):
-            sent = text_model.make_sentence_with_start(
-                start_str, strict=False, tries=50
-            )
+            text_model.make_sentence_with_start(start_str, strict=False, tries=50)
 
     def test_make_sentence_with_words_not_at_start_of_sentence_of_state_size(self):
         text_model = self.sherlock_model_ss2
         start_str = "was I"
         sent = text_model.make_sentence_with_start(start_str, strict=False, tries=50)
-        assert sent != None
+        assert sent is not None
         assert start_str == sent[: len(start_str)]
 
     def test_make_sentence_with_words_to_many(self):
         text_model = self.sherlock_model
         start_str = "dog is good"
-        with self.assertRaises(markovify.text.ParamError) as context:
-            sent = text_model.make_sentence_with_start(start_str, strict=False)
+        with self.assertRaises(markovify.text.ParamError):
+            text_model.make_sentence_with_start(start_str, strict=False)
 
     def test_make_sentence_with_start_three_words(self):
         start_str = "Sherlock Holmes was"
@@ -107,7 +105,7 @@ class MarkovifyTestBase(unittest.TestCase):
         except markovify.text.ParamError:
             assert True
 
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             text_model.make_sentence_with_start(start_str)
         text_model = self.sherlock_model_ss3
         sent = text_model.make_sentence_with_start("Sherlock", tries=50)
@@ -150,25 +148,23 @@ class MarkovifyTestBase(unittest.TestCase):
         model.make_sentence()
 
     def test_bad_corpus(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             markovify.Chain(corpus="testing, testing", state_size=2)
 
     def test_bad_json(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             markovify.Chain.from_json(1)
 
     def test_custom_regex(self):
-        with self.assertRaises(Exception) as context:
-            model = markovify.NewlineText(
+        with self.assertRaises(Exception):
+            markovify.NewlineText(
                 "This sentence contains a custom bad character: #.", reject_reg=r"#"
             )
 
-        with self.assertRaises(Exception) as context:
-            model = markovify.NewlineText("This sentence (would normall fail")
+        with self.assertRaises(Exception):
+            markovify.NewlineText("This sentence (would normall fail")
 
-        model = markovify.NewlineText(
-            "This sentence (would normall fail", well_formed=False
-        )
+        markovify.NewlineText("This sentence (would normall fail", well_formed=False)
 
 
 class MarkovifyTest(MarkovifyTestBase):

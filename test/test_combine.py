@@ -1,6 +1,6 @@
 import unittest
 import markovify
-import sys, os
+import os
 import operator
 
 
@@ -28,48 +28,48 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_combine_chains(self):
         chain = sherlock_model.chain
-        combo = markovify.combine([chain, chain])
+        markovify.combine([chain, chain])
 
     def test_combine_dicts(self):
         _dict = sherlock_model.chain.model
-        combo = markovify.combine([_dict, _dict])
+        markovify.combine([_dict, _dict])
 
     def test_combine_lists(self):
         _list = list(sherlock_model.chain.model.items())
-        combo = markovify.combine([_list, _list])
+        markovify.combine([_list, _list])
 
     def test_bad_types(self):
-        with self.assertRaises(Exception) as context:
-            combo = markovify.combine(["testing", "testing"])
+        with self.assertRaises(Exception):
+            markovify.combine(["testing", "testing"])
 
     def test_bad_weights(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             text_model = sherlock_model
-            combo = markovify.combine([text_model, text_model], [0.5])
+            markovify.combine([text_model, text_model], [0.5])
 
     def test_mismatched_state_sizes(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             text_model_a = markovify.Text(sherlock, state_size=2)
             text_model_b = markovify.Text(sherlock, state_size=3)
-            combo = markovify.combine([text_model_a, text_model_b])
+            markovify.combine([text_model_a, text_model_b])
 
     def test_mismatched_model_types(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             text_model_a = sherlock_model
             text_model_b = markovify.NewlineText(sherlock)
-            combo = markovify.combine([text_model_a, text_model_b])
+            markovify.combine([text_model_a, text_model_b])
 
     def test_compiled_model_fail(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             model_a = sherlock_model
             model_b = sherlock_model_compiled
-            combo = markovify.combine([model_a, model_b])
+            markovify.combine([model_a, model_b])
 
     def test_compiled_chain_fail(self):
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(Exception):
             model_a = sherlock_model.chain
             model_b = sherlock_model_compiled.chain
-            combo = markovify.combine([model_a, model_b])
+            markovify.combine([model_a, model_b])
 
     def test_combine_no_retain(self):
         text_model = sherlock_model_no_retain

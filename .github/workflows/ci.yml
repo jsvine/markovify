@@ -64,7 +64,7 @@ jobs:
 
     - name: Run tests
       run: |
-        python -m nose --with-coverage --cover-package markovify test
+        LANG=en_US.UTF-8 python -m nose --with-coverage --cover-package markovify test
         python -m coverage html
 
     - name: Upload code coverage

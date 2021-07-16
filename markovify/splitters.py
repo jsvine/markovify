@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 import re
 
 uppercase_letter_pat = re.compile(r"^[A-Z]$", re.UNICODE)

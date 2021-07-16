@@ -310,5 +310,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@Freestackmejai](https://github.com/Freestackmejai)
 - [@rokala](https://github.com/rokala)
 - [@eumiro](https://github.com/eumiro)
+- [@monosans](https://github.com/monosans)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

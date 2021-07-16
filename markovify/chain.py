@@ -143,10 +143,11 @@ class Chain(object):
         return the corresponding markovify.Chain.
         """
 
-        if isinstance(json_thing, str):
-            obj = json.loads(json_thing)
-        else:
-            obj = json_thing
+        obj = (
+            json.loads(json_thing)
+            if isinstance(json_thing, str)
+            else json_thing
+        )
 
         if isinstance(obj, list):
             rehydrated = dict((tuple(item[0]), item[1]) for item in obj)

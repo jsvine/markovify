@@ -30,6 +30,7 @@ setup(
     description="A simple, extensible Markov chain generator. Uses include generating random semi-plausible sentences based on an existing text.",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    python_requires=">=3.6",
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",

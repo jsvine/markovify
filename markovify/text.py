@@ -1,5 +1,6 @@
 import re
 import json
+import multiprocessing as mp
 import random
 from .splitters import split_into_sentences
 from .chain import Chain, BEGIN
@@ -27,6 +28,7 @@ class Text:
         retain_original=True,
         well_formed=True,
         reject_reg="",
+        multiprocess=False,
     ):
         """
         input_text: A string.
@@ -43,6 +45,7 @@ class Text:
               can be provided.
         reject_reg: If well_formed is True, this can be provided to override the
               standard rejection pattern.
+        multiprocess: Indicates whether to generate model using multiprocessing.
         """
 
         self.well_formed = well_formed
@@ -53,9 +56,14 @@ class Text:
         self.retain_original = retain_original and can_make_sentences
         self.state_size = state_size
 
+        if multiprocess:
+            generate_corpus = self.mp_generate_corpus
+        else:
+            generate_corpus = self.generate_corpus
+
         if self.retain_original:
             self.parsed_sentences = parsed_sentences or list(
-                self.generate_corpus(input_text)
+                generate_corpus(input_text)
             )
 
             # Rejoined text lets us assess the novelty of generated sentences
@@ -65,7 +73,7 @@ class Text:
             self.chain = chain or Chain(self.parsed_sentences, state_size)
         else:
             if not chain:
-                parsed = parsed_sentences or self.generate_corpus(input_text)
+                parsed = parsed_sentences or generate_corpus(input_text)
             self.chain = chain or Chain(parsed, state_size)
 
     def compile(self, inplace=False):
@@ -170,6 +178,84 @@ class Text:
                 sentences += self.sentence_split(line)
         passing = filter(self.test_sentence_input, sentences)
         runs = map(self.word_split, passing)
+        return runs
+
+    def mp_generate_corpus(self, text):
+        """
+        Given a text string, returns a list of lists; that is, a list of
+        "sentences," each of which is a list of words. Before splitting into
+        words, the sentences are filtered through `self.test_sentence_input`
+        """
+
+        # TODO: should be overridable
+        NUM_OF_WORKERS = mp.cpu_count()
+        # TODO: find something which cannot be present in input
+        END = "KTHXBYE"
+
+        # mp workers implementation. They work on (multi-)producer,
+        # (multi-)consumer queues delegating to user-defined logic
+        # the actual work.
+
+        def test_sentence_input_worker(sentences, passing):
+            for sentence in iter(sentences.get, END):
+                if self.test_sentence_input(sentence):
+                    passing.put(sentence)
+            passing.put(END)
+
+        def word_split_worker(passing, splitted):
+            for sentence in iter(passing.get, END):
+                splitted.put(self.word_split(sentence))
+            splitted.put(END)
+
+        # create pool containers and queues
+        test_sentence_input_worker_pool = []
+        word_split_worker_pool = []
+
+        sentences = mp.Queue()
+        passing = mp.Queue()
+        splitted = mp.Queue()
+
+        # spawn + start workers
+        for _ in range(NUM_OF_WORKERS):
+            test_sentence_input_worker_process = mp.Process(
+                target=test_sentence_input_worker,
+                args=(sentences, passing),
+            )
+            test_sentence_input_worker_process.start()
+            test_sentence_input_worker_pool.append(test_sentence_input_worker_process)
+
+            word_split_worker_process = mp.Process(
+                target=word_split_worker,
+                args=(passing, splitted),
+            )
+            word_split_worker_process.start()
+            word_split_worker_pool.append(word_split_worker_process)
+
+        # feed sentences queue with our input + sentinels
+        if isinstance(text, str):
+            for sentence in self.sentence_split(text):
+                sentences.put(sentence)
+        else:
+            for line in text:
+                for sentence in self.sentence_split(line):
+                    sentences.put(sentence)
+
+        for _ in range(NUM_OF_WORKERS):
+            sentences.put(END)
+
+        # consume output queue, expecting for NUM_OF_WORKERS sentinels
+        runs = []
+        for _ in range(NUM_OF_WORKERS):
+            for item in iter(splitted.get, END):
+                runs.append(item)
+
+        # join the two pools
+        for process in test_sentence_input_worker_pool:
+            process.join()
+
+        for process in word_split_worker_pool:
+            process.join()
+
         return runs
 
     def test_sentence_output(self, words, max_overlap_ratio, max_overlap_total):

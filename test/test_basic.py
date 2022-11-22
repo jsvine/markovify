@@ -13,8 +13,9 @@ class MarkovifyTestBase(unittest.TestCase):
 
     def test_text_too_small(self):
         text = "Example phrase. This is another example sentence."
-        text_model = markovify.Text(text)
-        assert text_model.make_sentence() is None
+        for multiprocess in (True, False):
+            text_model = markovify.Text(text, multiprocess=multiprocess)
+            assert text_model.make_sentence() is None
 
     def test_sherlock(self):
         text_model = self.sherlock_model
@@ -205,6 +206,60 @@ class MarkovifyTestCompiledInPlace(MarkovifyTestBase):
         sherlock_model = markovify.Text(sherlock_text)
         sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
         sherlock_model_ss3 = markovify.Text(sherlock_text, state_size=3)
+        sherlock_model.compile(inplace=True)
+        sherlock_model_ss2.compile(inplace=True)
+        sherlock_model_ss3.compile(inplace=True)
+
+
+class MarkovifyTestMP(MarkovifyTestBase):
+    __test__ = True
+
+    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+        sherlock_text = f.read()
+        sherlock_model = markovify.Text(sherlock_text, multiprocess=True)
+        sherlock_model_ss2 = markovify.Text(
+            sherlock_text, state_size=2, multiprocess=True
+        )
+        sherlock_model_ss3 = markovify.Text(
+            sherlock_text, state_size=3, multiprocess=True
+        )
+
+
+class MarkovifyTestCompiledMP(MarkovifyTestBase):
+    __test__ = True
+
+    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+        sherlock_text = f.read()
+        sherlock_model = (markovify.Text(sherlock_text, multiprocess=True)).compile()
+        sherlock_model_ss2 = (
+            markovify.Text(sherlock_text, state_size=2, multiprocess=True)
+        ).compile()
+        sherlock_model_ss3 = (
+            markovify.Text(sherlock_text, state_size=3, multiprocess=True)
+        ).compile()
+
+    def test_recompiling(self):
+        model_recompile = self.sherlock_model.compile()
+        sent = model_recompile.make_sentence()
+        assert len(sent) != 0
+
+        model_recompile.compile(inplace=True)
+        sent = model_recompile.make_sentence()
+        assert len(sent) != 0
+
+
+class MarkovifyTestCompiledInPlaceMP(MarkovifyTestBase):
+    __test__ = True
+
+    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+        sherlock_text = f.read()
+        sherlock_model = markovify.Text(sherlock_text, multiprocess=True)
+        sherlock_model_ss2 = markovify.Text(
+            sherlock_text, state_size=2, multiprocess=True
+        )
+        sherlock_model_ss3 = markovify.Text(
+            sherlock_text, state_size=3, multiprocess=True
+        )
         sherlock_model.compile(inplace=True)
         sherlock_model_ss2.compile(inplace=True)
         sherlock_model_ss3.compile(inplace=True)

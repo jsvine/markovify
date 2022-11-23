@@ -1,6 +1,7 @@
 import re
 import json
 import multiprocessing as mp
+import os
 import random
 from .splitters import split_into_sentences
 from .chain import Chain, BEGIN
@@ -29,6 +30,7 @@ class Text:
         well_formed=True,
         reject_reg="",
         multiprocess=False,
+        multiprocess_workers=len(os.sched_getaffinity(0)),
     ):
         """
         input_text: A string.
@@ -46,6 +48,8 @@ class Text:
         reject_reg: If well_formed is True, this can be provided to override the
               standard rejection pattern.
         multiprocess: Indicates whether to generate model using multiprocessing.
+        multiprocess_workers: An integer, indicating the number of multiprocess
+              workers. Defaults to the number of usable CPUs.
         """
 
         self.well_formed = well_formed
@@ -58,6 +62,7 @@ class Text:
 
         if multiprocess:
             generate_corpus = self.mp_generate_corpus
+            self.multiprocess_workers = multiprocess_workers
         else:
             generate_corpus = self.generate_corpus
 
@@ -187,8 +192,6 @@ class Text:
         words, the sentences are filtered through `self.test_sentence_input`
         """
 
-        # TODO: should be overridable
-        NUM_OF_WORKERS = mp.cpu_count()
         # TODO: find something which cannot be present in input
         END = "KTHXBYE"
 
@@ -216,7 +219,7 @@ class Text:
         splitted = mp.Queue()
 
         # spawn + start workers
-        for _ in range(NUM_OF_WORKERS):
+        for _ in range(self.multiprocess_workers):
             test_sentence_input_worker_process = mp.Process(
                 target=test_sentence_input_worker,
                 args=(sentences, passing),
@@ -240,12 +243,12 @@ class Text:
                 for sentence in self.sentence_split(line):
                     sentences.put(sentence)
 
-        for _ in range(NUM_OF_WORKERS):
+        for _ in range(self.multiprocess_workers):
             sentences.put(END)
 
-        # consume output queue, expecting for NUM_OF_WORKERS sentinels
+        # consume output queue, expecting for self.multiprocess_workers sentinels
         runs = []
-        for _ in range(NUM_OF_WORKERS):
+        for _ in range(self.multiprocess_workers):
             for item in iter(splitted.get, END):
                 runs.append(item)
 

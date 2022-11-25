@@ -30,7 +30,7 @@ class Text:
         well_formed=True,
         reject_reg="",
         multiprocess=False,
-        multiprocess_workers=len(os.sched_getaffinity(0)),
+        multiprocess_pool_size=len(os.sched_getaffinity(0)),
     ):
         """
         input_text: A string.
@@ -48,7 +48,7 @@ class Text:
         reject_reg: If well_formed is True, this can be provided to override the
               standard rejection pattern.
         multiprocess: Indicates whether to generate model using multiprocessing.
-        multiprocess_workers: An integer, indicating the number of multiprocess
+        multiprocess_pool_size: An integer, indicating the number of multiprocess
               workers. Defaults to the number of usable CPUs.
         """
 
@@ -62,7 +62,7 @@ class Text:
 
         if multiprocess:
             generate_corpus = self.mp_generate_corpus
-            self.multiprocess_workers = multiprocess_workers
+            self.multiprocess_pool_size = multiprocess_pool_size
         else:
             generate_corpus = self.generate_corpus
 
@@ -219,7 +219,7 @@ class Text:
         splitted = mp.Queue()
 
         # spawn + start workers
-        for _ in range(self.multiprocess_workers):
+        for _ in range(self.multiprocess_pool_size):
             test_sentence_input_worker_process = mp.Process(
                 target=test_sentence_input_worker,
                 args=(sentences, passing),
@@ -243,12 +243,12 @@ class Text:
                 for sentence in self.sentence_split(line):
                     sentences.put(sentence)
 
-        for _ in range(self.multiprocess_workers):
+        for _ in range(self.multiprocess_pool_size):
             sentences.put(END)
 
-        # consume output queue, expecting for self.multiprocess_workers sentinels
+        # consume output queue, expecting for self.multiprocess_pool_size sentinels
         runs = []
-        for _ in range(self.multiprocess_workers):
+        for _ in range(self.multiprocess_pool_size):
             for item in iter(splitted.get, END):
                 runs.append(item)
 

@@ -20,6 +20,9 @@ try:
 except AttributeError:
     DEFAULT_MP_POOL_SIZE = 4
 
+# TODO: find something which cannot be present in input
+END = "KTHXBYE"
+
 
 class ParamError(Exception):
     pass
@@ -194,30 +197,27 @@ class Text:
         runs = map(self.word_split, passing)
         return runs
 
+    # mp workers implementation. They work on (multi-)producer,
+    # (multi-)consumer queues delegating to user-defined logic
+    # the actual work.
+
+    def test_sentence_input_worker(self, sentences, passing):
+        for sentence in iter(sentences.get, END):
+            if self.test_sentence_input(sentence):
+                passing.put(sentence)
+        passing.put(END)
+
+    def word_split_worker(self, passing, splitted):
+        for sentence in iter(passing.get, END):
+            splitted.put(self.word_split(sentence))
+        splitted.put(END)
+
     def mp_generate_corpus(self, text):
         """
         Given a text string, returns a list of lists; that is, a list of
         "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
-
-        # TODO: find something which cannot be present in input
-        END = "KTHXBYE"
-
-        # mp workers implementation. They work on (multi-)producer,
-        # (multi-)consumer queues delegating to user-defined logic
-        # the actual work.
-
-        def test_sentence_input_worker(sentences, passing):
-            for sentence in iter(sentences.get, END):
-                if self.test_sentence_input(sentence):
-                    passing.put(sentence)
-            passing.put(END)
-
-        def word_split_worker(passing, splitted):
-            for sentence in iter(passing.get, END):
-                splitted.put(self.word_split(sentence))
-            splitted.put(END)
 
         # create pool containers and queues
         test_sentence_input_worker_pool = []
@@ -230,14 +230,14 @@ class Text:
         # spawn + start workers
         for _ in range(self.multiprocess_pool_size):
             test_sentence_input_worker_process = mp.Process(
-                target=test_sentence_input_worker,
+                target=self.test_sentence_input_worker,
                 args=(sentences, passing),
             )
             test_sentence_input_worker_process.start()
             test_sentence_input_worker_pool.append(test_sentence_input_worker_process)
 
             word_split_worker_process = mp.Process(
-                target=word_split_worker,
+                target=self.word_split_worker,
                 args=(passing, splitted),
             )
             word_split_worker_process.start()

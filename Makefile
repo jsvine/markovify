@@ -10,7 +10,7 @@ requirements:
 	pip install -e .
 
 tests:
-	python -m nose --with-coverage --cover-package markovify test
+	python -m pytest test
 	python -m coverage html
 
 check-black:

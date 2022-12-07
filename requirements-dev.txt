@@ -1,4 +1,4 @@
 black
 flake8
-nose
+pytest
 coveralls

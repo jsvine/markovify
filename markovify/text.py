@@ -11,6 +11,15 @@ DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
 
+try:
+    # From relevant section of Python docs:
+    # "These functions control how a process is allocated CPU time by the
+    # operating system. They are only available on some Unix platforms.
+    # For more detailed information, consult your Unix manpages."
+    DEFAULT_MP_POOL_SIZE = len(os.sched_getaffinity(0))
+except AttributeError:
+    DEFAULT_MP_POOL_SIZE = 4
+
 
 class ParamError(Exception):
     pass
@@ -30,7 +39,7 @@ class Text:
         well_formed=True,
         reject_reg="",
         multiprocess=False,
-        multiprocess_pool_size=len(os.sched_getaffinity(0)),
+        multiprocess_pool_size=DEFAULT_MP_POOL_SIZE,
     ):
         """
         input_text: A string.

@@ -17,7 +17,7 @@ try:
     # operating system. They are only available on some Unix platforms.
     # For more detailed information, consult your Unix manpages."
     DEFAULT_MP_POOL_SIZE = len(os.sched_getaffinity(0))
-except AttributeError:
+except AttributeError:  # pragma: no cover
     DEFAULT_MP_POOL_SIZE = 4
 
 # TODO: find something which cannot be present in input

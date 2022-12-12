@@ -4,13 +4,12 @@ venv:
 	python3 -m venv venv
 
 requirements:
-	. venv/bin/activate
 	pip install --upgrade pip
 	pip install -r requirements-dev.txt
 	pip install -e .
 
 tests:
-	python -m nose --with-coverage --cover-package markovify test
+	python -m pytest test
 	python -m coverage html
 
 check-black:

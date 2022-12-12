@@ -1,7 +1,6 @@
-import os
 import unittest
-
 import markovify
+import os
 
 
 class MarkovifyTest(unittest.TestCase):

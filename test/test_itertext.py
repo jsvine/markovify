@@ -47,11 +47,13 @@ class MarkovifyTest(unittest.TestCase):
         for multiprocess in (True, False):
             models = []
             for (dirpath, _, filenames) in os.walk(
-                os.path.join(os.path.dirname(__file__), "texts"),
-                encoding="utf-8",
+                os.path.join(os.path.dirname(__file__), "texts")
             ):
                 for filename in filenames:
-                    with open(os.path.join(dirpath, filename)) as f:
+                    with open(
+                        os.path.join(dirpath, filename),
+                        encoding="utf-8",
+                    ) as f:
                         models.append(
                             markovify.Text(
                                 f, retain_original=False, multiprocess=multiprocess

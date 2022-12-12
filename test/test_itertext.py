@@ -13,7 +13,8 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_without_retaining(self):
         with open(
-            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")
+            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt"),
+            encoding="utf-8",
         ) as f:
             senate_model = markovify.Text(f, retain_original=False)
         sent = senate_model.make_sentence()
@@ -22,7 +23,8 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_from_json_without_retaining(self):
         with open(
-            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")
+            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt"),
+            encoding="utf-8",
         ) as f:
             original_model = markovify.Text(f, retain_original=False)
         d = original_model.to_json()
@@ -37,7 +39,10 @@ class MarkovifyTest(unittest.TestCase):
             os.path.join(os.path.dirname(__file__), "texts")
         ):
             for filename in filenames:
-                with open(os.path.join(dirpath, filename)) as f:
+                with open(
+                    os.path.join(dirpath, filename),
+                    encoding="utf-8",
+                ) as f:
                     models.append(markovify.Text(f, retain_original=False))
         combined_model = markovify.combine(models)
         sent = combined_model.make_sentence()

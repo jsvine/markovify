@@ -142,7 +142,8 @@ class MarkovifyTestBase(unittest.TestCase):
 
     def test_newline_text(self):
         with open(
-            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt")
+            os.path.join(os.path.dirname(__file__), "texts/senate-bills.txt"),
+            encoding="utf-8",
         ) as f:
             model = markovify.NewlineText(f.read())
         model.make_sentence()

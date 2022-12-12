@@ -312,5 +312,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@rokala](https://github.com/rokala)
 - [@eumiro](https://github.com/eumiro)
 - [@monosans](https://github.com/monosans)
+- [@aogier](https://github.com/aogier)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

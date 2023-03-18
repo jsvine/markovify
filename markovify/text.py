@@ -1,3 +1,4 @@
+import functools
 import re
 import json
 import random
@@ -277,12 +278,7 @@ class Text:
                 init_states = [(BEGIN,) * (self.state_size - word_count) + split]
 
             else:
-                init_states = [
-                    key
-                    for key in self.chain.model.keys()
-                    # check for starting with begin as well ordered lists
-                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split
-                ]
+                init_states = self.find_init_states_from_chain(word_count, split)
 
                 random.shuffle(init_states)
         else:
@@ -301,6 +297,23 @@ class Text:
             f"`make_sentence_with_start` can't find sentence beginning with {beginning}"
         )
         raise ParamError(err_msg)
+
+    @functools.lru_cache(maxsize=1)
+    def find_init_states_from_chain(self, word_count, split):
+        """
+        Find all chains that begin with the split, when `self.make_sentence_with_start` 
+        is called with strict == False. 
+
+        This is a very expensive opeartion, so lru_cache caches the results of 
+        the latest query, in case the `self.make_sentence_with_start` is called 
+        repeatedly with the same beginning string. 
+        """
+        return [
+            key
+            for key in self.chain.model.keys()
+            # check for starting with begin as well ordered lists
+            if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split
+        ]
 
     @classmethod
     def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):

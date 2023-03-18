@@ -301,11 +301,11 @@ class Text:
     @functools.lru_cache(maxsize=1)
     def find_init_states_from_chain(self, word_count, split):
         """
-        Find all chains that begin with the split, when `self.make_sentence_with_start` 
+        Find all chains that begin with the split when `self.make_sentence_with_start` 
         is called with strict == False. 
 
-        This is a very expensive opeartion, so lru_cache caches the results of 
-        the latest query, in case the `self.make_sentence_with_start` is called 
+        This is a very expensive operation, so lru_cache caches the results of 
+        the latest query in case `self.make_sentence_with_start` is called 
         repeatedly with the same beginning string. 
         """
         return [

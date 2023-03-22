@@ -1,3 +1,4 @@
+import functools
 import re
 import json
 import random
@@ -15,7 +16,6 @@ class ParamError(Exception):
 
 
 class Text:
-
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
     def __init__(
@@ -277,12 +277,7 @@ class Text:
                 init_states = [(BEGIN,) * (self.state_size - word_count) + split]
 
             else:
-                init_states = [
-                    key
-                    for key in self.chain.model.keys()
-                    # check for starting with begin as well ordered lists
-                    if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split
-                ]
+                init_states = self.find_init_states_from_chain(split)
 
                 random.shuffle(init_states)
         else:
@@ -301,6 +296,24 @@ class Text:
             f"`make_sentence_with_start` can't find sentence beginning with {beginning}"
         )
         raise ParamError(err_msg)
+
+    @functools.lru_cache(maxsize=1)
+    def find_init_states_from_chain(self, split):
+        """
+        Find all chains that begin with the split when `self.make_sentence_with_start`
+        is called with strict == False.
+
+        This is a very expensive operation, so lru_cache caches the results of
+        the latest query in case `self.make_sentence_with_start` is called
+        repeatedly with the same beginning string.
+        """
+        word_count = len(split)
+        return [
+            key
+            for key in self.chain.model.keys()
+            # check for starting with begin as well ordered lists
+            if tuple(filter(lambda x: x != BEGIN, key))[:word_count] == split
+        ]
 
     @classmethod
     def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):

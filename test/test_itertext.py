@@ -35,7 +35,7 @@ class MarkovifyTest(unittest.TestCase):
 
     def test_from_mult_files_without_retaining(self):
         models = []
-        for (dirpath, _, filenames) in os.walk(
+        for dirpath, _, filenames in os.walk(
             os.path.join(os.path.dirname(__file__), "texts")
         ):
             for filename in filenames:

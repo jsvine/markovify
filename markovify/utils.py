@@ -52,6 +52,7 @@ def combine(models, weights=None):
     if isinstance(ret_inst, Chain):
         return Chain.from_json(c)
     if isinstance(ret_inst, Text):
+        ret_inst.find_init_states_from_chain.cache_clear()
         if any(m.retain_original for m in models):
             combined_sentences = []
             for m in models:

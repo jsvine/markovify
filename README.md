@@ -313,5 +313,6 @@ Many thanks to the following GitHub users for contributing code and/or ideas:
 - [@eumiro](https://github.com/eumiro)
 - [@monosans](https://github.com/monosans)
 - [@aogier](https://github.com/aogier)
+- [@terisikk](https://github.com/terisikk)
 
 Initially developed at [BuzzFeed](https://www.buzzfeed.com).

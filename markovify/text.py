@@ -16,7 +16,6 @@ class ParamError(Exception):
 
 
 class Text:
-
     reject_pat = re.compile(r"(^')|('$)|\s'|'\s|[\"(\(\)\[\])]")
 
     def __init__(
@@ -278,7 +277,7 @@ class Text:
                 init_states = [(BEGIN,) * (self.state_size - word_count) + split]
 
             else:
-                init_states = self.find_init_states_from_chain(word_count, split)
+                init_states = self.find_init_states_from_chain(split)
 
                 random.shuffle(init_states)
         else:
@@ -299,15 +298,16 @@ class Text:
         raise ParamError(err_msg)
 
     @functools.lru_cache(maxsize=1)
-    def find_init_states_from_chain(self, word_count, split):
+    def find_init_states_from_chain(self, split):
         """
-        Find all chains that begin with the split when `self.make_sentence_with_start` 
-        is called with strict == False. 
+        Find all chains that begin with the split when `self.make_sentence_with_start`
+        is called with strict == False.
 
-        This is a very expensive operation, so lru_cache caches the results of 
-        the latest query in case `self.make_sentence_with_start` is called 
-        repeatedly with the same beginning string. 
+        This is a very expensive operation, so lru_cache caches the results of
+        the latest query in case `self.make_sentence_with_start` is called
+        repeatedly with the same beginning string.
         """
+        word_count = len(split)
         return [
             key
             for key in self.chain.model.keys()

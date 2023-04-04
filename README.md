@@ -279,6 +279,7 @@ print(combined_model.make_sentence())
 - [Deuterium](https://github.com/portasynthinca3/deuterium), a Discord bot that generates messages on its own, after analyzing yours, and learning constantly. There's also a global model shared with all other servers.
 - [Markovify Piano](https://github.com/asigalov61/Markovify-Piano), generates coherent and plausible music generation.
 - [TweetyPy](https://twitter.com/_TweetyPy_), a Twitter bot that takes data from the top US trends or user tweets, learn and create own tweets and word clouds. [[code](https://github.com/SerhiiStets/TweetyPy)]
+- [cappuccino/ai.py](https://github.com/TheReverend403/cappuccino), an IRC bot with a plugin that generates sentences based on the PostgreSQL-stored logs of the IRC channels it's in. [[code](https://github.com/TheReverend403/cappuccino/blob/main/cappuccino/ai.py)]
 
 Have other examples? Pull requests welcome.
 

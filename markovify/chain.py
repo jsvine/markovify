@@ -118,6 +118,19 @@ class Chain:
         r = random.random() * cumdist[-1]
         selection = choices[bisect.bisect(cumdist, r)]
         return selection
+    
+    def greedy_move(self, state):
+        """
+        Given a state, choose the most likely next item
+        """
+        if self.compiled:
+            choices, _ = self.model[state]
+        elif state == tuple([BEGIN] * self.state_size):
+            choices = self.begin_choices
+        else:
+            choices, weights = zip(*self.model[state].items())
+        selection = choices[-1]
+        return selection
 
     def gen(self, init_state=None):
         """

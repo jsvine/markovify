@@ -131,10 +131,6 @@ class Chain:
         else:
             choices, weights = zip(*self.model[state].items())
             cumdist = list(accumulate(weights))
-        # r = 0 * cumdist[-1]
-        # selection_idx = bisect.bisect(cumdist, r)
-        # print(selection_idx)
-        # selection = choices[selection_idx]
         return choices[0]
 
     def gen(self, init_state=None):

@@ -124,13 +124,18 @@ class Chain:
         Given a state, choose the most likely next item
         """
         if self.compiled:
-            choices, _ = self.model[state]
+            choices, cumdist = self.model[state]
         elif state == tuple([BEGIN] * self.state_size):
             choices = self.begin_choices
+            cumdist = self.begin_cumdist
         else:
             choices, weights = zip(*self.model[state].items())
-        selection = choices[-1]
-        return selection
+            cumdist = list(accumulate(weights))
+        # r = 0 * cumdist[-1]
+        # selection_idx = bisect.bisect(cumdist, r)
+        # print(selection_idx)
+        # selection = choices[selection_idx]
+        return choices[0]
 
     def gen(self, init_state=None):
         """

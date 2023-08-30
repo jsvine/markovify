@@ -72,7 +72,7 @@ Notes:
 
 ## Advanced Usage
 
-### Specifying the model's state size
+### Specifying the model's state size (aka the *order* of higher-order Markov chains)
 
 State size is a number of words the probability of a next word depends on.
 

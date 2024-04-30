@@ -280,6 +280,7 @@ print(combined_model.make_sentence())
 - [Markovify Piano](https://github.com/asigalov61/Markovify-Piano), generates coherent and plausible music generation.
 - [TweetyPy](https://twitter.com/_TweetyPy_), a Twitter bot that takes data from the top US trends or user tweets, learn and create own tweets and word clouds. [[code](https://github.com/SerhiiStets/TweetyPy)]
 - [cappuccino/ai.py](https://github.com/TheReverend403/cappuccino), an IRC bot with a plugin that generates sentences based on the PostgreSQL-stored logs of the IRC channels it's in. [[code](https://github.com/TheReverend403/cappuccino/blob/main/cappuccino/ai.py)]
+- [django-markov](https://github.com/andrlik/django-markov), a reusable Django app that provides a generic backend to generate and store Markov chains for later retrieval and generation of sentences.
 
 Have other examples? Pull requests welcome.
 

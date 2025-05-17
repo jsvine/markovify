@@ -2,13 +2,54 @@ import functools
 import re
 import json
 import random
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
+
+if TYPE_CHECKING:
+    from typing_extensions import TypedDict, Unpack
+
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN
+from .chain import Chain, BEGIN, State
 from unidecode import unidecode
+
 
 DEFAULT_MAX_OVERLAP_RATIO = 0.7
 DEFAULT_MAX_OVERLAP_TOTAL = 15
 DEFAULT_TRIES = 10
+
+
+T = TypeVar("T")
+TextT = TypeVar("TextT", bound="Text")
+
+
+def cast_not_none(var: Union[T, None]) -> T:
+    return cast(T, var)
+
+
+if TYPE_CHECKING:
+
+    class TextMarkovifyDict(TypedDict):
+        state_size: int
+        chain: str
+        parsed_sentences: Union[List[List[str]], None]
+
+    class MakeSentenceKwargs(TypedDict, total=False):
+        tries: int
+        max_overlap_ratio: float
+        max_overlap_total: int
+        test_output: bool
+        max_words: Union[int, None]
+        min_words: Union[int, None]
 
 
 class ParamError(Exception):
@@ -20,13 +61,13 @@ class Text:
 
     def __init__(
         self,
-        input_text,
-        state_size=2,
-        chain=None,
-        parsed_sentences=None,
-        retain_original=True,
-        well_formed=True,
-        reject_reg="",
+        input_text: Union[str, None],
+        state_size: int = 2,
+        chain: Union[Chain, None] = None,
+        parsed_sentences: Union[List[List[str]], None] = None,
+        retain_original: bool = True,
+        well_formed: bool = True,
+        reject_reg: "Union[str, re.Pattern]" = "",
     ):
         """
         input_text: A string.
@@ -55,7 +96,7 @@ class Text:
 
         if self.retain_original:
             self.parsed_sentences = parsed_sentences or list(
-                self.generate_corpus(input_text)
+                self.generate_corpus(cast_not_none(input_text))
             )
 
             # Rejoined text lets us assess the novelty of generated sentences
@@ -64,11 +105,20 @@ class Text:
             )
             self.chain = chain or Chain(self.parsed_sentences, state_size)
         else:
-            if not chain:
-                parsed = parsed_sentences or self.generate_corpus(input_text)
-            self.chain = chain or Chain(parsed, state_size)
+            if chain is None:
+                if not can_make_sentences:
+                    raise ParamError(
+                        "Must provide either `input_text`, `parsed_sentences`, "
+                        "or `chain`."
+                    )
+                parsed = parsed_sentences or self.generate_corpus(
+                    cast_not_none(input_text)
+                )
+                self.chain = Chain(parsed, state_size)
+            else:
+                self.chain = chain
 
-    def compile(self, inplace=False):
+    def compile(self, inplace: bool = False) -> "Text":
         if inplace:
             self.chain.compile(inplace=True)
             return self
@@ -86,7 +136,7 @@ class Text:
             reject_reg=self.reject_pat,
         )
 
-    def to_dict(self):
+    def to_dict(self) -> "TextMarkovifyDict":
         """
         Returns the underlying data as a Python dict.
         """
@@ -96,14 +146,14 @@ class Text:
             "parsed_sentences": self.parsed_sentences if self.retain_original else None,
         }
 
-    def to_json(self):
+    def to_json(self) -> str:
         """
         Returns the underlying data as a JSON string.
         """
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_dict(cls, obj, **kwargs):
+    def from_dict(cls: Type[TextT], obj: "TextMarkovifyDict", **kwargs) -> TextT:
         return cls(
             None,
             state_size=obj["state_size"],
@@ -112,16 +162,16 @@ class Text:
         )
 
     @classmethod
-    def from_json(cls, json_str):
+    def from_json(cls: Type[TextT], json_str: str) -> TextT:
         return cls.from_dict(json.loads(json_str))
 
-    def sentence_split(self, text):
+    def sentence_split(self, text: str) -> List[str]:
         """
         Splits full-text string into a list of sentences.
         """
         return split_into_sentences(text)
 
-    def sentence_join(self, sentences):
+    def sentence_join(self, sentences: Iterable[str]) -> str:
         """
         Re-joins a list of sentences into the full text.
         """
@@ -129,19 +179,19 @@ class Text:
 
     word_split_pattern = re.compile(r"\s+")
 
-    def word_split(self, sentence):
+    def word_split(self, sentence: str) -> List[str]:
         """
         Splits a sentence into a list of words.
         """
         return re.split(self.word_split_pattern, sentence)
 
-    def word_join(self, words):
+    def word_join(self, words: Iterable[str]) -> str:
         """
         Re-joins a list of words into a sentence.
         """
         return " ".join(words)
 
-    def test_sentence_input(self, sentence):
+    def test_sentence_input(self, sentence: str) -> bool:
         """
         A basic sentence filter. The default rejects sentences that contain
         the type of punctuation that would look strange on its own
@@ -156,7 +206,7 @@ class Text:
             return False
         return True
 
-    def generate_corpus(self, text):
+    def generate_corpus(self, text: str) -> Iterator[List[str]]:
         """
         Given a text string, returns a list of lists; that is, a list of
         "sentences," each of which is a list of words. Before splitting into
@@ -172,7 +222,12 @@ class Text:
         runs = map(self.word_split, passing)
         return runs
 
-    def test_sentence_output(self, words, max_overlap_ratio, max_overlap_total):
+    def test_sentence_output(
+        self,
+        words: List[str],
+        max_overlap_ratio: float,
+        max_overlap_total: int,
+    ) -> bool:
         """
         Given a generated list of words, accept or reject it. This one rejects
         sentences that too closely match the original text, namely those that
@@ -192,7 +247,11 @@ class Text:
                 return False
         return True
 
-    def make_sentence(self, init_state=None, **kwargs):
+    def make_sentence(
+        self,
+        init_state: Union[Tuple[str, ...], None] = None,
+        **kwargs: "Unpack[MakeSentenceKwargs]",
+    ) -> Union[str, None]:
         """
         Attempts `tries` (default: 10) times to generate a valid sentence,
         based on the model and `test_sentence_output`. Passes `max_overlap_ratio`
@@ -214,8 +273,8 @@ class Text:
         mor = kwargs.get("max_overlap_ratio", DEFAULT_MAX_OVERLAP_RATIO)
         mot = kwargs.get("max_overlap_total", DEFAULT_MAX_OVERLAP_TOTAL)
         test_output = kwargs.get("test_output", True)
-        max_words = kwargs.get("max_words", None)
-        min_words = kwargs.get("min_words", None)
+        max_words = kwargs.get("max_words")
+        min_words = kwargs.get("min_words")
 
         if init_state is None:
             prefix = []
@@ -240,7 +299,12 @@ class Text:
                 return self.word_join(words)
         return None
 
-    def make_short_sentence(self, max_chars, min_chars=0, **kwargs):
+    def make_short_sentence(
+        self,
+        max_chars: int,
+        min_chars: int = 0,
+        **kwargs: "Unpack[MakeSentenceKwargs]",
+    ) -> Union[str, None]:
         """
         Tries making a sentence of no more than `max_chars` characters and optionally
         no less than `min_chars` characters, passing **kwargs to `self.make_sentence`.
@@ -252,7 +316,12 @@ class Text:
             if sentence and min_chars <= len(sentence) <= max_chars:
                 return sentence
 
-    def make_sentence_with_start(self, beginning, strict=True, **kwargs):
+    def make_sentence_with_start(
+        self,
+        beginning: str,
+        strict: bool = True,
+        **kwargs: "Unpack[MakeSentenceKwargs]",
+    ) -> str:
         """
         Tries making a sentence that begins with `beginning` string,
         which should be a string of one to `self.state` words known
@@ -298,7 +367,7 @@ class Text:
         raise ParamError(err_msg)
 
     @functools.lru_cache(maxsize=1)
-    def find_init_states_from_chain(self, split):
+    def find_init_states_from_chain(self, split: State) -> List[State]:
         """
         Find all chains that begin with the split when `self.make_sentence_with_start`
         is called with strict == False.
@@ -316,14 +385,19 @@ class Text:
         ]
 
     @classmethod
-    def from_chain(cls, chain_json, corpus=None, parsed_sentences=None):
+    def from_chain(
+        cls: Type[TextT],
+        chain_json: Union[str, Dict, List],
+        corpus: Union[str, None] = None,
+        parsed_sentences: Union[List[List[str]], None] = None,
+    ) -> TextT:
         """
         Init a Text class based on an existing chain JSON string or object
         If corpus is None, overlap checking won't work.
         """
         chain = Chain.from_json(chain_json)
         return cls(
-            corpus or None,
+            corpus,
             parsed_sentences=parsed_sentences,
             state_size=chain.state_size,
             chain=chain,
@@ -336,5 +410,5 @@ class NewlineText(Text):
     text where the sentences are separated by newlines instead of ". "
     """
 
-    def sentence_split(self, text):
+    def sentence_split(self, text: str) -> List[str]:
         return re.split(r"\s*\n\s*", text)

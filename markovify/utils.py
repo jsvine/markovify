@@ -1,16 +1,26 @@
-from .chain import Chain
+from typing import TYPE_CHECKING, List, Sequence, TypeVar, Union, cast, overload
+from .chain import Chain, ModelUncompiled
 from .text import Text
 
+if TYPE_CHECKING:
+    from typing_extensions import assert_never
+else:
 
-def get_model_dict(thing):
+    def assert_never() -> None:
+        pass
+
+
+def get_model_dict(
+    thing: Union[Chain, Text, List, ModelUncompiled],
+) -> ModelUncompiled:
     if isinstance(thing, Chain):
         if thing.compiled:
             raise ValueError("Not implemented for compiled markovify.Chain")
-        return thing.model
+        return cast(ModelUncompiled, thing.model)
     if isinstance(thing, Text):
         if thing.chain.compiled:
             raise ValueError("Not implemented for compiled markovify.Chain")
-        return thing.chain.model
+        return cast(ModelUncompiled, thing.chain.model)
     if isinstance(thing, list):
         return dict(thing)
     if isinstance(thing, dict):
@@ -21,7 +31,45 @@ def get_model_dict(thing):
     )
 
 
-def combine(models, weights=None):
+T = TypeVar("T", Chain, Text, List, ModelUncompiled)
+
+
+@overload
+def combine(
+    models: Sequence[Chain],
+    weights: Union[List[int], None] = None,
+) -> Chain:
+    ...
+
+
+@overload
+def combine(
+    models: Sequence[Text],
+    weights: Union[List[int], None] = None,
+) -> Text:
+    ...
+
+
+@overload
+def combine(
+    models: Sequence[List],
+    weights: Union[List[int], None] = None,
+) -> List:
+    ...
+
+
+@overload
+def combine(
+    models: Sequence[ModelUncompiled],
+    weights: Union[List[int], None] = None,
+) -> ModelUncompiled:
+    ...
+
+
+def combine(
+    models: Sequence[T],
+    weights: Union[List[int], None] = None,
+) -> T:
     if weights is None:
         weights = [1 for _ in range(len(models))]
 
@@ -37,7 +85,7 @@ def combine(models, weights=None):
     if len(set(map(type, models))) != 1:
         raise ValueError("All `models` must be of the same type.")
 
-    c = {}
+    c: ModelUncompiled = {}
 
     for m, w in zip(model_dicts, weights):
         for state, options in m.items():
@@ -53,9 +101,10 @@ def combine(models, weights=None):
         return Chain.from_json(c)
     if isinstance(ret_inst, Text):
         ret_inst.find_init_states_from_chain.cache_clear()
-        if any(m.retain_original for m in models):
+        text_models = cast(List[Text], models)
+        if any(m.retain_original for m in text_models):
             combined_sentences = []
-            for m in models:
+            for m in text_models:
                 if m.retain_original:
                     combined_sentences += m.parsed_sentences
             return ret_inst.from_chain(c, parsed_sentences=combined_sentences)
@@ -65,3 +114,4 @@ def combine(models, weights=None):
         return list(c.items())
     if isinstance(ret_inst, dict):
         return c
+    assert_never(ret_inst)

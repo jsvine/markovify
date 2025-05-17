@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 uppercase_letter_pat = re.compile(r"^[A-Z]$", re.UNICODE)
 initialism_pat = re.compile(r"^[A-Za-z0-9]{1,2}(\.[A-Za-z0-9]{1,2})+\.$", re.UNICODE)
@@ -22,7 +23,7 @@ abbr_capped = "|".join(
 abbr_lowercase = "etc|v|vs|viz|al|pct".split("|")
 
 
-def is_abbreviation(dotted_word):
+def is_abbreviation(dotted_word: str) -> bool:
     clipped = dotted_word[:-1]
     if re.match(uppercase_letter_pat, clipped[0]):
         if len(clipped) == 1:  # Initial
@@ -38,7 +39,7 @@ def is_abbreviation(dotted_word):
             return False
 
 
-def is_sentence_ender(word):
+def is_sentence_ender(word: str) -> bool:
     if re.match(initialism_pat, word) is not None:
         return False
     if word[-1] in ["?", "!"]:
@@ -50,7 +51,7 @@ def is_sentence_ender(word):
     return False
 
 
-def split_into_sentences(text):
+def split_into_sentences(text: str) -> List[str]:
     potential_end_pat = re.compile(
         r"".join(
             [

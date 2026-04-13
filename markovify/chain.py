@@ -75,22 +75,18 @@ class Chain:
         appears.
         """
 
-        # Using a DefaultDict here would be a lot more convenient, however the memory
-        # usage is far higher.
         model = {}
 
         for run in corpus:
             items = ([BEGIN] * state_size) + run + [END]
             for i in range(len(run) + 1):
-                state = tuple(items[i : i + state_size])
+                state = model.setdefault(tuple(items[i : i + state_size]), {})
                 follow = items[i + state_size]
-                if state not in model:
-                    model[state] = {}
+                try:
+                    state[follow] += 1
+                except KeyError:
+                    state[follow] = 1
 
-                if follow not in model[state]:
-                    model[state][follow] = 0
-
-                model[state][follow] += 1
         return model
 
     def precompute_begin_state(self):

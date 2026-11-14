@@ -1,3 +1,4 @@
+import copy
 import functools
 import re
 import json
@@ -72,19 +73,9 @@ class Text:
         if inplace:
             self.chain.compile(inplace=True)
             return self
-        cchain = self.chain.compile(inplace=False)
-        psent = None
-        if hasattr(self, "parsed_sentences"):
-            psent = self.parsed_sentences
-        return Text(
-            None,
-            state_size=self.state_size,
-            chain=cchain,
-            parsed_sentences=psent,
-            retain_original=self.retain_original,
-            well_formed=self.well_formed,
-            reject_reg=self.reject_pat,
-        )
+        compiled = copy.copy(self)
+        compiled.chain = self.chain.compile(inplace=False)
+        return compiled
 
     def to_dict(self):
         """

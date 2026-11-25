@@ -171,7 +171,10 @@ class MarkovifyTestBase(unittest.TestCase):
 class MarkovifyTest(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+    with open(
+        os.path.join(os.path.dirname(__file__), "texts/sherlock.txt"),
+        encoding="utf-8-sig",
+    ) as f:
         sherlock_text = f.read()
         sherlock_model = markovify.Text(sherlock_text)
         sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)
@@ -181,7 +184,10 @@ class MarkovifyTest(MarkovifyTestBase):
 class MarkovifyTestCompiled(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+    with open(
+        os.path.join(os.path.dirname(__file__), "texts/sherlock.txt"),
+        encoding="utf-8-sig",
+    ) as f:
         sherlock_text = f.read()
         sherlock_model = (markovify.Text(sherlock_text)).compile()
         sherlock_model_ss2 = (markovify.Text(sherlock_text, state_size=2)).compile()
@@ -200,7 +206,10 @@ class MarkovifyTestCompiled(MarkovifyTestBase):
 class MarkovifyTestCompiledInPlace(MarkovifyTestBase):
     __test__ = True
 
-    with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+    with open(
+        os.path.join(os.path.dirname(__file__), "texts/sherlock.txt"),
+        encoding="utf-8-sig",
+    ) as f:
         sherlock_text = f.read()
         sherlock_model = markovify.Text(sherlock_text)
         sherlock_model_ss2 = markovify.Text(sherlock_text, state_size=2)

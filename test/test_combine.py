@@ -8,7 +8,10 @@ def get_sorted(chain_json):
     return sorted(chain_json, key=operator.itemgetter(0))
 
 
-with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+with open(
+    os.path.join(os.path.dirname(__file__), "texts/sherlock.txt"),
+    encoding="utf-8-sig",
+) as f:
     sherlock = f.read()
     sherlock_model = markovify.Text(sherlock)
     sherlock_model_no_retain = markovify.Text(sherlock, retain_original=False)

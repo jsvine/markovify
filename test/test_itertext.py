@@ -5,7 +5,10 @@ import os
 
 class MarkovifyTest(unittest.TestCase):
     def test_simple(self):
-        with open(os.path.join(os.path.dirname(__file__), "texts/sherlock.txt")) as f:
+        with open(
+            os.path.join(os.path.dirname(__file__), "texts/sherlock.txt"),
+            encoding="utf-8-sig",
+        ) as f:
             sherlock_model = markovify.Text(f)
         sent = sherlock_model.make_sentence()
         assert sent is not None
@@ -41,7 +44,7 @@ class MarkovifyTest(unittest.TestCase):
             for filename in filenames:
                 with open(
                     os.path.join(dirpath, filename),
-                    encoding="utf-8",
+                    encoding="utf-8-sig",
                 ) as f:
                     models.append(markovify.Text(f, retain_original=False))
         combined_model = markovify.combine(models)
